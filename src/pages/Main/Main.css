@@ -1,39 +1,67 @@
 .Main {
   display: flex;
+  flex-direction: column;
   overflow: hidden;
   max-height: 100vh;
+  color: #C5C6C7;
 }
+
 .Main .container {
   display: flex;
+  flex-direction: column;
   width: 100vw;
 }
-.Main .container .outlet {
-  flex-grow: 3;
-  padding: 1rem;
-}
+
 .Main .container .navigation {
-  background-color: aliceblue;
-  padding-top: 40px;
-  height: 100vh;
+  background-color: #1F2833;
+  width: 100%;
+  padding: 10px 0;
 }
+
 .Main .container .navigation ul {
+  display: flex;
+  justify-content: center;
   list-style: none;
-  overflow: hidden;
   padding: 0;
   margin: 0;
+  color: #C5C6C7;
+  font-weight: bold;
 }
 
 .Main .container .navigation ul li {
-  padding: 10px 80px 10px 20px;
+  padding: 10px 20px;
 }
-.Main .container .navigation ul li.active,
-.Main .container .navigation ul li:hover {
-  background: #ccc;
-}
+
 .Main .container .navigation ul li a {
   text-decoration: none;
+  display: block;
+  padding: 10px 20px;
+  border-radius: 7%;
+}
+
+.Main .container .navigation ul li a.active {
+  background: #31374e;
+  color: #C5C6C7;
+}
+
+.Main .container .navigation ul li a:hover {
+  background: #31374e;
+  color: #C5C6C7;
 }
 
 .Main .container .navigation ul li.logout {
   cursor: pointer;
+}
+
+.Main .container .outlet {
+  flex-grow: 1;
+  padding: 1rem;
+  background-color: #0B0C10;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }

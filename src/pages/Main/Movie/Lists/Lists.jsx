@@ -8,7 +8,6 @@ const Lists = () => {
   const [lists, setLists] = useState([]);
 
   const getMovies = () => {
-    //get the movies from the api or database
     axios.get('/movies').then((response) => {
       setLists(response.data);
     });
@@ -29,7 +28,6 @@ const Lists = () => {
           },
         })
         .then(() => {
-          //update list by modifying the movie list array
           const tempLists = [...lists];
           const index = lists.findIndex((movie) => movie.id === id);
           if (index !== undefined || index !== -1) {
@@ -37,8 +35,6 @@ const Lists = () => {
             setLists(tempLists);
           }
 
-          //update list by requesting again to api
-          // getMovies();
         })
         .catch((error) => {
           console.log(error);

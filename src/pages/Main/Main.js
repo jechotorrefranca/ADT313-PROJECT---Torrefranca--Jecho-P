@@ -1,41 +1,48 @@
-import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import './Main.css';
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import "./Main.css";
 
 function Main() {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    navigate('/');
+    localStorage.removeItem("accessToken");
+    navigate("/");
   };
 
   useEffect(() => {
-    if (
-      accessToken === undefined ||
-      accessToken === '' ||
-      accessToken === null
-    ) {
+    if (!accessToken) {
       handleLogout();
     }
   }, []);
+
   return (
-    <div className='Main'>
-      <div className='container'>
-        <div className='navigation'>
+    <div className="Main">
+      <div className="container">
+        <div className="navigation">
           <ul>
-            {/* <li>
-              <a href='/main/dashboard'>Dashboard</a>
-            </li> */}
             <li>
-              <a href='/main/movies'>Movies</a>
+              <NavLink
+                to="/main/dashboard"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Dashboard
+              </NavLink>
             </li>
-            <li className='logout'>
+            <li>
+              <NavLink
+                to="/main/movies"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Movies
+              </NavLink>
+            </li>
+            <li className="logout">
               <a onClick={handleLogout}>Logout</a>
             </li>
           </ul>
         </div>
-        <div className='outlet'>
+        <div className="outlet">
           <Outlet />
         </div>
       </div>
