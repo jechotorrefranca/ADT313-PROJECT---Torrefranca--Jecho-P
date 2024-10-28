@@ -8,8 +8,8 @@ const Form = () => {
   const [searchedMovieList, setSearchedMovieList] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(undefined);
   const [movie, setMovie] = useState(undefined);
-  const [page, setpage] = useState(1); // Track current page
-  const [totalPages, setTotalPages] = useState(1); // Total pages for search results
+  const [page, setpage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   let { movieId } = useParams();
   const navigate = useNavigate();
 
@@ -107,129 +107,132 @@ const Form = () => {
 
   return (
     <>
-      <h1>{movieId !== undefined ? "Edit " : "Create "} Movie</h1>
+      <div className="movieFormCont">
+        <h1>{movieId !== undefined ? "Edit " : "Create "} Movie</h1>
 
-      {movieId === undefined && (
-        <>
-          <div className="search-container">
-            Search Movie:{" "}
-            <input
-              type="text"
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <button type="button" onClick={handleSearch}>
-              Search
-            </button>
-            <div className="searched-movie">
-              {searchedMovieList.map((movie) => (
-                <p key={movie.id} onClick={() => handleSelectMovie(movie)}>
-                  {movie.original_title}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          {searchedMovieList.length > 0 && (
-            <>
-              <div className="pagination">
-                <button onClick={handlePreviousPage} disabled={page === 1}>
-                  Previous
-                </button>
-                <span>
-                  Page {page} of {totalPages}
-                </span>
-                <button onClick={handleNextPage} disabled={page === totalPages}>
-                  Next
-                </button>
+        {movieId === undefined && (
+          <>
+            <div className="search-container">
+              Search Movie:{" "}
+              <input
+                type="text"
+                onChange={(event) => setQuery(event.target.value)}
+              />
+              <button type="button" onClick={handleSearch}>
+                Search
+              </button>
+              <div className="searched-movie">
+                {searchedMovieList.map((movie) => (
+                  <p key={movie.id} onClick={() => handleSelectMovie(movie)}>
+                    {movie.original_title}
+                  </p>
+                ))}
               </div>
-              <hr />
-            </>
-          )}
-        </>
-      )}
+            </div>
 
-      <div className="container">
-        <form>
-          {selectedMovie ? (
-            <img
-              className="poster-image"
-              src={`https://image.tmdb.org/t/p/original/${selectedMovie.poster_path}`}
-              alt={selectedMovie.original_title}
-            />
-          ) : (
-            ""
-          )}
-          <div className="field">
-            Title:
-            <input
-              type="text"
-              disabled={!movieId}
-              value={selectedMovie ? selectedMovie.original_title : ""}
-              onChange={(e) =>
-                setSelectedMovie({
-                  ...selectedMovie,
-                  original_title: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div className="field">
-            Overview:
-            <textarea
-              disabled={!movieId}
-              rows={10}
-              value={selectedMovie ? selectedMovie.overview : ""}
-              onChange={(e) =>
-                setSelectedMovie({ ...selectedMovie, overview: e.target.value })
-              }
-            />
-          </div>
-          <div className="field">
-            Popularity:
-            <input
-              type="text"
-              disabled={!movieId}
-              value={selectedMovie ? selectedMovie.popularity : ""}
-              onChange={(e) =>
-                setSelectedMovie({
-                  ...selectedMovie,
-                  popularity: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div className="field">
-            Release Date:
-            <input
-              type="text"
-              disabled={!movieId}
-              value={selectedMovie ? selectedMovie.release_date : ""}
-              onChange={(e) =>
-                setSelectedMovie({
-                  ...selectedMovie,
-                  release_date: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div className="field">
-            Vote Average:
-            <input
-              type="text"
-              disabled={!movieId}
-              value={selectedMovie ? selectedMovie.vote_average : ""}
-              onChange={(e) =>
-                setSelectedMovie({
-                  ...selectedMovie,
-                  vote_average: e.target.value,
-                })
-              }
-            />
-          </div>
-          <button type="button" onClick={handleSave}>
-            Save
-          </button>
-        </form>
+            {searchedMovieList.length > 0 && (
+              <>
+                <div className="pagination">
+                  <button onClick={handlePreviousPage} disabled={page === 1}>
+                    Previous
+                  </button>
+                  <span>
+                    Page {page} of {totalPages}
+                  </span>
+                  <button onClick={handleNextPage} disabled={page === totalPages}>
+                    Next
+                  </button>
+                </div>
+                <hr />
+              </>
+            )}
+          </>
+        )}
+
+        <div className="container">
+          <form>
+            {selectedMovie ? (
+              <img
+                className="poster-image"
+                src={`https://image.tmdb.org/t/p/original/${selectedMovie.poster_path}`}
+                alt={selectedMovie.original_title}
+              />
+            ) : (
+              ""
+            )}
+            <div className="field">
+              Title:
+              <input
+                type="text"
+                disabled={!movieId}
+                value={selectedMovie ? selectedMovie.original_title : ""}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    original_title: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="field">
+              Overview:
+              <textarea
+                disabled={!movieId}
+                rows={10}
+                value={selectedMovie ? selectedMovie.overview : ""}
+                onChange={(e) =>
+                  setSelectedMovie({ ...selectedMovie, overview: e.target.value })
+                }
+              />
+            </div>
+            <div className="field">
+              Popularity:
+              <input
+                type="text"
+                disabled={!movieId}
+                value={selectedMovie ? selectedMovie.popularity : ""}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    popularity: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="field">
+              Release Date:
+              <input
+                type="text"
+                disabled={!movieId}
+                value={selectedMovie ? selectedMovie.release_date : ""}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    release_date: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="field">
+              Vote Average:
+              <input
+                type="text"
+                disabled={!movieId}
+                value={selectedMovie ? selectedMovie.vote_average : ""}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    vote_average: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <button type="button" onClick={handleSave}>
+              Save
+            </button>
+          </form>
+        </div>
+        
       </div>
     </>
   );
