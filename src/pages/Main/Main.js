@@ -8,6 +8,7 @@ function Main() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     navigate("/");
+    //add window to accept
   };
 
   useEffect(() => {

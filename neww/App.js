@@ -8,38 +8,21 @@ import Main from './pages/Main/Main';
 import Movie from './pages/Main/Movie/Movie';
 import Lists from './pages/Main/Movie/Lists/Lists';
 import Form from './pages/Main/Movie/Form/Form';
-import Home from './client page/Main/Movie/Home/Home'
-import View from './client page/Main/Movie/View/View'
-import MainClient from './client page/Main/MainClient';
-import MovieContextProvider from './context/MovieContext';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainClient />,
-    children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: '/view/:movieId?',
-        element: <View />,
-      },
-    ],
-  },
-  {
-    path: '/login',
     element: <Login />,
   },
   {
     path: '/main',
     element: <Main />,
     children: [
-      {
-        path: '/main/dashboard',
-        element: <Dashboard />,
-      },
+      //Temporarily disabled the dashboard route
+      // {
+      //   path: '/main/dashboard',
+      //   element: <Dashboard />,
+      // },
       {
         path: '/main/movies',
         element: <Movie />,
@@ -89,9 +72,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className='App'>
-      <MovieContextProvider>
-        <RouterProvider router={router} />
-      </MovieContextProvider>
+      <RouterProvider router={router} />
     </div>
   );
 }
