@@ -23,14 +23,32 @@ function MainClient() {
       <div className='container'>
         <div className='navigation'>
           <ul>
-            <li>
+            <div>
+              <NavLink
+                to='/'
+              >
+                Koullection
+              </NavLink>
+            </div>
+
+            <div>
+              <div className='searchCont'>
+                ds
+              </div>
+              {/* <NavLink
+                to='/'
+              >
+                Koullection
+              </NavLink> */}
+            </div>
+            {/* <li>
               <NavLink
                 to='/'
                 className={({ isActive }) => (isActive ? 'active' : '')}
               >
                 Movies
               </NavLink>
-            </li>
+            </li> */}
             {accessToken ? (
               <li className='logout'>
                 <a onClick={handleLogout}>Logout</a>

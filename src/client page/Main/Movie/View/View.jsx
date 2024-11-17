@@ -55,6 +55,7 @@ function View() {
               {JSON.stringify(movie.photos)}
             </div>
           )}
+
         </>
       )}
     </>
