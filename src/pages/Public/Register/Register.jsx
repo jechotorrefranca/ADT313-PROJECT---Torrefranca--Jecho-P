@@ -102,7 +102,7 @@ function Register () {
     
         await axios({
             method: 'post',
-            url: '/admin/register',
+            url: '/registerUser.php',
             data,
             headers: { 'Access-Control-Allow-Origin': '*' },
         })

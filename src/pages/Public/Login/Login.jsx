@@ -44,26 +44,34 @@ function Login() {
     const data = { email, password };
     setStatus('loading');
     console.log(data);
-
-    await axios({
-      method: 'post',
-      url: '/admin/login',
-      data,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-    })
-      .then((res) => {
-        console.log(res);
-        localStorage.setItem('accessToken', res.data.access_token);
-        navigate('/main/movies');
-        setStatus('idle');
-      })
-      .catch((e) => {
-        console.log(e);
-        setStatus('idle');
-        // alert(e.response.data.message);
+  
+    try {
+      const res = await axios({
+        method: 'post',
+        url: '/loginUser.php',
+        data,
+        headers: { 'Access-Control-Allow-Origin': '*' },
       });
+  
+      console.log(res);
+      console.log(`User role: ${res.data.role}`); // Log the user's role
+  
+      if (res.data.role === 'admin') {
+        localStorage.setItem('accessToken', res.data.access_token);
+        console.log("Admin login successful");
+        navigate('/main/movies');
+      } else {
+        console.log("Access denied: User is not an admin");
+        alert("Access denied: User is not an admin");
+      }
+    } catch (e) {
+      console.error("Login failed", e);
+      alert(e.response?.data?.error || "An error occurred during login");
+    } finally {
+      setStatus('idle');
+    }
   };
-
+  
   useEffect(() => {
     setDebounceState(true);
   }, [userInputDebounce]);

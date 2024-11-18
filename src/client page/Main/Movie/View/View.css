@@ -4,9 +4,9 @@
 }
 
 .movBackdrop {
-    width: 90%;
+    /* width: 90%; */
     object-fit: contain;
-    height: 35vh;
+    height: 35rem;
 }
 
 .movPoster {

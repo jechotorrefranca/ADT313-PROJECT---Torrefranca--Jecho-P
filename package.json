@@ -22,7 +22,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost/movieproject-api",
+  "proxy": "http://localhost/aniKou-api",
   "eslintConfig": {
     "extends": [
       "react-app",

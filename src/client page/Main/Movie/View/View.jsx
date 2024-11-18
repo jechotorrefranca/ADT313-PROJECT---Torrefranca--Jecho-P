@@ -66,7 +66,7 @@ function View() {
               <span>movie poster</span>
             </div>
 
-            <div>
+            <div className="try">
               <img
                 src={`https://image.tmdb.org/t/p/${movie.backdropPath}`}
                 alt={movie.title}
