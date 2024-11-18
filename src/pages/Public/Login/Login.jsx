@@ -53,14 +53,12 @@ function Login() {
         headers: { 'Access-Control-Allow-Origin': '*' },
       });
   
-      console.log(res);
-      console.log(`User role: ${res.data.role}`); // Log the user's role
-  
       if (res.data.role === 'admin') {
         localStorage.setItem('accessToken', res.data.access_token);
         console.log("Admin login successful");
         navigate('/main/movies');
       } else {
+        //add other nav
         console.log("Access denied: User is not an admin");
         alert("Access denied: User is not an admin");
       }
