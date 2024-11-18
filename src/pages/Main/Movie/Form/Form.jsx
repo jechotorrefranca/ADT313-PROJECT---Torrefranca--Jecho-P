@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import "./Form.css";
 
+
+
 const Form = () => {
   const [query, setQuery] = useState("");
   const [searchedMovieList, setSearchedMovieList] = useState([]);
@@ -13,24 +15,27 @@ const Form = () => {
   let { movieId } = useParams();
   const navigate = useNavigate();
 
+  const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+
   const handleSearch = useCallback(() => {
+
+    console.log(process.env.REACT_APP_TMDB_API_KEY)
     axios({
       method: "get",
-      url: `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}`,
+      url: `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}&api_key=${apiKey}`,
       headers: {
         Accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YTdiNmUyNGJkNWRkNjhiNmE1ZWFjZjgyNWY3NGY5ZCIsIm5iZiI6MTcyOTI5NzI5Ny4wNzMzNTEsInN1YiI6IjY2MzhlZGM0MmZhZjRkMDEzMGM2NzM3NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIX4EF2yAKl6NwhcmhZucxSQi1rJDZiGG80tDd6_9XI",
       },
     })
-      .then((response) => {
-        setSearchedMovieList(response.data.results);
-        setTotalPages(response.data.total_pages);
-      })
-      .catch((error) => {
-        console.log(error);
-        alert(error);
-      });
+    .then((response) => {
+      setSearchedMovieList(response.data.results);
+      setTotalPages(response.data.total_pages);
+    })
+    .catch((error) => {
+      console.log(error);
+      alert(error);
+    });
+    
   }, [query, page]);
 
   const handleSelectMovie = (movie) => {
