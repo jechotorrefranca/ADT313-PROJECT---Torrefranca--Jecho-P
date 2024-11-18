@@ -1,14 +1,24 @@
-import { useEffect } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import '../../pages/Main/Main.css';
+import { useEffect, useRef } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import "../../pages/Main/Main.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 function MainClient() {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
+  const inputRef = useRef(null);
+
+  const handleDivClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    navigate('/');
+    localStorage.removeItem("accessToken");
+    navigate("/");
     // window.location.reload(); // Refreshes the page to reflect the logout state
   };
 
@@ -19,53 +29,48 @@ function MainClient() {
   }, [accessToken]); // Add accessToken as a dependency
 
   return (
-    <div className='Main'>
-      <div className='container'>
-        <div className='navigation'>
+    <div className="Main">
+      <div className="container">
+        <div className="navigation">
           <ul>
-            <div>
-              <NavLink
-                to='/'
-              >
-                Koullection
-              </NavLink>
+            <div className="leftNav">
+              <div className="navLogo">
+                <NavLink to="/">Koullection</NavLink>
+              </div>
+
+              <div className="searchCont" onClick={handleDivClick}>
+                <FontAwesomeIcon icon={faSearch} />
+                <input
+                  placeholder="Search Movie"
+                  type="text"
+                  className="searchBox"
+                  ref={inputRef}
+                />
+              </div>
+
+              <div className="filterBut">
+                <span>Filter</span>
+              </div>
             </div>
 
-            <div>
-              <div className='searchCont'>
-                ds
-              </div>
-              {/* <NavLink
-                to='/'
-              >
-                Koullection
-              </NavLink> */}
-            </div>
-            {/* <li>
-              <NavLink
-                to='/'
-                className={({ isActive }) => (isActive ? 'active' : '')}
-              >
-                Movies
-              </NavLink>
-            </li> */}
             {accessToken ? (
-              <li className='logout'>
+              <li className="logout">
                 <a onClick={handleLogout}>Logout</a>
               </li>
             ) : (
-              <li className='login'>
-                <NavLink
-                  to='/login'
-                  className={({ isActive }) => (isActive ? 'active' : '')}
-                >
-                  Login
+              <div className="logReg">
+                
+                <NavLink to="/login" className="login">
+                  <span >Login</span>
                 </NavLink>
-              </li>
+
+                <div>Register</div>
+              </div>
             )}
           </ul>
         </div>
-        <div className='outlet'>
+
+        <div className="outlet">
           <Outlet />
         </div>
       </div>

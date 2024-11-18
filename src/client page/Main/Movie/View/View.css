@@ -1,0 +1,15 @@
+.movieDetMain {
+    padding: 3rem 0rem;
+    height: 100vh;
+}
+
+.movBackdrop {
+    width: 90%;
+    object-fit: contain;
+    height: 35vh;
+}
+
+.movPoster {
+    width: 10rem;
+
+}
