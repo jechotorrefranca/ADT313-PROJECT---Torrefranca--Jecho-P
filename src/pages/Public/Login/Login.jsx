@@ -57,10 +57,13 @@ function Login() {
         localStorage.setItem('accessToken', res.data.access_token);
         console.log("Admin login successful");
         navigate('/main/movies');
+      } else if (res.data.role === 'user') {
+        localStorage.setItem('accessToken', res.data.access_token);
+        navigate('/');
+        console.log("Access denied: User");
+        
       } else {
-        //add other nav
-        console.log("Access denied: User is not an admin");
-        alert("Access denied: User is not an admin");
+        alert("User not recognized");
       }
     } catch (e) {
       console.error("Login failed", e);

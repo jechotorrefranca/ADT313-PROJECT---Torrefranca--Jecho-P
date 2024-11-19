@@ -18,7 +18,7 @@ $lastName = $conn->real_escape_string($data['lastName']);
 $middleName = $conn->real_escape_string($data['middleName']);
 $contactNo = $conn->real_escape_string($data['contactNo']);
 
-$role = 'admin';
+$role = 'user';
 
 $sql = "INSERT INTO users (email, password, firstName, lastName, middleName, contactNo, role) 
         VALUES ('$email', '$password', '$firstName', '$lastName', '$middleName', '$contactNo', '$role')";
