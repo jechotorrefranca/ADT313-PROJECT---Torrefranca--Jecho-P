@@ -10,33 +10,110 @@ const Form = () => {
   const [searchedMovieList, setSearchedMovieList] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(undefined);
   const [movie, setMovie] = useState(undefined);
-  const [page, setpage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(20);
   let { movieId } = useParams();
   const navigate = useNavigate();
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const getCurrentPageItems = () => {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+    return searchedMovieList.slice(startIndex, endIndex);
+  };
+
+const handleSearch = useCallback(() => {
+
+  setPage(1);
+
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+  const genreAnimationId = 16;
 
-  const handleSearch = useCallback(() => {
+  axios({
+    method: "get",
+    url: `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&original_language=ja&api_key=${apiKey}`,
+    headers: {
+      Accept: "application/json",
+    },
+  })
+    .then(async (response) => {
+      const totalPages = response.data.total_pages;
 
-    console.log(process.env.REACT_APP_TMDB_API_KEY)
-    axios({
-      method: "get",
-      url: `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}&api_key=${apiKey}`,
-      headers: {
-        Accept: "application/json",
-      },
-    })
-    .then((response) => {
-      setSearchedMovieList(response.data.results);
-      setTotalPages(response.data.total_pages);
+      const fetchAllPages = [];
+      for (let page = 1; page <= totalPages; page++) {
+        await delay(50);
+
+        fetchAllPages.push(
+          axios({
+            method: "get",
+            url: `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&original_language=ja&page=${page}&api_key=${apiKey}`,
+            headers: {
+              Accept: "application/json",
+            },
+          })
+        );
+      }
+
+      Promise.all(fetchAllPages)
+        .then((pageResponses) => {
+          const allResults = pageResponses.reduce((acc, currentPage) => {
+            return acc.concat(currentPage.data.results);
+          }, []);
+
+          const filteredResults = allResults.filter((item) => {
+            const hasAnimationGenre = item.genre_ids && item.genre_ids.includes(genreAnimationId);
+            const isJapanese = item.original_language === 'ja';
+            return hasAnimationGenre && isJapanese;
+          });
+
+          setSearchedMovieList(filteredResults);
+          console.log("Filtered Results:", filteredResults);
+
+          const fetchAdditionalData = filteredResults.map((item) => {
+            const { id, media_type } = item;
+            const movieDetailsUrl = `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${apiKey}&language=en-US`;
+            const videoUrl = `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=${apiKey}&language=en-US`;
+            const castUrl = `https://api.themoviedb.org/3/${media_type}/${id}/credits?api_key=${apiKey}&language=en-US`;
+
+            return axios.all([
+              axios.get(movieDetailsUrl),
+              axios.get(videoUrl),
+              axios.get(castUrl),
+            ])
+            .then(axios.spread((movieDetails, videoDetails, castDetails) => {
+              return {
+                ...item,
+                videoKey: videoDetails.data.results.length > 0 ? videoDetails.data.results[0].key : null,
+                cast: castDetails.data.cast,
+              };
+            }));
+          });
+
+          Promise.all(fetchAdditionalData)
+            .then((moviesWithAdditionalData) => {
+              setSearchedMovieList(moviesWithAdditionalData);
+              console.log("Movies with Additional Data:", moviesWithAdditionalData);
+            })
+            .catch((error) => {
+              console.log("Error fetching additional data:", error);
+              alert("Error fetching additional data");
+            });
+        })
+        .catch((error) => {
+          console.log("Error fetching all pages:", error);
+          alert("Error fetching all pages");
+        });
     })
     .catch((error) => {
-      console.log(error);
-      alert(error);
+      console.log("Error fetching search data:", error);
+      alert("Error fetching data");
     });
-    
-  }, [query, page]);
+}, [query]);
+
+  
+  
+  
 
   const handleSelectMovie = (movie) => {
     setSelectedMovie(movie);
@@ -94,21 +171,8 @@ const Form = () => {
     }
   }, []);
 
-  const handleNextPage = () => {
-    if (page < totalPages) {
-      setpage((prevPage) => prevPage + 1);
-    }
-  };
+  const totalPages = Math.ceil(searchedMovieList.length / pageSize);
 
-  const handlePreviousPage = () => {
-    if (page > 1) {
-      setpage((prevPage) => prevPage - 1);
-    }
-  };
-
-  useEffect(() => {
-    if (query) handleSearch();
-  }, [page]);
 
   return (
     <>
@@ -127,9 +191,9 @@ const Form = () => {
                 Search
               </button>
               <div className="searched-movie">
-                {searchedMovieList.map((movie) => (
+                {getCurrentPageItems().map((movie) => (
                   <p key={movie.id} onClick={() => handleSelectMovie(movie)}>
-                    {movie.original_title}
+                    {movie.name || movie.title}
                   </p>
                 ))}
               </div>
@@ -138,13 +202,13 @@ const Form = () => {
             {searchedMovieList.length > 0 && (
               <>
                 <div className="pagination">
-                  <button onClick={handlePreviousPage} disabled={page === 1}>
+                  <button onClick={() => setPage(page - 1)} disabled={page === 1}>
                     Previous
                   </button>
                   <span>
                     Page {page} of {totalPages}
                   </span>
-                  <button onClick={handleNextPage} disabled={page === totalPages}>
+                  <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>
                     Next
                   </button>
                 </div>

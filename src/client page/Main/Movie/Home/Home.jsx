@@ -42,7 +42,7 @@ useEffect(() => {
 
   return (
     <div className='whole'>
-      <h1 className='page-title'>KouLlection</h1>
+      <h1 className='page-title'>AniKou</h1>
       {featuredMovie && movieList.length ? (
         <div className='featured-list-container'>
           <div

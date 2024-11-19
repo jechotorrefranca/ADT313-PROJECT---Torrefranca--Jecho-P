@@ -19,14 +19,13 @@ function MainClient() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     navigate("/");
-    // window.location.reload(); // Refreshes the page to reflect the logout state
   };
 
   useEffect(() => {
     if (!accessToken) {
       handleLogout();
     }
-  }, [accessToken]); // Add accessToken as a dependency
+  }, [accessToken]);
 
   return (
     <div className="Main">
@@ -35,7 +34,7 @@ function MainClient() {
           <ul>
             <div className="leftNav">
               <div className="navLogo">
-                <NavLink to="/">Koullection</NavLink>
+                <NavLink to="/">AniKou</NavLink>
               </div>
 
               <div className="searchCont" onClick={handleDivClick}>

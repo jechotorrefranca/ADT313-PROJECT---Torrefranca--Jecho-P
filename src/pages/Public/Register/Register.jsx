@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './Register.css';
 import axios from 'axios';
 import { useDebounce } from '../../../utils/hooks/useDebounce';
+import { useNavigate } from 'react-router-dom';
 
 function Register () {
     const [email, setEmail] = useState('');
@@ -23,6 +24,8 @@ function Register () {
     const [debounceState, setDebounceState] = useState(true);
     const [status, setStatus] = useState('idle');
     const userInputDebounce = useDebounce({ email, password, firstName, middleName, lastName, contactNo }, 2000);
+
+    const navigate = useNavigate();
 
     const handleShowPassword = useCallback(() => {
         setIsShowPassword((value) => !value);
@@ -109,6 +112,7 @@ function Register () {
         .then((res) => {
             console.log(res);
             alert('Registration successful!');
+            navigate('/login');
             resetInputs();
             setStatus('idle');
             })
