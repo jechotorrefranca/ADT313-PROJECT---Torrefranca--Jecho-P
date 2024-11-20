@@ -43,25 +43,24 @@ function Login() {
   const handleLogin = async () => {
     const data = { email, password };
     setStatus('loading');
-    console.log(data);
-  
     try {
-      const res = await axios({
+      const response = await axios({
         method: 'post',
         url: '/loginUser.php',
         data,
         headers: { 'Access-Control-Allow-Origin': '*' },
       });
+
+      console.log(response);
   
-      if (res.data.role === 'admin') {
-        localStorage.setItem('accessToken', res.data.access_token);
+      if (response.data.user.user_role === 'admin') {
+        localStorage.setItem('accessToken', response.data.user.access_token);
         console.log("Admin login successful");
         navigate('/main/movies');
-      } else if (res.data.role === 'user') {
-        localStorage.setItem('accessToken', res.data.access_token);
+      } else if (response.data.user.user_role === 'user') {
+        localStorage.setItem('accessToken', response.data.user.access_token);
         navigate('/');
         console.log("Access denied: User");
-        
       } else {
         alert("User not recognized");
       }

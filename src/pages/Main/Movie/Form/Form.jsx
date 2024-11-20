@@ -36,7 +36,12 @@ const handleSearch = useCallback(() => {
     },
   })
     .then(async (response) => {
-      const totalPages = response.data.total_pages;
+      let totalPages = response.data.total_pages;
+
+      if (totalPages > 200) {
+        totalPages = 200;
+        console.log(totalPages)
+      }
 
       const fetchAllPages = [];
       for (let page = 1; page <= totalPages; page++) {
