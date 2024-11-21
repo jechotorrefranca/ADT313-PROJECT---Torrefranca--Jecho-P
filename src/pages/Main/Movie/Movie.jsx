@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
-import './Movie.css';
+import './Anime.css';
 
 const Movie = () => {
   return (
     <>
     <div>
-      <h1>Movie Page</h1>
+      <h1>Anime Page</h1>
     </div>
       <Outlet />
     </>

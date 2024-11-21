@@ -18,19 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['message'] = 'Login successful';
 
         $payload = [
-            'iat' => time(), // Issued at
+            'iat' => time(),
             'exp' => time() + (10 * 24 * 60 * 60),
-            'data' => [ // Store user data here
+            'data' => [
                 'user_id' => $user['id'],
                 'user_email' => $user['email'],
                 'user_role' => $user['role'],
             ],
         ];
 
-        // Encode the JWT
         $jwt = JWT::encode($payload, $secretKey, 'HS256');
 
-        // Include user details in the response
         $response['user'] = array(
             'user_id' => $user['id'],
             'user_role' => $user['role'],

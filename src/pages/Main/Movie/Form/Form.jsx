@@ -13,6 +13,8 @@ const Form = () => {
   let { animeId } = useParams();
   const navigate = useNavigate();
 
+  const userId = localStorage.getItem('userId');
+
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const getCurrentPageItems = () => {
@@ -160,7 +162,7 @@ const handleSearch = useCallback(() => {
       },
     })
       .then((response) => {
-        console.log(response.data); // Check the actual response data
+        console.log(response.data);
         console.log("Response:", response);
         alert("Success");
       })

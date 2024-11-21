@@ -6,7 +6,7 @@ use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
 
 $headers = getallheaders();
-$accessToken = $headers['authorization'] ? $headers['authorization'] : '';
+$accessToken = $headers['authorization'] ?? '';
 
 try {
     if (strpos($accessToken, 'Bearer ') === 0) {
@@ -41,8 +41,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $isAdmin = ($decoded->data->user_role === 'admin');
 
-if ($isAdmin) {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userId = $decoded->data->user_id; // Extract user ID from token
+
         $adult = $conn->real_escape_string($data['adult']);
         $backdrop_path = $conn->real_escape_string($data['backdrop_path']);
         $cast = json_encode($data['cast']);
@@ -59,35 +60,19 @@ if ($isAdmin) {
         $videoKey = $conn->real_escape_string($data['videoKey']);
         $vote_average = $conn->real_escape_string($data['vote_average']);
         $vote_count = $conn->real_escape_string($data['vote_count']);
-    
-        $sql = "INSERT INTO animes (adult, backdrop_path, cast, genre_ids, tmdbId, media_type, name, original_language, 
+
+        $stmt = $conn->prepare("
+            INSERT INTO animes
+                (userId, adult, backdrop_path, cast, genre_ids, tmdbId, media_type, name, original_language, 
                 original_name, overview, popularity, poster_path, release_date, videoKey, vote_average, vote_count) 
-                VALUES ('$adult', '$backdrop_path', '$cast', '$genre_ids', '$tmdbId', '$media_type', '$name', '$original_language', 
-                '$original_name', '$overview', '$popularity', '$poster_path', '$release_date', '$videoKey', '$vote_average', '$vote_count')";
-    
-        if ($conn->query($sql) === TRUE) {
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iisssissssssssssi", $userId, $adult, $backdrop_path, $cast, $genre_ids, $tmdbId, $media_type, $name, $original_language, $original_name, $overview, $popularity, $poster_path, $release_date, $videoKey, $vote_average, $vote_count);
+        if ($stmt->execute()) {
             echo json_encode(["success" => "Anime added successfully"]);
         } else {
-            echo json_encode(["error" => "Error: " . $conn->error]);
-        }
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
-        $animeId = $conn->real_escape_string($data['id']);
-    
-        $updateFields = [];
-        foreach ($data as $key => $value) {
-            if ($value !== null) {
-                $updateFields[] = "$key = '" . $conn->real_escape_string($value) . "'";
-            }
-        }
-    
-        $updateQuery = "UPDATE animes SET " . implode(", ", $updateFields) . " WHERE tmdbId = '$animeId'";
-    
-        if ($conn->query($updateQuery) === TRUE) {
-            echo json_encode(["success" => "Anime updated successfully"]);
-        } else {
-            echo json_encode(["error" => "Error: " . $conn->error]);
+            echo json_encode(["error" => "Error: " . $stmt->error]);
         }
     }
-}
+
 $conn->close();
 ?>
