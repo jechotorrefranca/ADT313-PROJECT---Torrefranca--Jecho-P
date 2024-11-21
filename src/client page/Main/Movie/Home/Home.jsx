@@ -2,25 +2,34 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import MovieCards from '../../../../components/MovieCards/MovieCards';
+import AnimeCards from '../../../../components/AnimeCards/AnimeCards';
 import { useMovieContext } from '../../../../context/MovieContext';
 const Home = () => {
-  const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   const [featuredMovie, setFeaturedMovie] = useState(null);
   const { movieList, setMovieList, setMovie } = useMovieContext();
 
   const getMovies = () => {
-    //get the movies from the api or database
+    // Fetch the animes from the API
     axios
-      .get('/movies')
+      .post('/getAnime.php') // Adjust the API endpoint accordingly
       .then((response) => {
-        setMovieList(response.data);
-        const random = Math.floor(Math.random() * response.data.length);
-        console.log(random)
-        setFeaturedMovie(response.data[random]);
+        if (response.data.success) {
+          const animes = response.data.data;
+          setMovieList(animes);
+
+          // Select a random anime as the featured anime
+          const randomIndex = Math.floor(Math.random() * animes.length);
+          setFeaturedMovie(animes[randomIndex]);
+
+          console.log(animes)
+        } else {
+          console.error('No animes found');
+        }
       })
-      .catch((e) => console.log(e));
+      .catch((error) => {
+        console.error('Error fetching animes:', error);
+      });
   };
 
   useEffect(() => {
@@ -48,15 +57,11 @@ useEffect(() => {
           <div
             className='featured-backdrop'
             style={{
-              background: `url(${
-                featuredMovie.backdropPath !==
-                'https://image.tmdb.org/t/p/original/undefined'
-                  ? featuredMovie.backdropPath
-                  : featuredMovie.posterPath
+              background: `url(${ featuredMovie.backdrop_path || featuredMovie.poster_path
               }) no-repeat center top`,
             }}
           >
-            <span className='featured-movie-title'>{featuredMovie.title}</span>
+            <span className='featured-movie-title'>{featuredMovie.name}</span>
           </div>
         </div>
       ) : (
@@ -65,7 +70,7 @@ useEffect(() => {
       <div className='list-container'>
         {movieList.map((movie) => (
           <>
-            <MovieCards
+            <AnimeCards
               movie={movie}
               onClick={() => {
                 navigate(`/view/${movie.id}`);
