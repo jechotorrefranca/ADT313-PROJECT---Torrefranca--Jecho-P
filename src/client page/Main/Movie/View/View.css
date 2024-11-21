@@ -1,15 +1,29 @@
 .movieDetMain {
-    padding: 3rem 0rem;
-    height: 100vh;
+  padding: 3rem 0rem;
+  height: 100vh;
 }
 
-.movBackdrop {
-    /* width: 90%; */
+.backdropCont {
+    display: flex;
+    justify-content: center;
+    background-color: blue;
+    width: 100%;
+}
+
+.bd {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
     object-fit: contain;
-    height: 35rem;
+}
+
+.bdImage {
+    width: 100%;
+
 }
 
 .movPoster {
-    width: 10rem;
-
+  width: 10rem;
 }

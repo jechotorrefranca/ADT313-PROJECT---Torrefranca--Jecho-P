@@ -6,7 +6,7 @@ import AnimeCards from '../../../../components/AnimeCards/AnimeCards';
 import { useMovieContext } from '../../../../context/MovieContext';
 const Home = () => {
   const navigate = useNavigate();
-  const [featuredMovie, setFeaturedMovie] = useState(null);
+  const [featuredAnime, setfeaturedAnime] = useState(null);
   const { movieList, setMovieList, setMovie } = useMovieContext();
 
   const getMovies = () => {
@@ -20,7 +20,7 @@ const Home = () => {
 
           // Select a random anime as the featured anime
           const randomIndex = Math.floor(Math.random() * animes.length);
-          setFeaturedMovie(animes[randomIndex]);
+          setfeaturedAnime(animes[randomIndex]);
 
           console.log(animes)
         } else {
@@ -41,7 +41,7 @@ useEffect(() => {
     if (movieList.length) {
       console.log('change movie');
       const random = Math.floor(Math.random() * movieList.length);
-      setFeaturedMovie(movieList[random]);
+      setfeaturedAnime(movieList[random]);
     }
   }, 5000);
 
@@ -52,16 +52,15 @@ useEffect(() => {
   return (
     <div className='whole'>
       <h1 className='page-title'>AniKou</h1>
-      {featuredMovie && movieList.length ? (
+      {featuredAnime && movieList.length ? (
         <div className='featured-list-container'>
           <div
             className='featured-backdrop'
             style={{
-              background: `url(${ featuredMovie.backdrop_path || featuredMovie.poster_path
-              }) no-repeat center top`,
+              background: `url(${ featuredAnime.backdrop_path}) no-repeat center top`,
             }}
           >
-            <span className='featured-movie-title'>{featuredMovie.name}</span>
+            <span className='featured-movie-title'>{featuredAnime.name}</span>
           </div>
         </div>
       ) : (
