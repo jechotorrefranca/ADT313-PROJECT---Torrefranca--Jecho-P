@@ -16,7 +16,7 @@ function View() {
         .post("/getAnime.php", { id: `${movieId}` })
         .then((response) => {
           setMovie(response.data.data[0]);
-          console.log(response.data.data[0]);
+          console.log("this", response.data.data[0]);
         })
         .catch((error) => {
           console.error("Error fetching animes:", error);
@@ -53,7 +53,7 @@ function View() {
             </div>
 
             <div className="banner">
-              <h1>{movie.title}</h1>
+              <h1>{movie.name}</h1>
             </div>
             <h3>{movie.overview}</h3>
             <div>

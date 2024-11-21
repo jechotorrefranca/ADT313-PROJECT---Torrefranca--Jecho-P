@@ -42,7 +42,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $isAdmin = ($decoded->data->user_role === 'admin');
 
 if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $userId = $decoded->data->user_id; // Extract user ID from token
+        $userId = $decoded->data->user_id;
 
         $adult = $conn->real_escape_string($data['adult']);
         $backdrop_path = $conn->real_escape_string($data['backdrop_path']);

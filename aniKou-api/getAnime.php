@@ -10,6 +10,12 @@ $conditions = [];
 $params = [];
 $types = "";
 
+if (!empty($data['id'])) {
+    $conditions[] = "id = ?";
+    $params[] = $data['id'];
+    $types .= "i";
+}
+
 if (!empty($data['tmdbId'])) {
     $conditions[] = "tmdbId = ?";
     $params[] = $data['tmdbId'];

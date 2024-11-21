@@ -9,7 +9,7 @@ const Home = () => {
   const [featuredAnime, setfeaturedAnime] = useState(null);
   const { movieList, setMovieList, setMovie } = useMovieContext();
 
-  const getMovies = () => {
+  const getAnime = () => {
     // Fetch the animes from the API
     axios
       .post('/getAnime.php') // Adjust the API endpoint accordingly
@@ -33,7 +33,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getMovies();
+    getAnime();
   }, []);
 
 useEffect(() => {
