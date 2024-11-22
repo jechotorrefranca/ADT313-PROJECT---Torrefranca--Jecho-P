@@ -26,7 +26,8 @@ function View() {
     return () => {};
   }, [movieId]);
 
-  const parsedCast = movie && movie.cast ? JSON.parse(movie.cast) : [];
+  const parsedCast = movie && movie.cast && movie.cast !== 'null' ? JSON.parse(movie.cast) : [];
+  console.log(parsedCast);
 
   return (
     <div className="movieDetMain">
@@ -61,9 +62,9 @@ function View() {
             </div>
 
 
-
+          
             <h2>Cast:</h2>
-            {parsedCast.length > 0 ? (
+            {parsedCast.length > 0 && parsedCast.length !== "null" ? (
               <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                 {parsedCast.map((castMember, index) => (
                   <div

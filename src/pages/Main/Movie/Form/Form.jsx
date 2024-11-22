@@ -25,6 +25,8 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const handleSearch = useCallback(() => {
 
+  console.log('searching...');
+
   setPage(1);
 
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
@@ -97,8 +99,8 @@ const handleSearch = useCallback(() => {
 
           Promise.all(fetchAdditionalData)
             .then((animesWithAdditionalData) => {
-              setsearchedAnimeList(animesWithAdditionalData);
               console.log("animes with Additional Data:", animesWithAdditionalData);
+              setsearchedAnimeList(animesWithAdditionalData);
             })
             .catch((error) => {
               console.log("Error fetching additional data:", error);
@@ -135,22 +137,22 @@ const handleSearch = useCallback(() => {
     }
   
     const data = {
-      adult: selectedAnime.adult,
-      backdrop_path: `https://image.tmdb.org/t/p/original/${selectedAnime.backdrop_path}`,
-      cast: selectedAnime.cast,
-      genre_ids: selectedAnime.genre_ids,
-      tmdbId: selectedAnime.id,
-      media_type: selectedAnime.media_type,
-      name: selectedAnime.title || selectedAnime.name,
-      original_language: selectedAnime.original_language,
-      original_name: selectedAnime.original_name || selectedAnime.original_title,
-      overview: selectedAnime.overview,
-      popularity: selectedAnime.popularity,
-      poster_path: `https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`,
-      release_date: selectedAnime.release_date || selectedAnime.first_air_date,
-      videoKey: selectedAnime.videoKey,
-      vote_average: selectedAnime.vote_average,
-      vote_count: selectedAnime.vote_count,
+      adult: selectedAnime?.adult,
+      backdrop_path: `https://image.tmdb.org/t/p/original/${selectedAnime?.backdrop_path}`,
+      cast: selectedAnime?.cast,
+      genre_ids: selectedAnime?.genre_ids,
+      tmdbId: selectedAnime?.id,
+      media_type: selectedAnime?.media_type,
+      name: selectedAnime?.title || selectedAnime?.name,
+      original_language: selectedAnime?.original_language,
+      original_name: selectedAnime?.original_name || selectedAnime?.original_title,
+      overview: selectedAnime?.overview,
+      popularity: selectedAnime?.popularity,
+      poster_path: `https://image.tmdb.org/t/p/original/${selectedAnime?.poster_path}`,
+      release_date: selectedAnime?.release_date || selectedAnime?.first_air_date,
+      videoKey: selectedAnime?.videoKey,
+      vote_average: selectedAnime?.vote_average,
+      vote_count: selectedAnime?.vote_count,
     };
   
     axios({
@@ -173,23 +175,23 @@ const handleSearch = useCallback(() => {
   };
   
 
-  useEffect(() => {
-    if (animeId) {
-      axios.get(`/animes/${animeId}`).then((response) => {
-        setAnime(response.data);
-        const tempData = {
-          id: response.data.tmdbId,
-          original_title: response.data.title,
-          overview: response.data.overview,
-          popularity: response.data.popularity,
-          poster_path: response.data.posterPath,
-          release_date: response.data.releaseDate,
-          vote_average: response.data.voteAverage,
-        };
-        setSelectedAnime(tempData);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (animeId) {
+  //     axios.get(`/animes/${animeId}`).then((response) => {
+  //       setAnime(response.data);
+  //       const tempData = {
+  //         id: response.data.tmdbId,
+  //         original_title: response.data.title,
+  //         overview: response.data.overview,
+  //         popularity: response.data.popularity,
+  //         poster_path: response.data.posterPath,
+  //         release_date: response.data.releaseDate,
+  //         vote_average: response.data.voteAverage,
+  //       };
+  //       setSelectedAnime(tempData);
+  //     });
+  //   }
+  // }, []);
 
   const totalPages = Math.ceil(searchedAnimeList.length / pageSize);
 

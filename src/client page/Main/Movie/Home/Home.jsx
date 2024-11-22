@@ -68,7 +68,7 @@ useEffect(() => {
       )}
       <div className='list-container'>
         {movieList.map((movie) => (
-          <>
+          <div key={movie.id}>
             <AnimeCards
               movie={movie}
               onClick={() => {
@@ -76,7 +76,8 @@ useEffect(() => {
                 setMovie(movie);
               }}
             />
-          </>
+
+          </div>
         ))}
       </div>
     </div>

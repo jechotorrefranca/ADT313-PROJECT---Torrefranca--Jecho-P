@@ -44,22 +44,22 @@ $isAdmin = ($decoded->data->user_role === 'admin');
 if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $userId = $decoded->data->user_id;
 
-        $adult = $conn->real_escape_string($data['adult']);
-        $backdrop_path = $conn->real_escape_string($data['backdrop_path']);
+        $adult = $data['adult'];
+        $backdrop_path = $data['backdrop_path'];
         $cast = json_encode($data['cast']);
         $genre_ids = json_encode($data['genre_ids']);
-        $tmdbId = $conn->real_escape_string($data['tmdbId']);
-        $media_type = $conn->real_escape_string($data['media_type']);
-        $name = $conn->real_escape_string($data['name']);
-        $original_language = $conn->real_escape_string($data['original_language']);
-        $original_name = $conn->real_escape_string($data['original_name']);
-        $overview = $conn->real_escape_string($data['overview']);
-        $popularity = $conn->real_escape_string($data['popularity']);
-        $poster_path = $conn->real_escape_string($data['poster_path']);
-        $release_date = $conn->real_escape_string($data['release_date']);
-        $videoKey = $conn->real_escape_string($data['videoKey']);
-        $vote_average = $conn->real_escape_string($data['vote_average']);
-        $vote_count = $conn->real_escape_string($data['vote_count']);
+        $tmdbId = $data['tmdbId'];
+        $media_type = $data['media_type'];
+        $name = $data['name'];
+        $original_language = $data['original_language'];
+        $original_name = $data['original_name'];
+        $overview = $data['overview'];
+        $popularity = $data['popularity'];
+        $poster_path = $data['poster_path'];
+        $release_date = $data['release_date'];
+        $videoKey = $data['videoKey'];
+        $vote_average = $data['vote_average'];
+        $vote_count = $data['vote_count'];
 
         $stmt = $conn->prepare("
             INSERT INTO animes
