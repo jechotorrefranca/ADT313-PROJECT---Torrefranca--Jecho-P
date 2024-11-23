@@ -40,7 +40,7 @@ function MainClient() {
               <div className="searchCont" onClick={handleDivClick}>
                 <FontAwesomeIcon icon={faSearch} />
                 <input
-                  placeholder="Search Movie"
+                  placeholder="Search TV Shows or Movies"
                   type="text"
                   className="searchBox"
                   ref={inputRef}

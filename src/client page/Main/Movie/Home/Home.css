@@ -1,8 +1,19 @@
-.featured-movie-container {
+.whole {
+  padding: 3rem 0rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.wholeCont {
+  width: 90%;
+
+}
+
 .page-title {
   font-size: 4.5rem;
 }
+
 .list-container {
   display: flex;
   flex-wrap: wrap;
@@ -10,26 +21,73 @@
   gap: 1rem;
 }
 
-.featured-list-container {
-  width: 100%;
-  margin-bottom: 5rem;
-  aspect-ratio: 16 / 9;
-}
-.featured-backdrop {
-  height: 45rem;
-  width: 100%;
-  /* background-size: cover !important; */
-  object-fit: fill;
+.genreList {
+  margin-left: 2rem;
   display: flex;
-  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+
 }
+
+.genreFeatured {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 80%);
+  padding: 0rem 1.2rem;
+  border-radius: 100rem;
+  width: fit-content;
+  color: rgba(0, 0, 0, 80%);
+  font-size: 0.8rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.bdTextCont {
+  text-align: start;
+  position: absolute;
+  bottom: 25%;
+  left: 5% ;
+  width: 55%;
+}
+
 .featured-movie-title {
   font-weight: bold;
-  font-size: 3rem;
+  font-size: 3.5rem;
   width: 100%;
-  padding: 2rem;
-  color: black;
+  padding: 1rem;
+  color: rgb(255, 255, 255);
+  z-index: 1;
+  text-shadow: 0.5rem 0.3rem 0.4rem rgba(0, 0, 0, 1);
 }
+
+.featured-list-container {
+  display: flex;
+  justify-content: center;
+  align-content: end;
+  width: 100%;
+  height: 35rem;
+  margin-bottom: 5rem;
+  position: relative;
+
+}
+
+.featured-backdrop {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  background-size: cover !important;
+  z-index: -1;
+}
+
+.backdropExtra {
+  background-color: rgb(23, 23, 23);
+  width: 20%;
+}
+
 
 /* .whole {
   width: 80vw;

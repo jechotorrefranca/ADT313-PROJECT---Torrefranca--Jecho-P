@@ -18,7 +18,7 @@ try {
         echo json_encode(['status' => 'error', 'message' => 'Invalid token structure.']);
         exit;
     }
-    // Corrected condition
+
     if ($decoded->data->user_role !== 'admin') {
         echo json_encode(['status' => 'error', 'message' => 'Access denied.']);
         exit;
