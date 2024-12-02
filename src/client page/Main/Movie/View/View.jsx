@@ -5,12 +5,14 @@ import axios from "axios";
 import "./View.css";
 
 function View() {
-  const { anime, fetchAnimeById } = useAnimeContext();
+  const { anime, fetchAnimeById, setAnime } = useAnimeContext();
   const [videoKey, setVideoKey] = useState(null);
   const { animeId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    setAnime(null);
+
     if (animeId) {
       fetchAnimeById(animeId, navigate);
     }
@@ -79,7 +81,6 @@ function View() {
           </div>
 
           <div>
-
             <span>video</span>
           </div>
 
