@@ -11,7 +11,7 @@ import Form from './pages/Main/Movie/Form/Form';
 import Home from './client page/Main/Movie/Home/Home'
 import View from './client page/Main/Movie/View/View'
 import MainClient from './client page/Main/MainClient';
-import MovieContextProvider from './context/MovieContext';
+import AnimeContextProvider from './context/AnimeContext';
 import Register from './pages/Public/Register/Register'
 
 const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/view/:movieId?',
+        path: '/view/:animeId?',
         element: <View />,
       },
     ],
@@ -54,17 +54,17 @@ const router = createBrowserRouter([
             element: <Lists />,
           },
           {
-            path: '/main/movies/form/:movieId?',
+            path: '/main/movies/form/:animeId?',
             element: <Form />,
             children: [
               {
-                path: '/main/movies/form/:movieId',
+                path: '/main/movies/form/:animeId',
                 element: (
                   <h1>Change this for cast & crew CRUD functionality.</h1>
                 ),
               },
               {
-                path: '/main/movies/form/:movieId/cast-and-crews',
+                path: '/main/movies/form/:animeId/cast-and-crews',
                 element: (
                   <h1>
                     Change this for cast & crew CRUD functionality component.
@@ -72,13 +72,13 @@ const router = createBrowserRouter([
                 ),
               },
               {
-                path: '/main/movies/form/:movieId/photos',
+                path: '/main/movies/form/:animeId/photos',
                 element: (
                   <h1>Change this for photos CRUD functionality component.</h1>
                 ),
               },
               {
-                path: '/main/movies/form/:movieId/videos',
+                path: '/main/movies/form/:animeId/videos',
                 element: (
                   <h1>Change this for videos CRUD functionality component.</h1>
                 ),
@@ -94,9 +94,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className='App'>
-      <MovieContextProvider>
+      <AnimeContextProvider>
         <RouterProvider router={router} />
-      </MovieContextProvider>
+      </AnimeContextProvider>
     </div>
   );
 }

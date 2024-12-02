@@ -1,10 +1,10 @@
 import './AnimeCards.css';
-function AnimeCards({ movie: movie, onClick }) {
+function AnimeCards({ anime: anime, onClick }) {
   return (
     <>
       <div className='card' onClick={onClick}>
-        <img src={movie.poster_path} />
-        <span>{movie.name}</span>
+        <img src={anime.poster_path} />
+        <span>{anime.name}</span>
       </div>
     </>
   );
