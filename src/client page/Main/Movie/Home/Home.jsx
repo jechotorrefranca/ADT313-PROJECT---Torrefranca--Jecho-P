@@ -162,18 +162,15 @@ const Home = () => {
 
         <div className="ratedAnimeList">
           {ratedAnimeList.map((anime, index) => (
-            <>
-              <div key={anime.id}>
-                <AnimeCards
-                  anime={anime}
-                  name={anime.name}
-                  place={index + 1}
-                  onClick={() => {
-                    navigate(`/view/${anime.id}`);
-                  }}
-                />
-              </div>
-            </>
+            <div key={anime.id}>
+              <AnimeCards
+                anime={anime}
+                place={index + 1}
+                onClick={() => {
+                  navigate(`/view/${anime.id}`);
+                }}
+              />
+            </div>
           ))}
         </div>
 

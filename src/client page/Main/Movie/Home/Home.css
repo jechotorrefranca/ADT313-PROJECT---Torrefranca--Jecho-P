@@ -67,7 +67,7 @@
   align-items: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 80%);
-  padding: 0rem 1.2rem;
+  padding: 0.8rem 1.2rem;
   border-radius: 100rem;
   width: fit-content;
   color: rgba(0, 0, 0, 80%);
@@ -164,7 +164,7 @@
 .featuredNumber {
   font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   color: rgba(85, 163, 255,);
 }
 
@@ -172,6 +172,7 @@
   display: flex;
   overflow-x: auto;
   gap: 1.5rem;
+  padding-right: 9rem;
 }
 
 .animeTitle {
