@@ -15,7 +15,7 @@
   align-content: end;
   width: 100%;
   height: 35rem;
-  margin-bottom: 5rem;
+  margin-bottom: 1rem;
   position: relative;
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
@@ -166,4 +166,16 @@
   font-weight: bold;
   margin-bottom: 1rem;
   color: rgba(85, 163, 255,);
+}
+
+.ratedAnimeList {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+}
+
+.animeTitle {
+  display: flex;
+  font-weight: bold;
+  font-size: 2rem;
 }

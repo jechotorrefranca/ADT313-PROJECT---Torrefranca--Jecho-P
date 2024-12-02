@@ -25,7 +25,7 @@ const Home = () => {
     favoriteAnimeList,
     ratedAnimeList,
     featuredAnimeList,
-    setAnime,
+    popularAnimeList,
   } = useAnimeContext();
 
   const parsedFeaturedGenres =
@@ -156,9 +156,32 @@ const Home = () => {
           <div className="featured-list-container-loader"></div>
         )}
 
-        <div className=""></div>
+        <div className="animeTitle">
+          <p>Top Anime</p>
+        </div>
 
-        <div className="list-container">
+        <div className="ratedAnimeList">
+          {ratedAnimeList.map((anime, index) => (
+            <>
+              <div key={anime.id}>
+                <AnimeCards
+                  anime={anime}
+                  name={anime.name}
+                  place={index + 1}
+                  onClick={() => {
+                    navigate(`/view/${anime.id}`);
+                  }}
+                />
+              </div>
+            </>
+          ))}
+        </div>
+
+        <div className="lovedAnimeList"></div>
+
+        <div className="popularAnimeList"></div>
+
+        {/* <div className="list-container">
           {animeList.map((anime) => (
             <div key={anime.id}>
               <AnimeCards
@@ -169,7 +192,7 @@ const Home = () => {
               />
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );
