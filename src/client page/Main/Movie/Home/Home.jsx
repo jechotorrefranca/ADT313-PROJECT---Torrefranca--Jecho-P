@@ -28,13 +28,6 @@ const Home = () => {
     popularAnimeList,
   } = useAnimeContext();
 
-  const parsedFeaturedGenres =
-    featuredAnime &&
-    featuredAnime.genre_ids &&
-    featuredAnime.genre_ids !== "null"
-      ? JSON.parse(featuredAnime.genre_ids)
-      : [];
-
   useEffect(() => {
     if (featuredAnimeList.length) {
       setFeaturedAnime(featuredAnimeList[animeIndex]);
@@ -94,7 +87,7 @@ const Home = () => {
 
                 <span>
                   <FontAwesomeIcon icon={faCalendar} className="featuredDate" />{" "}
-                  {featuredAnime.release_date}
+                  {featuredAnime.first_air_date}
                 </span>
 
                 <span>
@@ -103,13 +96,7 @@ const Home = () => {
                 </span>
               </div>
 
-              <div className="genreList">
-                {parsedFeaturedGenres.map((genre, index) => (
-                  <div className="genreFeatured" key={index}>
-                    <GenreConverter genreNumber={genre} />
-                  </div>
-                ))}
-              </div>
+              <GenreConverter genres={featuredAnime.genres} />
 
               <div className="featuredOverview">
                 {featuredAnime.overview

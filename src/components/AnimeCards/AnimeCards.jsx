@@ -53,7 +53,7 @@ function AnimeCards({ anime, onClick, place }) {
               </div>
 
               <div className="some">Japanese: {anime.original_name}</div>
-              <div className="some">Aired: {anime.release_date}</div>
+              <div className="some">Aired: {anime.first_air_date}</div>
 
               <div className="some">
                 <div>Genres:</div>
