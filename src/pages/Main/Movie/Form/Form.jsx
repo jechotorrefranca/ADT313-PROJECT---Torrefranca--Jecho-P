@@ -2,6 +2,7 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import "./Form.css";
+import { useAnimeContext } from "../../../../context/AnimeContext";
 
 const Form = () => {
   const [query, setQuery] = useState("");
@@ -11,10 +12,9 @@ const Form = () => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(20);
   const [selectedItem, setSelectedItem] = useState(null);
+  const { accessToken, userId } = useAnimeContext();
   let { animeId } = useParams();
   const navigate = useNavigate();
-
-  const userId = localStorage.getItem("userId");
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -176,9 +176,6 @@ const Form = () => {
   };
 
   const saveToAnime = () => {
-    const accessToken = localStorage.getItem("accessToken");
-    console.log(accessToken);
-
     if (!accessToken) {
       alert("No access token found. Please log in.");
       return;
@@ -198,7 +195,7 @@ const Form = () => {
       tmdbId: selectedAnime?.id,
       adult: selectedAnime?.adult,
       backdrop_path: selectedAnime?.backdrop_path || null,
-      episode_run_time: selectedAnime?.episode_run_time || null,
+      episode_run_time: selectedAnime?.episode_run_time[0] || null,
       first_air_date: selectedAnime?.first_air_date || null,
       genres: selectedAnime?.genres || null,
       homepage: selectedAnime?.homepage || null,
@@ -225,7 +222,6 @@ const Form = () => {
       },
     })
       .then((response) => {
-        console.log(response.data);
         console.log("Response:", response);
         alert("Success");
       })

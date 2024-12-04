@@ -24,8 +24,12 @@ function AnimeContextProvider({ children }) {
   const [ratedAnimeList, setRatedAnimeList] = useState([]);
   const [featuredAnimeList, setFeaturedAnimeList] = useState([]);
 
+  const accessToken = localStorage.getItem("accessToken");
+  const userId = localStorage.getItem("userId");
+
   const fetchAnimeById = useCallback(async (animeId, navigate) => {
     try {
+      console.log(animeId);
       const response = await axios.post("/getAnime.php", { id: `${animeId}` });
       if (response.data.success) {
         setAnime(response.data.data[0]);
@@ -109,6 +113,8 @@ function AnimeContextProvider({ children }) {
         featuredAnimeList,
         fetchAnimeById,
         popularAnimeList,
+        accessToken,
+        userId,
       }}
     >
       {children}

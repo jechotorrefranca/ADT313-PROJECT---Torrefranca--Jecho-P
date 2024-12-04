@@ -89,7 +89,7 @@ const Home = () => {
                     icon={faCirclePlay}
                     className="featuredPlay"
                   />{" "}
-                  {featuredAnime.media_type.toUpperCase()}
+                  {featuredAnime.episode_run_time ? "TV" : "MOVIE"}
                 </span>
 
                 <span>

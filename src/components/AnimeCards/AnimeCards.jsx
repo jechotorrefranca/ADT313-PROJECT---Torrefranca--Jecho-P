@@ -48,7 +48,7 @@ function AnimeCards({ anime, onClick, place }) {
                     icon={faCirclePlay}
                     className="featuredPlay"
                   />
-                  <span>{anime.media_type.toUpperCase()}</span>
+                  <span>{anime.episode_run_time ? "TV" : "MOVIE"}</span>
                 </div>
               </div>
 
