@@ -61,8 +61,8 @@
 
 .hoverModal {
   position: absolute;
-  top: 10%;
-  left: 30%;
+  top: 3%;
+  left: 20%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
@@ -81,6 +81,8 @@
   display: flex;
 }
 
+
+
 .starType {
   display: flex;
   justify-content: space-around;
@@ -95,6 +97,9 @@
   margin-bottom: 0.5rem;
 }
 
+.movDet {
+  width: 100%;
+}
 
 .modalDetailsCont {
   display: flex;

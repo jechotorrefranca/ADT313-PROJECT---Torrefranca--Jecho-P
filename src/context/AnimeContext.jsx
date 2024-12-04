@@ -29,7 +29,6 @@ function AnimeContextProvider({ children }) {
 
   const fetchAnimeById = useCallback(async (animeId, navigate) => {
     try {
-      console.log(animeId);
       const response = await axios.post("/getAnime.php", { id: `${animeId}` });
       if (response.data.success) {
         setAnime(response.data.data[0]);
@@ -49,7 +48,7 @@ function AnimeContextProvider({ children }) {
         const response = await axios.post("/getAnime.php");
         if (response.data.success) {
           setAnimeList(response.data.data);
-          console.log("Fetched Anime list:", response.data.data);
+          // console.log("Fetched Anime list:", response.data.data);
         } else {
           console.error("No Animes found");
         }
@@ -63,10 +62,10 @@ function AnimeContextProvider({ children }) {
         const response = await axios.post("/getAnime.php", { sortBy });
         if (response.data.success) {
           setter(response.data.data.slice(0, 10));
-          console.log(
-            `Fetched ${sortBy} Anime list:`,
-            response.data.data.slice(0, 10)
-          );
+          // console.log(
+          //   `Fetched ${sortBy} Anime list:`,
+          //   response.data.data.slice(0, 10)
+          // );
         } else {
           console.error(`No ${sortBy} Animes found`);
         }

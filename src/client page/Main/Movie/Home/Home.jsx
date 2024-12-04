@@ -12,6 +12,8 @@ import {
   faCirclePlay,
   faAngleRight,
   faAngleLeft,
+  faClock,
+  faClosedCaptioning,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
@@ -77,7 +79,7 @@ const Home = () => {
               <div className="featured-movie-title">{featuredAnime.name}</div>
 
               <div className="featuredDetails">
-                <span className="featuredSpan">
+                <span>
                   <FontAwesomeIcon
                     icon={faCirclePlay}
                     className="featuredPlay"
@@ -89,6 +91,13 @@ const Home = () => {
                   <FontAwesomeIcon icon={faCalendar} className="featuredDate" />{" "}
                   {featuredAnime.first_air_date}
                 </span>
+
+                {featuredAnime.episode_run_time && (
+                  <span>
+                    <FontAwesomeIcon icon={faClock} className="featuredClock" />{" "}
+                    {featuredAnime.episode_run_time}m
+                  </span>
+                )}
 
                 <span>
                   <FontAwesomeIcon icon={faStar} className="featuredStar" />{" "}

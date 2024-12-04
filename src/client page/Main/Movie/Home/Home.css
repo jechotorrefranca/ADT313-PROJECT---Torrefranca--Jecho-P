@@ -129,6 +129,10 @@
   color: #fcff55;
 }
 
+.featuredClock {
+  color: #bbbbbb;
+}
+
 .featuredDetails {
   display: flex;
   align-items: center;

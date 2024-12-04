@@ -1,17 +1,18 @@
 import "./AnimeCards.css";
-import GenreConverter from "../GenreConvert/GenreConverter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendar,
   faStar,
   faCirclePlay,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
 function AnimeCards({ anime, onClick, place }) {
   const parsedFeaturedGenres =
-    anime && anime.genre_ids && anime.genre_ids !== "null"
-      ? JSON.parse(anime.genre_ids)
-      : [];
+    anime && anime.genres !== "null" ? JSON.parse(anime.genres) : [];
+
+  const parsedSeasons =
+    anime && anime.seasons !== "null" ? JSON.parse(anime.seasons) : [];
 
   return (
     <div className="whole-card-content">
@@ -50,21 +51,34 @@ function AnimeCards({ anime, onClick, place }) {
                   />
                   <span>{anime.episode_run_time ? "TV" : "MOVIE"}</span>
                 </div>
+
+                {anime.episode_run_time && (
+                  <div>
+                    <FontAwesomeIcon icon={faClock} className="featuredClock" />
+                    <span>{anime.episode_run_time}m</span>
+                  </div>
+                )}
               </div>
 
               <div className="some">Japanese: {anime.original_name}</div>
               <div className="some">Aired: {anime.first_air_date}</div>
 
+              {parsedSeasons && parsedSeasons.length > 0 && (
+                <div className="some">Seasons: {parsedSeasons.length}</div>
+              )}
+
               <div className="some">
                 <div>Genres:</div>
+                <div dangerouslySetInnerHTML={{ __html: "&nbsp;" }}></div>
                 <div>
-                  {" "}
-                  {parsedFeaturedGenres.map((genre, index) => (
-                    <span key={index}>
-                      <GenreConverter genreNumber={genre} />
-                      {index < parsedFeaturedGenres.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
+                  {parsedFeaturedGenres.map((genre, index) => {
+                    return (
+                      <>
+                        <span key={index}>{genre.name}</span>
+                        {index < parsedFeaturedGenres.length - 1 && ", "}
+                      </>
+                    );
+                  })}
                 </div>
               </div>
             </div>
