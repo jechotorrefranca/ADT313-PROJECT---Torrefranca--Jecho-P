@@ -48,37 +48,6 @@ const Form = () => {
     });
   }, [animeId, fetchAnimeById, navigate]);
 
-  // useEffect(() => {
-  //   if (animeId) {
-  //     fetchAnimeById(animeId, navigate);
-  //     console.log("fdfd", anime);
-
-  //     const tempData = {
-  //       tmdbId: anime?.id,
-  //       adult: anime?.adult,
-  //       backdrop_path: anime?.backdrop_path,
-  //       episode_run_time: anime?.episode_run_time,
-  //       first_air_date: anime?.first_air_date,
-  //       genres: anime?.genres,
-  //       homepage: anime?.homepage,
-  //       origin_country: anime?.origin_country,
-  //       original_language: anime?.original_language,
-  //       original_name: anime?.original_name,
-  //       name: anime?.name,
-  //       overview: anime?.overview,
-  //       popularity: anime?.popularity,
-  //       poster_path: anime?.poster_path,
-  //       production_companies: anime?.production_companies,
-  //       seasons: anime?.seasons,
-  //       status: anime?.status,
-  //       vote_average: anime?.vote_average,
-  //       vote_count: anime?.vote_count,
-  //     };
-
-  //     setSelectedAnime(tempData);
-  //   }
-  // }, [animeId, fetchAnimeById, navigate]);
-
   const getCurrentPageItems = () => {
     const startIndex = (page - 1) * pageSize;
     const endIndex = page * pageSize;
@@ -154,12 +123,10 @@ const Form = () => {
     const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 
     try {
-      // Fetch detailed anime data
       const { data: animeDetails } = await axios.get(
         `https://api.themoviedb.org/3/${anime.media_type}/${anime.id}?api_key=${apiKey}`
       );
 
-      // Fetch videos
       const { data: videoData } = await axios.get(
         `https://api.themoviedb.org/3/${anime.media_type}/${anime.id}/videos?api_key=${apiKey}`
       );
@@ -253,10 +220,15 @@ const Form = () => {
     }
 
     const data = {
+      id: animeId,
       tmdbId: selectedAnime?.id,
       adult: selectedAnime?.adult,
       backdrop_path: selectedAnime?.backdrop_path || null,
-      episode_run_time: selectedAnime?.episode_run_time[0] || null,
+      episode_run_time:
+        Array.isArray(selectedAnime?.episode_run_time) &&
+        selectedAnime?.episode_run_time.length > 0
+          ? selectedAnime.episode_run_time[0]
+          : selectedAnime?.episode_run_time || null,
       first_air_date: selectedAnime?.first_air_date || null,
       genres: selectedAnime?.genres || null,
       homepage: selectedAnime?.homepage || null,
@@ -275,7 +247,7 @@ const Form = () => {
     };
 
     axios({
-      method: "post",
+      method: animeId ? "patch" : "post",
       url: "/animeCrud.php",
       data: data,
       headers: {
@@ -425,7 +397,7 @@ const Form = () => {
                 onChange={(e) =>
                   setSelectedAnime({
                     ...selectedAnime,
-                    release_date: e.target.value,
+                    first_air_date: e.target.value,
                   })
                 }
               />
