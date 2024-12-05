@@ -1,24 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-import './Lists.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import "./Lists.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useAnimeContext } from "../../../../context/AnimeContext";
 const Lists = () => {
-  const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
-
-  const getMovies = () => {
-    axios.get('/movies').then((response) => {
-      setLists(response.data);
-    });
-  };
-  useEffect(() => {
-    getMovies();
-  }, []);
+  const { accessToken, userId, animeList } = useAnimeContext();
 
   const handleDelete = (id) => {
     const isConfirm = window.confirm(
-      'Are you sure that you want to delete this data?'
+      "Are you sure that you want to delete this data?"
     );
     if (isConfirm) {
       axios
@@ -34,7 +26,6 @@ const Lists = () => {
             tempLists.splice(index, 1);
             setLists(tempLists);
           }
-
         })
         .catch((error) => {
           console.log(error);
@@ -44,19 +35,19 @@ const Lists = () => {
   };
 
   return (
-    <div className='lists-container'>
-      <div className='create-container'>
+    <div className="lists-container">
+      <div className="create-container">
         <button
-          type='button'
+          type="button"
           onClick={() => {
-            navigate('/main/movies/form');
+            navigate("/main/movies/form");
           }}
         >
           Create new
         </button>
       </div>
-      <div className='table-container'>
-        <table className='movie-lists'>
+      <div className="table-container">
+        <table className="movie-lists">
           <thead>
             <tr>
               <th>ID</th>
@@ -65,20 +56,20 @@ const Lists = () => {
             </tr>
           </thead>
           <tbody>
-            {lists.map((movie) => (
-              <tr key={movie.id}>
-                <td>{movie.id}</td>
-                <td>{movie.title}</td>
+            {animeList.map((anime) => (
+              <tr key={anime.id}>
+                <td>{anime.id}</td>
+                <td>{anime.name}</td>
                 <td>
                   <button
-                    type='button'
+                    type="button"
                     onClick={() => {
-                      navigate('/main/movies/form/' + movie.id);
+                      navigate("/main/movies/form/" + anime.id);
                     }}
                   >
                     Edit
                   </button>
-                  <button type='button' onClick={() => handleDelete(movie.id)}>
+                  <button type="button" onClick={() => handleDelete(anime.id)}>
                     Delete
                   </button>
                 </td>

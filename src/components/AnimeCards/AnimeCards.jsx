@@ -73,10 +73,10 @@ function AnimeCards({ anime, onClick, place }) {
                 <div>
                   {parsedFeaturedGenres.map((genre, index) => {
                     return (
-                      <>
+                      <div key={index}>
                         <span key={index}>{genre.name}</span>
                         {index < parsedFeaturedGenres.length - 1 && ", "}
-                      </>
+                      </div>
                     );
                   })}
                 </div>

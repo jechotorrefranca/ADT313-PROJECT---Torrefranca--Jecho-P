@@ -11,11 +11,13 @@ function View() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!animeId) return;
+
     setAnime(null);
 
-    if (animeId) {
-      fetchAnimeById(animeId, navigate);
-    }
+    fetchAnimeById(animeId, navigate).then((anime) => {
+      setAnime(anime);
+    });
   }, [animeId, fetchAnimeById, navigate]);
 
   const parsedCast =

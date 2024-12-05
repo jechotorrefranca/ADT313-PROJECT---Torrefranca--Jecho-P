@@ -8,15 +8,76 @@ const Form = () => {
   const [query, setQuery] = useState("");
   const [searchedAnimeList, setsearchedAnimeList] = useState([]);
   const [selectedAnime, setSelectedAnime] = useState(undefined);
-  const [anime, setAnime] = useState(undefined);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(20);
   const [selectedItem, setSelectedItem] = useState(null);
-  const { accessToken, userId } = useAnimeContext();
+  const { accessToken, userId, fetchAnimeById, anime, setAnime } =
+    useAnimeContext();
   let { animeId } = useParams();
   const navigate = useNavigate();
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  useEffect(() => {
+    if (!animeId) return;
+
+    fetchAnimeById(animeId, navigate).then((anime) => {
+      if (anime) {
+        setSelectedAnime({
+          tmdbId: anime?.id,
+          adult: anime?.adult,
+          backdrop_path: anime?.backdrop_path,
+          episode_run_time: anime?.episode_run_time,
+          first_air_date: anime?.first_air_date,
+          genres: anime?.genres,
+          homepage: anime?.homepage,
+          origin_country: anime?.origin_country,
+          original_language: anime?.original_language,
+          original_name: anime?.original_name,
+          name: anime?.name,
+          overview: anime?.overview,
+          popularity: anime?.popularity,
+          poster_path: anime?.poster_path,
+          production_companies: anime?.production_companies,
+          seasons: anime?.seasons,
+          status: anime?.status,
+          vote_average: anime?.vote_average,
+          vote_count: anime?.vote_count,
+        });
+      }
+    });
+  }, [animeId, fetchAnimeById, navigate]);
+
+  // useEffect(() => {
+  //   if (animeId) {
+  //     fetchAnimeById(animeId, navigate);
+  //     console.log("fdfd", anime);
+
+  //     const tempData = {
+  //       tmdbId: anime?.id,
+  //       adult: anime?.adult,
+  //       backdrop_path: anime?.backdrop_path,
+  //       episode_run_time: anime?.episode_run_time,
+  //       first_air_date: anime?.first_air_date,
+  //       genres: anime?.genres,
+  //       homepage: anime?.homepage,
+  //       origin_country: anime?.origin_country,
+  //       original_language: anime?.original_language,
+  //       original_name: anime?.original_name,
+  //       name: anime?.name,
+  //       overview: anime?.overview,
+  //       popularity: anime?.popularity,
+  //       poster_path: anime?.poster_path,
+  //       production_companies: anime?.production_companies,
+  //       seasons: anime?.seasons,
+  //       status: anime?.status,
+  //       vote_average: anime?.vote_average,
+  //       vote_count: anime?.vote_count,
+  //     };
+
+  //     setSelectedAnime(tempData);
+  //   }
+  // }, [animeId, fetchAnimeById, navigate]);
 
   const getCurrentPageItems = () => {
     const startIndex = (page - 1) * pageSize;

@@ -29,16 +29,14 @@ function AnimeContextProvider({ children }) {
 
   const fetchAnimeById = useCallback(async (animeId, navigate) => {
     try {
-      const response = await axios.post("/getAnime.php", { id: `${animeId}` });
+      const response = await axios.post("/getAnime.php", { id: animeId });
       if (response.data.success) {
-        setAnime(response.data.data[0]);
-      } else {
-        console.error("No Anime found with the given ID");
-        navigate && navigate("/");
+        return response.data.data[0];
       }
+      navigate("/");
     } catch (error) {
       console.error("Error fetching Anime:", error);
-      navigate && navigate("/");
+      navigate("/");
     }
   }, []);
 
