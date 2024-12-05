@@ -362,105 +362,107 @@ const Form = () => {
 
         <hr className="lineBreak" />
 
-        <div className="previewContainer">
-          <div className="preview">
-            <div className="previewImages">
-              <img
-                src={
-                  selectedAnime.backdrop_path
-                    ? selectedAnime.backdrop_path
-                    : "https://via.placeholder.com/800x450?text=No+Backdrop+Available"
-                }
-                alt={selectedAnime.original_title}
-                className="previewBD"
-              />
-
-              <img
-                className="previewP"
-                src={
-                  selectedAnime?.poster_path
-                    ? `https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`
-                    : "https://via.placeholder.com/200x300?text=No+Image+Available"
-                }
-                alt={selectedAnime.original_title}
-              />
-
-              <input
-                className="previewTitle"
-                type="text"
-                disabled={!animeId}
-                value={
-                  selectedAnime ? selectedAnime.title || selectedAnime.name : ""
-                }
-                onChange={(e) =>
-                  setSelectedAnime({
-                    ...selectedAnime,
-                    name: e.target.value,
-                  })
-                }
-              />
-
-              <textarea
-                className="previewOverview"
-                disabled={!animeId}
-                rows={10}
-                value={selectedAnime ? selectedAnime.overview : ""}
-                onChange={(e) =>
-                  setSelectedAnime({
-                    ...selectedAnime,
-                    overview: e.target.value,
-                  })
-                }
-              />
-            </div>
-          </div>
-          <div className="vertical-line"></div>
-          <div className="objectSelect">a</div>
-        </div>
-
-        <div className="container">
-          <form>
-            {selectedAnime ? (
-              <>
-                <img
-                  src={
-                    selectedAnime.backdrop_path
-                      ? selectedAnime.backdrop_path
-                      : "https://via.placeholder.com/800x450?text=No+Backdrop+Available"
-                  }
-                  alt={selectedAnime.original_title}
-                  width="550"
-                />
-                <img
-                  className="poster-image"
-                  src={
-                    selectedAnime?.poster_path
-                      ? `https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`
-                      : "https://via.placeholder.com/200x300?text=No+Image+Available"
-                  }
-                  alt={selectedAnime.original_title}
-                />
-                <div className="field">
-                  Title:
-                  <input
-                    type="text"
-                    disabled={!animeId}
-                    value={
-                      selectedAnime
-                        ? selectedAnime.title || selectedAnime.name
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setSelectedAnime({
-                        ...selectedAnime,
-                        name: e.target.value,
-                      })
-                    }
-                  />
+        {selectedAnime && (
+          <div>
+            <div className="previewContainer">
+              <div className="preview">
+                <div className="previewContText">
+                  <p className="previewText">Preview</p>
                 </div>
-                <div className="field">
-                  Overview:
+                <div className="previewImages">
+                  <img
+                    src={
+                      selectedAnime.backdrop_path
+                        ? selectedAnime.backdrop_path
+                        : "https://via.placeholder.com/800x450?text=No+Backdrop+Available"
+                    }
+                    alt={selectedAnime.original_title}
+                    className="previewBD"
+                  />
+
+                  <div className="previewP">
+                    <img
+                      className="previewImg"
+                      src={
+                        selectedAnime?.poster_path
+                          ? `https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`
+                          : "https://via.placeholder.com/200x300?text=No+Image+Available"
+                      }
+                      alt={selectedAnime.original_title}
+                    />
+
+                    <div className="previewTextsCont">
+                      <p>Title</p>
+                      <textarea
+                        className="previewTitle"
+                        disabled={!animeId}
+                        value={
+                          selectedAnime
+                            ? selectedAnime.title || selectedAnime.name
+                            : ""
+                        }
+                        onChange={(e) =>
+                          setSelectedAnime({
+                            ...selectedAnime,
+                            name: e.target.value,
+                          })
+                        }
+                      />
+                      <p>Popularity</p>
+                      <input
+                        className="previewInputs"
+                        type="text"
+                        disabled={!animeId}
+                        value={selectedAnime ? selectedAnime.popularity : ""}
+                        onChange={(e) =>
+                          setSelectedAnime({
+                            ...selectedAnime,
+                            popularity: e.target.value,
+                          })
+                        }
+                      />
+                      <p>Release Date</p>
+                      <input
+                        className="previewInputs"
+                        type="text"
+                        disabled={!animeId}
+                        value={
+                          selectedAnime
+                            ? selectedAnime.release_date ||
+                              selectedAnime.first_air_date
+                            : ""
+                        }
+                        onChange={(e) =>
+                          setSelectedAnime({
+                            ...selectedAnime,
+                            first_air_date: e.target.value,
+                          })
+                        }
+                      />
+                      <p>Vote Average</p>
+                      <input
+                        className="previewInputs"
+                        type="text"
+                        disabled={!animeId}
+                        value={selectedAnime ? selectedAnime.vote_average : ""}
+                        onChange={(e) =>
+                          setSelectedAnime({
+                            ...selectedAnime,
+                            vote_average: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overviewCont">
+                  <div className="overviewtext">
+                    <p>Overview</p>
+                  </div>
+
                   <textarea
+                    className="previewOverview"
                     disabled={!animeId}
                     rows={10}
                     value={selectedAnime ? selectedAnime.overview : ""}
@@ -472,64 +474,72 @@ const Form = () => {
                     }
                   />
                 </div>
-                <div className="field">
-                  Popularity:
-                  <input
-                    type="text"
+
+                <div className="overviewCont">
+                  <div className="overviewtext">
+                    <p>Trailer</p>
+                  </div>
+
+                  <textarea
+                    className="previewOverview"
                     disabled={!animeId}
-                    value={selectedAnime ? selectedAnime.popularity : ""}
+                    rows={10}
+                    value={selectedAnime ? selectedAnime.overview : ""}
                     onChange={(e) =>
                       setSelectedAnime({
                         ...selectedAnime,
-                        popularity: e.target.value,
+                        overview: e.target.value,
                       })
                     }
                   />
                 </div>
-                <div className="field">
-                  Release Date:
-                  <input
-                    type="text"
+
+                <div className="overviewCont">
+                  <div className="overviewtext">
+                    <p>Casts</p>
+                  </div>
+
+                  <textarea
+                    className="previewOverview"
                     disabled={!animeId}
-                    value={
-                      selectedAnime
-                        ? selectedAnime.release_date ||
-                          selectedAnime.first_air_date
-                        : ""
-                    }
+                    rows={10}
+                    value={selectedAnime ? selectedAnime.overview : ""}
                     onChange={(e) =>
                       setSelectedAnime({
                         ...selectedAnime,
-                        first_air_date: e.target.value,
+                        overview: e.target.value,
                       })
                     }
                   />
                 </div>
-                <div className="field">
-                  Vote Average:
-                  <input
-                    type="text"
+
+                <div className="overviewCont">
+                  <div className="overviewtext">
+                    <p>Media</p>
+                  </div>
+
+                  <textarea
+                    className="previewOverview"
                     disabled={!animeId}
-                    value={selectedAnime ? selectedAnime.vote_average : ""}
+                    rows={10}
+                    value={selectedAnime ? selectedAnime.overview : ""}
                     onChange={(e) =>
                       setSelectedAnime({
                         ...selectedAnime,
-                        vote_average: e.target.value,
+                        overview: e.target.value,
                       })
                     }
                   />
                 </div>
-                <button type="button" onClick={handleSave}>
-                  Save
-                </button>
-              </>
-            ) : (
-              <div className="noSelectedAnime">
-                <p>Please Select an Anime</p>
               </div>
-            )}
-          </form>
-        </div>
+              <div className="vertical-line"></div>
+
+              <div className="objectSelect">
+                <div></div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div>

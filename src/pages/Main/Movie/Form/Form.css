@@ -195,10 +195,15 @@
 }
 
 .preview {
-  background-color: blue;
+  background-color: rgb(15, 15, 15);
+  border-radius: 1rem;
+  padding: 1rem 1rem;
+  padding-bottom: 4rem;
   width: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
 }
 
@@ -209,29 +214,100 @@ width: 50%;
 
 .previewImages {
   position: relative;
+  padding: 1rem;
+  font-size: 0.5rem;
 }
 
 .previewBD {
+  max-width: 50rem;
   width: 100%;
+  border-radius: 1rem;
 }
 
 .previewP {
-  width: 30%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
   position: absolute;
   top: 50%;
-  left: 5%;
+  left: 20%;
+  padding: 1.3rem 2rem;
+  border-radius: 1rem;
+  background-color: rgba(12, 12, 12, 80%);
+
+}
+
+.previewImg {
+  border-radius: 1rem;
+  height: 100%;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.previewTitle {
-  position: absolute;
-  font-size: 1rem;
-  width: 50%;           /* Ensure it takes up the full width of its container */
-  min-width: 150px;      /* Set a minimum width to prevent it from shrinking too small */
-  height: 3rem;          /* Let the height adjust automatically to content */
-  white-space: normal;   /* Allow text to wrap to the next line */
-  overflow: visible;     /* Allow the content to overflow as necessary */
-  word-wrap: break-word; /* Break long words onto the next line if needed */
+
+.previewInputs {
+  color: white;
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem;
+  font-size: 0.7rem;
 }
 
+.previewTextsCont {
+  width: 50%;
+  color: white;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.previewTitle {
+  top: 10%;
+  left: 0%;
+  all: unset;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 0.7rem;
+}
+
+.overviewCont {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+color: white;
+}
+
+.overviewtext {
+  display: flex;
+  max-width: 50rem;
+  width: 100%;
+  font-weight: bold;
+}
+
+.previewOverview {
+  all: unset;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  max-width: 50rem;
+  height: 7rem;
+  width: 100%;
+}
+
+.previewContText {
+  display: flex;
+  justify-content: center;
+}
+
+.previewText {
+  font-size: 2rem;
+  font-weight: bold;
+}
 
