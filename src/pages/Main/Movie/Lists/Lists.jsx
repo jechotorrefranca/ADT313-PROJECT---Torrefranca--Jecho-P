@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import "./Lists.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { useAnimeContext } from "../../../../context/AnimeContext";
 const Lists = () => {
   const navigate = useNavigate();
-  const [lists, setLists] = useState([]);
-  const { accessToken, fetchAnimeList, animeList } = useAnimeContext();
+  const { accessToken, fetchAnimeList, lists, setLists } = useAnimeContext();
 
   useEffect(() => {
     fetchAnimeList();
@@ -60,7 +59,7 @@ const Lists = () => {
             </tr>
           </thead>
           <tbody>
-            {animeList.map((anime) => (
+            {lists.map((anime) => (
               <tr key={anime.id}>
                 <td>{anime.id}</td>
                 <td>{anime.name}</td>

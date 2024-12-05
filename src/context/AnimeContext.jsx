@@ -7,14 +7,7 @@ import React, {
 } from "react";
 import axios from "axios";
 
-const AnimeContext = createContext({
-  list: [],
-  selectedAnime: undefined,
-  popularAnimeList: [],
-  favoriteAnimeList: [],
-  ratedAnimeList: [],
-  featuredAnimeList: [],
-});
+const AnimeContext = createContext();
 
 function AnimeContextProvider({ children }) {
   const [animeList, setAnimeList] = useState([]);
@@ -23,6 +16,7 @@ function AnimeContextProvider({ children }) {
   const [favoriteAnimeList, setFavoriteAnimeList] = useState([]);
   const [ratedAnimeList, setRatedAnimeList] = useState([]);
   const [featuredAnimeList, setFeaturedAnimeList] = useState([]);
+  const [lists, setLists] = useState([]);
 
   const accessToken = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userId");
@@ -40,22 +34,24 @@ function AnimeContextProvider({ children }) {
     }
   }, []);
 
-  const fetchAnimeList = async () => {
+  const fetchAnimeList = useCallback(async () => {
     try {
       const response = await axios.post("/getAnime.php");
       if (response.data.success) {
-        setAnimeList(response.data.data);
+        const fetchedData = response.data.data;
+        setAnimeList(fetchedData);
+        setLists(fetchedData);
       } else {
         console.error("No Animes found");
       }
     } catch (error) {
       console.error("Error fetching Anime list:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchAnimeList();
-  }, []);
+  }, [fetchAnimeList]);
 
   useEffect(() => {
     const fetchSortedAnimes = async (sortBy, setter) => {
@@ -80,7 +76,7 @@ function AnimeContextProvider({ children }) {
     fetchSortedAnimes("popular", setPopularAnimeList);
     fetchSortedAnimes("favorite", setFavoriteAnimeList);
     fetchSortedAnimes("rated", setRatedAnimeList);
-  }, []);
+  }, [fetchAnimeList]);
 
   useEffect(() => {
     if (animeList.length > 0) {
@@ -113,7 +109,8 @@ function AnimeContextProvider({ children }) {
         featuredAnimeList,
         fetchAnimeById,
         fetchAnimeList,
-        popularAnimeList,
+        lists,
+        setLists,
         accessToken,
         userId,
       }}
