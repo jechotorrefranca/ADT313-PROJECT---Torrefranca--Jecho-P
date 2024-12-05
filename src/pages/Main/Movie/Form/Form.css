@@ -1,16 +1,237 @@
-.searched-movie {
-  max-height: 200px;
-  overflow-y: auto;
-}
-.search-container p:hover {
-  background-color: lightblue;
+.animeFormCont {
+  margin-top: 3rem;
 }
 
-.poster-image {
-  width: 150px;
+.titleForm {
+  color: rgba(85, 163, 255);
+  font-size: 3.5rem;
+}
+
+.searchWholeCont {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.searchedMovie {
+  max-height: 25rem;
+  display: flex;
+  overflow-y: auto;
+  gap: 1rem;
+  width: 80%;
+  padding: 1rem;
+
+}
+
+.lineBreak {
+  margin: 3rem 0rem;
+}
+
+.searchedPosterImage {
+  width: 100px;
   height: auto;
+}
+
+.searchedMovieCont {
+  background-color: rgb(36, 36, 36);
+  width: 150px;
+  height: 20rem; /* Set a fixed height */
+  padding: 1.3rem 1.5rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  overflow: auto;
+  border: 2px solid rgb(111, 128, 138);
+  border-radius: 1rem;
+}
+
+.searchedAnimeButton {
+  background-color: rgba(85, 163, 255);
+  border-radius: 100rem;
+  padding: 0.5rem 1.5rem;
+  color: rgb(19, 19, 19);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.searchedAnimeButton:hover {
+  background-color: rgb(35, 84, 141);
+  color: white;
+  transform: scale(1.05);
+}
+
+.searchedMovieCont p {
+  margin-top: 1rem;
+  word-wrap: break-word;
+  text-align: center;
+}
+
+.searchedPosterImage {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 0.5rem;
 }
 
 .container {
   overflow-y: auto;
 }
+
+.searchBarCont {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+
+.searchBarDes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: white;
+  border-radius: 100rem;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+
+}
+
+.searchBar {
+  display: flex;
+  gap: 1rem;
+  width: 80%;
+  justify-content: space-around;
+  padding: 1rem;
+}
+
+.searchBar input {
+  outline: none;
+  border: none;
+  font-family: "Century Gothic";
+  font-size: medium;
+  width: 100%;
+}
+
+.searchBarButton {
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: white;
+  background-color: rgba(85, 163, 255);
+  border-radius: 100rem;
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.searchBarButton:hover {
+  background-color: rgb(35, 84, 141);
+  color: white;
+  transform: scale(1.05);
+}
+
+.paginationCont {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.pagination span {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.paginationArrow {
+  all: unset;
+  background-color: rgb(83, 83, 83);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 1rem;
+  border-radius: 100rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.paginationArrow:hover {
+  background-color: rgb(35, 84, 141);
+  color: white;
+  transform: scale(1.05);
+}
+
+.vertical-line {
+  border-left: 0.3rem solid rgba(85, 163, 255);
+  margin: 0 10px;
+  border-radius: 100rem;
+}
+
+
+.previewContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5rem;
+}
+
+.noSelectedAnime {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.preview {
+  background-color: blue;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+
+}
+
+.objectSelect {
+background-color: brown;
+width: 50%;
+}
+
+.previewImages {
+  position: relative;
+}
+
+.previewBD {
+  width: 100%;
+}
+
+.previewP {
+  width: 30%;
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.previewTitle {
+  position: absolute;
+  font-size: 1rem;
+  width: 50%;           /* Ensure it takes up the full width of its container */
+  min-width: 150px;      /* Set a minimum width to prevent it from shrinking too small */
+  height: 3rem;          /* Let the height adjust automatically to content */
+  white-space: normal;   /* Allow text to wrap to the next line */
+  overflow: visible;     /* Allow the content to overflow as necessary */
+  word-wrap: break-word; /* Break long words onto the next line if needed */
+}
+
+

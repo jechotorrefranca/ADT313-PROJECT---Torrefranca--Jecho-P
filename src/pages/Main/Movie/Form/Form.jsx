@@ -3,6 +3,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import "./Form.css";
 import { useAnimeContext } from "../../../../context/AnimeContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faAngleRight,
+  faAngleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Form = () => {
   const [query, setQuery] = useState("");
@@ -275,74 +281,112 @@ const Form = () => {
   return (
     <>
       <div className="animeFormCont">
-        <h1>{animeId !== undefined ? "Edit " : "Create "} anime</h1>
+        <h1 className="titleForm">
+          {animeId !== undefined ? "Edit " : "Add "} Anime
+        </h1>
 
         {animeId === undefined && (
           <>
             <div className="search-container">
-              Search anime:{" "}
-              <input
-                type="text"
-                onChange={(event) => setQuery(event.target.value)}
-              />
-              <button type="button" onClick={handleSearch}>
-                Search
-              </button>
-              <div className="">
-                {getCurrentPageItems().map((anime) => (
-                  <p key={anime.id} onClick={() => handleSelectanime(anime)}>
-                    {anime.name || anime.title}
-                  </p>
-                ))}
+              <div className="searchBarCont">
+                <div className="searchBar">
+                  <div className="searchBarDes">
+                    <FontAwesomeIcon icon={faSearch} />
+                    <input
+                      type="text"
+                      placeholder="Search Anime"
+                      onChange={(event) => setQuery(event.target.value)}
+                    />
+                  </div>
+                  <div className="searchBarButton" onClick={handleSearch}>
+                    Search
+                  </div>
+                </div>
+              </div>
+              <div className="searchWholeCont">
+                <div className="searchedMovie">
+                  {getCurrentPageItems().map((anime) => (
+                    <div key={anime.id}>
+                      <div className="searchedMovieCont">
+                        <img
+                          className="searchedPosterImage"
+                          src={
+                            anime.poster_path
+                              ? `https://image.tmdb.org/t/p/original/${anime.poster_path}`
+                              : "https://via.placeholder.com/500x750?text=No+Image+Available"
+                          }
+                          alt={anime.original_title || "No Title Available"}
+                        />
+
+                        <p>{anime.name || anime.title}</p>
+                        <div
+                          className="searchedAnimeButton"
+                          onClick={() => handleSelectanime(anime)}
+                        >
+                          Select
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
             {searchedAnimeList.length > 0 && (
-              <>
+              <div className="paginationCont">
                 <div className="pagination">
                   <button
+                    className="paginationArrow"
                     onClick={() => setPage(page - 1)}
                     disabled={page === 1}
                   >
-                    Previous
+                    <FontAwesomeIcon icon={faAngleLeft} />
                   </button>
+
                   <span>
                     Page {page} of {totalPages}
                   </span>
+
                   <button
+                    className="paginationArrow"
                     onClick={() => setPage(page + 1)}
                     disabled={page === totalPages}
                   >
-                    Next
+                    <FontAwesomeIcon icon={faAngleRight} />
                   </button>
                 </div>
-                <hr />
-              </>
+              </div>
             )}
           </>
         )}
 
-        <div className="container">
-          <form>
-            {selectedAnime ? (
-              <>
-                <img
-                  src={selectedAnime.backdrop_path}
-                  alt={selectedAnime.name}
-                  width="300"
-                />
-                <img
-                  className="poster-image"
-                  src={`https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`}
-                  alt={selectedAnime.original_title}
-                />
-              </>
-            ) : (
-              ""
-            )}
-            <div className="field">
-              Title:
+        <hr className="lineBreak" />
+
+        <div className="previewContainer">
+          <div className="preview">
+            <div className="previewImages">
+              <img
+                src={
+                  selectedAnime.backdrop_path
+                    ? selectedAnime.backdrop_path
+                    : "https://via.placeholder.com/800x450?text=No+Backdrop+Available"
+                }
+                alt={selectedAnime.original_title}
+                className="previewBD"
+              />
+
+              <img
+                className="previewP"
+                src={
+                  selectedAnime?.poster_path
+                    ? `https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`
+                    : "https://via.placeholder.com/200x300?text=No+Image+Available"
+                }
+                alt={selectedAnime.original_title}
+              />
+
               <input
+                className="previewTitle"
                 type="text"
                 disabled={!animeId}
                 value={
@@ -355,10 +399,9 @@ const Form = () => {
                   })
                 }
               />
-            </div>
-            <div className="field">
-              Overview:
+
               <textarea
+                className="previewOverview"
                 disabled={!animeId}
                 rows={10}
                 value={selectedAnime ? selectedAnime.overview : ""}
@@ -370,55 +413,121 @@ const Form = () => {
                 }
               />
             </div>
-            <div className="field">
-              Popularity:
-              <input
-                type="text"
-                disabled={!animeId}
-                value={selectedAnime ? selectedAnime.popularity : ""}
-                onChange={(e) =>
-                  setSelectedAnime({
-                    ...selectedAnime,
-                    popularity: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="field">
-              Release Date:
-              <input
-                type="text"
-                disabled={!animeId}
-                value={
-                  selectedAnime
-                    ? selectedAnime.release_date || selectedAnime.first_air_date
-                    : ""
-                }
-                onChange={(e) =>
-                  setSelectedAnime({
-                    ...selectedAnime,
-                    first_air_date: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="field">
-              Vote Average:
-              <input
-                type="text"
-                disabled={!animeId}
-                value={selectedAnime ? selectedAnime.vote_average : ""}
-                onChange={(e) =>
-                  setSelectedAnime({
-                    ...selectedAnime,
-                    vote_average: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <button type="button" onClick={handleSave}>
-              Save
-            </button>
+          </div>
+          <div className="vertical-line"></div>
+          <div className="objectSelect">a</div>
+        </div>
+
+        <div className="container">
+          <form>
+            {selectedAnime ? (
+              <>
+                <img
+                  src={
+                    selectedAnime.backdrop_path
+                      ? selectedAnime.backdrop_path
+                      : "https://via.placeholder.com/800x450?text=No+Backdrop+Available"
+                  }
+                  alt={selectedAnime.original_title}
+                  width="550"
+                />
+                <img
+                  className="poster-image"
+                  src={
+                    selectedAnime?.poster_path
+                      ? `https://image.tmdb.org/t/p/original/${selectedAnime.poster_path}`
+                      : "https://via.placeholder.com/200x300?text=No+Image+Available"
+                  }
+                  alt={selectedAnime.original_title}
+                />
+                <div className="field">
+                  Title:
+                  <input
+                    type="text"
+                    disabled={!animeId}
+                    value={
+                      selectedAnime
+                        ? selectedAnime.title || selectedAnime.name
+                        : ""
+                    }
+                    onChange={(e) =>
+                      setSelectedAnime({
+                        ...selectedAnime,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="field">
+                  Overview:
+                  <textarea
+                    disabled={!animeId}
+                    rows={10}
+                    value={selectedAnime ? selectedAnime.overview : ""}
+                    onChange={(e) =>
+                      setSelectedAnime({
+                        ...selectedAnime,
+                        overview: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="field">
+                  Popularity:
+                  <input
+                    type="text"
+                    disabled={!animeId}
+                    value={selectedAnime ? selectedAnime.popularity : ""}
+                    onChange={(e) =>
+                      setSelectedAnime({
+                        ...selectedAnime,
+                        popularity: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="field">
+                  Release Date:
+                  <input
+                    type="text"
+                    disabled={!animeId}
+                    value={
+                      selectedAnime
+                        ? selectedAnime.release_date ||
+                          selectedAnime.first_air_date
+                        : ""
+                    }
+                    onChange={(e) =>
+                      setSelectedAnime({
+                        ...selectedAnime,
+                        first_air_date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="field">
+                  Vote Average:
+                  <input
+                    type="text"
+                    disabled={!animeId}
+                    value={selectedAnime ? selectedAnime.vote_average : ""}
+                    onChange={(e) =>
+                      setSelectedAnime({
+                        ...selectedAnime,
+                        vote_average: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <button type="button" onClick={handleSave}>
+                  Save
+                </button>
+              </>
+            ) : (
+              <div className="noSelectedAnime">
+                <p>Please Select an Anime</p>
+              </div>
+            )}
           </form>
         </div>
       </div>
@@ -430,7 +539,7 @@ const Form = () => {
         <div>
           <h2>Videos</h2>
           <div className="videos-list">
-            {selectedAnime?.videos?.map((video) => (
+            {selectedAnime?.all_videos?.map((video) => (
               <div key={video.id} className="video-item">
                 <p>
                   <strong>{video.name}</strong> ({video.type})
@@ -473,8 +582,8 @@ const Form = () => {
               <div key={index} className="backdrop-item">
                 <img
                   src={backdrop.file_path}
-                  alt={`Backdrop ${index}`}
-                  width="300"
+                  alt={`Poster ${index}`}
+                  width="200"
                 />
                 <button
                   onClick={() =>
