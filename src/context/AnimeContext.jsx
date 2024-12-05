@@ -40,21 +40,24 @@ function AnimeContextProvider({ children }) {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchAnimeList = async () => {
-      try {
-        const response = await axios.post("/getAnime.php");
-        if (response.data.success) {
-          setAnimeList(response.data.data);
-          // console.log("Fetched Anime list:", response.data.data);
-        } else {
-          console.error("No Animes found");
-        }
-      } catch (error) {
-        console.error("Error fetching Anime list:", error);
+  const fetchAnimeList = async () => {
+    try {
+      const response = await axios.post("/getAnime.php");
+      if (response.data.success) {
+        setAnimeList(response.data.data);
+      } else {
+        console.error("No Animes found");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching Anime list:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchAnimeList();
+  }, []);
+
+  useEffect(() => {
     const fetchSortedAnimes = async (sortBy, setter) => {
       try {
         const response = await axios.post("/getAnime.php", { sortBy });
@@ -109,6 +112,7 @@ function AnimeContextProvider({ children }) {
         ratedAnimeList,
         featuredAnimeList,
         fetchAnimeById,
+        fetchAnimeList,
         popularAnimeList,
         accessToken,
         userId,

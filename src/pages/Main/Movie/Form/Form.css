@@ -20,7 +20,6 @@
   gap: 1rem;
   width: 80%;
   padding: 1rem;
-
 }
 
 .lineBreak {
@@ -34,9 +33,10 @@
 
 .searchedMovieCont {
   background-color: rgb(36, 36, 36);
-  width: 150px;
-  height: 20rem; /* Set a fixed height */
+  width: 200px;
+  height: 20rem;
   padding: 1.3rem 1.5rem;
+  max-width: 300px;
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
@@ -98,7 +98,6 @@
   border-radius: 100rem;
   padding: 0.5rem 1rem;
   gap: 1rem;
-
 }
 
 .searchBar {
@@ -180,7 +179,6 @@
   border-radius: 100rem;
 }
 
-
 .previewContainer {
   display: flex;
   justify-content: space-between;
@@ -201,15 +199,15 @@
   padding-bottom: 4rem;
   width: 50%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-
 }
 
 .objectSelect {
-background-color: brown;
-width: 50%;
+  background-color: rgb(15, 15, 15);
+  width: 50%;
+  border-radius: 1rem;
+  padding: 0rem 2rem;
 }
 
 .previewImages {
@@ -236,7 +234,6 @@ width: 50%;
   padding: 1.3rem 2rem;
   border-radius: 1rem;
   background-color: rgba(12, 12, 12, 80%);
-
 }
 
 .previewImg {
@@ -244,7 +241,6 @@ width: 50%;
   height: 100%;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
 }
-
 
 .previewInputs {
   color: white;
@@ -281,7 +277,7 @@ width: 50%;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-color: white;
+  color: white;
 }
 
 .overviewtext {
@@ -311,3 +307,107 @@ color: white;
   font-weight: bold;
 }
 
+.videos-list {
+  display: flex;
+  overflow-y: auto;
+  gap: 1rem;
+  font-weight: bold;
+  padding: 0rem 1rem;
+}
+
+.videos-list2 {
+  display: flex;
+  overflow-y: auto;
+  gap: 1rem;
+  font-weight: bold;
+  padding: 0rem 1rem;
+  margin-top: 2rem;
+}
+
+.videoTextCont {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.mediaCont {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1em;
+}
+
+.videoButton {
+  all: unset;
+  margin-top: 1rem;
+  background-color: rgba(85, 163, 255);
+  border-radius: 100rem;
+  padding: 0.5rem 1.5rem;
+  color: rgb(19, 19, 19);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: bold;
+}
+
+.videoButton:hover {
+  background-color: rgb(35, 84, 141);
+  color: white;
+  transform: scale(1.05);
+}
+
+.sectionTitleCont {
+  padding: 0rem 1rem;
+}
+
+.sectionTitle {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.videosCont {
+  background-color: rgb(36, 36, 36);
+  max-width: 20rem;
+  padding: 1.5rem 1.5rem;
+  border: 2px solid rgb(111, 128, 138);
+  border-radius: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 3rem;
+  margin-bottom: 1rem;
+}
+
+.saveButtonCont {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.videoButton2 {
+  all: unset;
+  width: 30%;
+  text-align: center;
+  margin-top: 1rem;
+  background-color: rgba(85, 163, 255);
+  border-radius: 100rem;
+  padding: 1.5rem 1.5rem;
+  color: rgb(19, 19, 19);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.videoButton2:hover {
+  background-color: rgb(35, 84, 141);
+  color: white;
+  transform: scale(1.05);
+}
+
+.video-wrapper iframe {
+  width: 100%;
+  height: 450px;
+  aspect-ratio: 16/9;
+}

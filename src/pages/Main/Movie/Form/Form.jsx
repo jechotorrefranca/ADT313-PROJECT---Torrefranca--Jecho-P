@@ -17,6 +17,7 @@ const Form = () => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(20);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState([]);
   const { accessToken, userId, fetchAnimeById, anime, setAnime } =
     useAnimeContext();
   let { animeId } = useParams();
@@ -261,6 +262,7 @@ const Form = () => {
       },
     })
       .then((response) => {
+        navigate("/main/movies");
         console.log("Response:", response);
         alert("Success");
       })
@@ -476,22 +478,24 @@ const Form = () => {
                 </div>
 
                 <div className="overviewCont">
-                  <div className="overviewtext">
-                    <p>Trailer</p>
-                  </div>
-
-                  <textarea
-                    className="previewOverview"
-                    disabled={!animeId}
-                    rows={10}
-                    value={selectedAnime ? selectedAnime.overview : ""}
-                    onChange={(e) =>
-                      setSelectedAnime({
-                        ...selectedAnime,
-                        overview: e.target.value,
-                      })
-                    }
-                  />
+                  {selectedVideo && selectedVideo.key ? (
+                    <>
+                      <div className="overviewtext">
+                        <p>Trailer</p>
+                      </div>
+                      <div className="video-wrapper">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${selectedVideo.key}`}
+                          title={selectedVideo.name}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                    </>
+                  ) : (
+                    <h2>No Trailer Available</h2>
+                  )}
                 </div>
 
                 <div className="overviewCont">
@@ -535,77 +539,138 @@ const Form = () => {
               <div className="vertical-line"></div>
 
               <div className="objectSelect">
+                <div className="mediaCont">
+                  <div className="videoTextCont">
+                    <p>Customization</p>
+                  </div>
+                  <div>
+                    <div className="sectionTitleCont">
+                      <p className="sectionTitle">Video</p>
+                    </div>
+                    <div className="videos-list">
+                      {selectedAnime &&
+                      selectedAnime.all_videos &&
+                      selectedAnime.all_videos.length > 0 ? (
+                        selectedAnime.all_videos.map((video) => (
+                          <div className="videosCont" key={video.id}>
+                            <p>{video.name}</p>
+                            <div className="videolist">
+                              <div className="video-preview">
+                                <iframe
+                                  width="280"
+                                  height="158"
+                                  src={`https://www.youtube.com/embed/${video.key}`}
+                                  title={video.name}
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                ></iframe>
+                              </div>
+                              <button
+                                className="videoButton"
+                                onClick={() => {
+                                  setSelectedVideo(video);
+                                }}
+                              >
+                                Select Video
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No videos found</p>
+                      )}
+                    </div>
+
+                    <div className="sectionTitleCont">
+                      <p className="sectionTitle">Poster</p>
+                    </div>
+
+                    <div className="videos-list2">
+                      {selectedAnime &&
+                      selectedAnime.all_poster_path &&
+                      selectedAnime.all_poster_path.length > 0 ? (
+                        selectedAnime.all_poster_path.map((poster, index) => (
+                          <div className="videosCont" key={index}>
+                            <p>{poster.name}</p>
+                            <div className="videolist">
+                              <div className="video-preview">
+                                <img
+                                  src={poster.file_path}
+                                  alt={`Poster ${index}`}
+                                  width="200"
+                                />
+                              </div>
+                              <button
+                                className="videoButton"
+                                onClick={() => {
+                                  handleSelect(poster.file_path, "poster_path");
+                                }}
+                              >
+                                Select Poster
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No Posters found</p>
+                      )}
+                    </div>
+
+                    <div className="sectionTitleCont">
+                      <p className="sectionTitle">Backdrop</p>
+                    </div>
+
+                    <div className="videos-list2">
+                      {selectedAnime &&
+                      selectedAnime.all_backdrop_path &&
+                      selectedAnime.all_backdrop_path.length > 0 ? (
+                        selectedAnime.all_backdrop_path.map(
+                          (backdrop, index) => (
+                            <div className="videosCont" key={index}>
+                              <p>{backdrop.name}</p>
+                              <div className="video-preview">
+                                <img
+                                  src={backdrop.file_path}
+                                  alt={`Backdrop ${index}`}
+                                  width="300"
+                                />
+                              </div>
+                              <button
+                                className="videoButton"
+                                onClick={() => {
+                                  handleSelect(
+                                    backdrop.file_path,
+                                    "backdrop_path"
+                                  );
+                                }}
+                              >
+                                Select Backdrop
+                              </button>
+                            </div>
+                          )
+                        )
+                      ) : (
+                        <p>No Backdrop found</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 <div></div>
+
+                <div className="saveButtonCont">
+                  <button
+                    className="videoButton2"
+                    type="button"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
-      </div>
-
-      <div>
-        <h1>{selectedAnime?.name || "Anime Details"}</h1>
-
-        {/* Videos Section */}
-        <div>
-          <h2>Videos</h2>
-          <div className="videos-list">
-            {selectedAnime?.all_videos?.map((video) => (
-              <div key={video.id} className="video-item">
-                <p>
-                  <strong>{video.name}</strong> ({video.type})
-                </p>
-                <p>Platform: {video.site}</p>
-                <button onClick={() => handleSelect(video, "video")}>
-                  Select Video
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Posters Section */}
-        <div>
-          <h2>Posters</h2>
-          <div className="posters-list">
-            {selectedAnime?.all_poster_path?.map((poster, index) => (
-              <div key={index} className="poster-item">
-                <img
-                  src={poster.file_path}
-                  alt={`Poster ${index}`}
-                  width="200"
-                />
-                <button
-                  onClick={() => handleSelect(poster.file_path, "poster_path")}
-                >
-                  Select Poster
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Backdrops Section */}
-        <div>
-          <h2>Backdrops</h2>
-          <div className="backdrops-list">
-            {selectedAnime?.all_backdrop_path?.map((backdrop, index) => (
-              <div key={index} className="backdrop-item">
-                <img
-                  src={backdrop.file_path}
-                  alt={`Poster ${index}`}
-                  width="200"
-                />
-                <button
-                  onClick={() =>
-                    handleSelect(backdrop.file_path, "backdrop_path")
-                  }
-                >
-                  Select Backdrop
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {animeId !== undefined && selectedAnime && (

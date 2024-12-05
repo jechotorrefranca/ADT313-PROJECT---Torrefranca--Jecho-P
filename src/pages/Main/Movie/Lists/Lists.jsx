@@ -6,7 +6,11 @@ import { useAnimeContext } from "../../../../context/AnimeContext";
 const Lists = () => {
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
-  const { accessToken, userId, animeList } = useAnimeContext();
+  const { accessToken, fetchAnimeList, animeList } = useAnimeContext();
+
+  useEffect(() => {
+    fetchAnimeList();
+  }, [fetchAnimeList]);
 
   const handleDelete = (id) => {
     const isConfirm = window.confirm(
