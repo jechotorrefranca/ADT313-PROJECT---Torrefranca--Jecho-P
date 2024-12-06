@@ -9,10 +9,20 @@ import {
 
 function AnimeCards({ anime, onClick, place }) {
   const parsedFeaturedGenres =
-    anime && anime.genres !== "null" ? JSON.parse(anime.genres) : [];
+    anime &&
+    anime.genres &&
+    typeof anime.genres === "string" &&
+    anime.genres !== "null"
+      ? JSON.parse(anime.genres)
+      : anime?.genres || [];
 
   const parsedSeasons =
-    anime && anime.seasons !== "null" ? JSON.parse(anime.seasons) : [];
+    anime &&
+    anime.seasons &&
+    typeof anime.seasons === "string" &&
+    anime.seasons !== "null"
+      ? JSON.parse(anime.seasons)
+      : anime?.seasons || [];
 
   return (
     <div className="whole-card-content">

@@ -1,7 +1,10 @@
 import React from "react";
 
 const GenreConverter = ({ genres }) => {
-  const parsedGenres = genres !== "null" ? JSON.parse(genres) : [];
+  const parsedGenres =
+    typeof genres === "string" && genres !== "null"
+      ? JSON.parse(genres)
+      : genres || [];
 
   return (
     <div className="genreList">

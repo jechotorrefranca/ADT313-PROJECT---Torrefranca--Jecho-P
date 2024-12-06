@@ -23,18 +23,16 @@ function AnimeContextProvider({ children }) {
 
   const fetchAnimeById = useCallback(async (animeId, navigate) => {
     try {
-      // Ensure that we are passing the right data to the API
       const response = await axios.post("/getAnime.php", { id: animeId });
-      // Check if the response data is successful
       if (response.data.success) {
         return response.data.data[0]; // If success, return the first anime
       } else {
         console.error("No data found for anime with ID:", animeId);
-        // navigate("/");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error fetching Anime:", error);
-      // navigate("/");
+      navigate("/");
     }
   }, []);
 
@@ -45,7 +43,6 @@ function AnimeContextProvider({ children }) {
         const fetchedData = response.data.data;
         setAnimeList(fetchedData);
         setLists(fetchedData);
-        console.log(fetchedData);
       } else {
         console.error("No Animes found");
       }
@@ -112,6 +109,7 @@ function AnimeContextProvider({ children }) {
         favoriteAnimeList,
         ratedAnimeList,
         featuredAnimeList,
+        setFeaturedAnimeList,
         fetchAnimeById,
         fetchAnimeList,
         lists,

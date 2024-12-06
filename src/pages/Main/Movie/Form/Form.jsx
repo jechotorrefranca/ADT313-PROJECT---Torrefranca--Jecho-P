@@ -19,6 +19,7 @@ const Form = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState([]);
   const [currentAnimeData, setCurrentAnimeData] = useState([]);
+  const [realId, setRealId] = useState();
   const { accessToken, userId, fetchAnimeById, anime, setAnime } =
     useAnimeContext();
   let { animeId } = useParams();
@@ -26,12 +27,12 @@ const Form = () => {
 
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 
-  let data = {
-    key: selectedVideo.key || "",
-    name: selectedVideo.name || "",
-    site: selectedVideo.site || "Youtube",
-    type: selectedVideo.type || "Custom Video",
-  };
+  // let data = {
+  //   key: selectedVideo.key || "",
+  //   name: selectedVideo.name || "",
+  //   site: selectedVideo.site || "Youtube",
+  //   type: selectedVideo.type || "Custom Video",
+  // };
 
   // console.log("selectedvid", data);
 
@@ -76,6 +77,8 @@ const Form = () => {
             type: anime.videos[0].type,
             name: anime.videos[0].name,
           });
+
+          setRealId(anime.videos[0].id);
 
           console.log("Video data fetched:", anime.videos[0]);
         } else {
@@ -163,7 +166,6 @@ const Form = () => {
 
   const fetchAnimeDetails = async (anime) => {
     try {
-      // Use 'anime' directly instead of 'selectedAnime'
       const { data: animeDetails } = await axios.get(
         `https://api.themoviedb.org/3/${
           anime.episode_run_time ? "tv" : "movie"
@@ -341,6 +343,7 @@ const Form = () => {
   };
 
   const handleSave = () => {
+    console.log("why arent u working", selectedVideo);
     saveToAnime();
   };
 
@@ -376,17 +379,18 @@ const Form = () => {
           ? selectedAnime.episode_run_time[0]
           : selectedAnime?.episode_run_time || null,
       first_air_date: selectedAnime?.first_air_date || null,
-      genres: selectedAnime?.genres || null,
+      genres: JSON.stringify(selectedAnime?.genres) || null,
       homepage: selectedAnime?.homepage || null,
-      origin_country: selectedAnime?.origin_country || null,
+      origin_country: JSON.stringify(selectedAnime?.origin_country) || null,
       original_language: selectedAnime?.original_language || null,
       original_name: selectedAnime?.original_name || null,
       name: selectedAnime?.name || null,
       overview: selectedAnime?.overview || null,
       popularity: selectedAnime?.popularity || null,
       poster_path: selectedAnime?.poster_path || null,
-      production_companies: selectedAnime?.production_companies || null,
-      seasons: selectedAnime?.seasons || null,
+      production_companies:
+        JSON.stringify(selectedAnime?.production_companies) || null,
+      seasons: JSON.stringify(selectedAnime?.seasons) || null,
       status: selectedAnime?.status || null,
       vote_average: selectedAnime?.vote_average || null,
       vote_count: selectedAnime?.vote_count || null,
@@ -405,6 +409,7 @@ const Form = () => {
         const savedAnimeId = response?.data?.id || animeId;
         console.log("iddddd", response.data.id);
         saveToVideo(savedAnimeId);
+        navigate("/main/movies");
       })
       .catch((error) => {
         console.error(error);
@@ -421,12 +426,14 @@ const Form = () => {
 
     const videoData = {
       animeId: id,
-      id: selectedVideo.id,
-      key: selectedVideo.key || "",
-      name: selectedVideo.name || "",
+      id: animeId ? realId : id,
+      key: selectedVideo.key || "nokey",
+      name: selectedVideo.name || "noname",
       site: selectedVideo.site || "Youtube",
       type: selectedVideo.type || "Custom Video",
     };
+
+    console.log("BEDYO", videoData);
 
     axios({
       method: animeId ? "patch" : "post",

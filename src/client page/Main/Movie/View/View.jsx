@@ -16,7 +16,8 @@ function View() {
     setAnime(null);
 
     fetchAnimeById(animeId, navigate).then((anime) => {
-      setAnime(anime);
+      setAnime(anime.anime);
+      console.log(anime);
     });
   }, [animeId, fetchAnimeById, navigate]);
 

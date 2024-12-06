@@ -22,6 +22,7 @@ const Home = () => {
   const [featuredNumber, setFeaturedNumber] = useState(null);
   const [animeIndex, setAnimeIndex] = useState(9);
   const [isSliding, setIsSliding] = useState(false);
+  const [featuredAnimeArray, setFeaturedAnimeArray] = useState([]);
   const {
     animeList,
     favoriteAnimeList,
@@ -31,34 +32,41 @@ const Home = () => {
   } = useAnimeContext();
 
   useEffect(() => {
-    if (featuredAnimeList.length) {
-      setFeaturedAnime(featuredAnimeList[animeIndex]);
+    if (featuredAnimeList && featuredAnimeList.length) {
+      const animeArray = featuredAnimeList.map((item) => item.anime);
+      setFeaturedAnimeArray(animeArray);
+    }
+  }, [featuredAnimeList]);
+
+  useEffect(() => {
+    if (featuredAnimeArray.length) {
+      setFeaturedAnime(featuredAnimeArray[animeIndex]);
       setFeaturedNumber(animeIndex + 1);
     }
 
     let index = animeIndex;
     const interval = setInterval(() => {
-      if (featuredAnimeList.length) {
-        index = index === 0 ? featuredAnimeList.length - 1 : index - 1;
+      if (featuredAnimeArray.length) {
+        index = index === 0 ? featuredAnimeArray.length - 1 : index - 1;
         setAnimeIndex(index);
-        setFeaturedAnime(featuredAnimeList[index]);
+        setFeaturedAnime(featuredAnimeArray[index]);
         setFeaturedNumber(index + 1);
       }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [animeIndex, featuredAnimeList]);
+  }, [animeIndex, featuredAnimeArray]);
 
   const handleSlide = (direction) => {
     if (isSliding) return;
     setIsSliding(true);
     let newIndex = animeIndex + direction;
 
-    if (newIndex < 0) newIndex = featuredAnimeList.length - 1;
-    if (newIndex >= featuredAnimeList.length) newIndex = 0;
+    if (newIndex < 0) newIndex = featuredAnimeArray.length - 1;
+    if (newIndex >= featuredAnimeArray.length) newIndex = 0;
 
     setAnimeIndex(newIndex);
-    setFeaturedAnime(featuredAnimeList[newIndex]);
+    setFeaturedAnime(featuredAnimeArray[newIndex]);
     setFeaturedNumber(newIndex + 1);
 
     setTimeout(() => setIsSliding(false), 100);
@@ -67,7 +75,7 @@ const Home = () => {
   return (
     <div className="whole">
       <div className="wholeCont">
-        {featuredAnime && featuredAnimeList.length ? (
+        {featuredAnime && featuredAnimeArray.length ? (
           <div className="featured-list-container">
             <div className="featuredArrow left" onClick={() => handleSlide(1)}>
               <FontAwesomeIcon icon={faAngleLeft} />
@@ -155,15 +163,14 @@ const Home = () => {
         <div className="animeTitle">
           <p>Top Anime</p>
         </div>
-
         <div className="ratedAnimeList">
-          {ratedAnimeList.map((anime, index) => (
-            <div key={anime.id}>
+          {ratedAnimeList.map((all, index) => (
+            <div key={all.anime.id}>
               <AnimeCards
-                anime={anime}
-                place={index + 1}
+                anime={all.anime}
+                place={index + 1} // Pass the index here
                 onClick={() => {
-                  navigate(`/view/${anime.id}`);
+                  navigate(`/view/${all.anime.id}`);
                 }}
               />
             </div>
@@ -174,8 +181,8 @@ const Home = () => {
 
         <div className="popularAnimeList"></div>
 
-        {/* <div className="list-container">
-          {animeList.map((anime) => (
+        <div className="list-container">
+          {/* {animeList.map((anime) => (
             <div key={anime.id}>
               <AnimeCards
                 anime={anime}
@@ -184,8 +191,8 @@ const Home = () => {
                 }}
               />
             </div>
-          ))}
-        </div> */}
+          ))} */}
+        </div>
       </div>
     </div>
   );
