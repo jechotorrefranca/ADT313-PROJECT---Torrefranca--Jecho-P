@@ -23,6 +23,15 @@ const Form = () => {
   let { animeId } = useParams();
   const navigate = useNavigate();
 
+  let data = {
+    key: selectedVideo.key || "",
+    name: selectedVideo.name || "",
+    site: selectedVideo.site || "Youtube",
+    type: selectedVideo.type || "Custom Video",
+  };
+
+  // console.log("selectedvid", data);
+
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
@@ -128,6 +137,13 @@ const Form = () => {
 
   const handleSelectanime = async (anime) => {
     const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+    setSelectedAnime(null);
+    setSelectedVideo({
+      key: "",
+      name: "",
+      site: "Youtube",
+      type: "Custom Video",
+    });
 
     try {
       const { data: animeDetails } = await axios.get(
@@ -480,21 +496,110 @@ const Form = () => {
                 <div className="overviewCont">
                   {selectedVideo && selectedVideo.key ? (
                     <>
-                      <div className="overviewtext">
-                        <p>Trailer</p>
-                      </div>
                       <div className="video-wrapper">
-                        <iframe
-                          src={`https://www.youtube.com/embed/${selectedVideo.key}`}
-                          title={selectedVideo.name}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
+                        {selectedVideo.key !== "" && (
+                          <>
+                            <div className="overviewtext">
+                              <p>Trailer</p>
+                            </div>
+                            <iframe
+                              src={`https://www.youtube.com/embed/${selectedVideo.key}`}
+                              title={selectedVideo.name}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="previewVideMain">
+                        <p className="prevVidTitle">Customize Video</p>
+                        <div className="previewVideoDes">
+                          <p>Youtube Key</p>
+                          <input
+                            className="previewInputs"
+                            type="text"
+                            // disabled={!animeId}
+                            value={selectedVideo.key}
+                            onChange={(e) =>
+                              setSelectedVideo({
+                                ...selectedVideo,
+                                key: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="previewVideoDes">
+                          <p>Video Name</p>
+                          <input
+                            className="previewInputs"
+                            type="text"
+                            // disabled={!animeId}
+                            value={selectedVideo.name}
+                            onChange={(e) =>
+                              setSelectedVideo({
+                                ...selectedVideo,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
                       </div>
                     </>
                   ) : (
-                    <h2>No Trailer Available</h2>
+                    <>
+                      <div className="video-wrapper">
+                        {selectedVideo.key !== "" && (
+                          <>
+                            <div className="overviewtext">
+                              <p>Trailer</p>
+                            </div>
+                            <iframe
+                              src={`https://www.youtube.com/embed/${selectedVideo.key}`}
+                              title={selectedVideo.name}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="previewVideMain">
+                        <p className="prevVidTitle">Customize Video</p>
+                        <div className="previewVideoDes">
+                          <p>Youtube Key</p>
+                          <input
+                            className="previewInputs"
+                            type="text"
+                            // disabled={!animeId}
+                            value={selectedVideo.key}
+                            onChange={(e) =>
+                              setSelectedVideo({
+                                ...selectedVideo,
+                                key: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="previewVideoDes">
+                          <p>Video Name</p>
+                          <input
+                            className="previewInputs"
+                            type="text"
+                            // disabled={!animeId}
+                            value={selectedVideo.name}
+                            onChange={(e) =>
+                              setSelectedVideo({
+                                ...selectedVideo,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </>
                   )}
                 </div>
 
