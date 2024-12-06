@@ -18,10 +18,13 @@ const Form = () => {
   const [pageSize] = useState(20);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState([]);
+  const [currentAnimeData, setCurrentAnimeData] = useState([]);
   const { accessToken, userId, fetchAnimeById, anime, setAnime } =
     useAnimeContext();
   let { animeId } = useParams();
   const navigate = useNavigate();
+
+  const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 
   let data = {
     key: selectedVideo.key || "",
@@ -40,26 +43,49 @@ const Form = () => {
     fetchAnimeById(animeId, navigate).then((anime) => {
       if (anime) {
         setSelectedAnime({
-          tmdbId: anime?.id,
-          adult: anime?.adult,
-          backdrop_path: anime?.backdrop_path,
-          episode_run_time: anime?.episode_run_time,
-          first_air_date: anime?.first_air_date,
-          genres: anime?.genres,
-          homepage: anime?.homepage,
-          origin_country: anime?.origin_country,
-          original_language: anime?.original_language,
-          original_name: anime?.original_name,
-          name: anime?.name,
-          overview: anime?.overview,
-          popularity: anime?.popularity,
-          poster_path: anime?.poster_path,
-          production_companies: anime?.production_companies,
-          seasons: anime?.seasons,
-          status: anime?.status,
-          vote_average: anime?.vote_average,
-          vote_count: anime?.vote_count,
+          tmdbId: anime?.anime.id,
+          adult: anime?.anime.adult,
+          backdrop_path: anime?.anime.backdrop_path,
+          episode_run_time: anime?.anime.episode_run_time,
+          first_air_date: anime?.anime.first_air_date,
+          genres: anime?.anime.genres,
+          homepage: anime?.anime.homepage,
+          origin_country: anime?.anime.origin_country,
+          original_language: anime?.anime.original_language,
+          original_name: anime?.anime.original_name,
+          name: anime?.anime.name,
+          overview: anime?.anime.overview,
+          popularity: anime?.anime.popularity,
+          poster_path: anime?.anime.poster_path,
+          production_companies: anime?.anime.production_companies,
+          seasons: anime?.anime.seasons,
+          status: anime?.anime.status,
+          vote_average: anime?.anime.vote_average,
+          vote_count: anime?.anime.vote_count,
         });
+
+        console.log("di ko na alam", anime.anime);
+
+        // console.log("AAAAAA", anime?.videos[0].id);
+
+        if (anime?.videos && anime.videos.length > 0) {
+          setSelectedVideo({
+            id: anime.videos[0].id,
+            key: anime.videos[0].key,
+            site: anime.videos[0].site,
+            type: anime.videos[0].type,
+            name: anime.videos[0].name,
+          });
+
+          console.log("Video data fetched:", anime.videos[0]);
+        } else {
+          console.log("No videos found for this anime.");
+        }
+
+        console.log("fetching current details");
+        console.log(selectedVideo);
+        console.log(anime.anime);
+        fetchAndSetAnimeData(anime.anime);
       }
     });
   }, [animeId, fetchAnimeById, navigate]);
@@ -135,8 +161,100 @@ const Form = () => {
       });
   }, [query]);
 
+  const fetchAnimeDetails = async (anime) => {
+    try {
+      // Use 'anime' directly instead of 'selectedAnime'
+      const { data: animeDetails } = await axios.get(
+        `https://api.themoviedb.org/3/${
+          anime.episode_run_time ? "tv" : "movie"
+        }/${anime.tmdbId}?api_key=${apiKey}`
+      );
+
+      console.log("episode_run_time", anime.episode_run_time); // Ensure you're logging the correct property
+
+      const { data: videoData } = await axios.get(
+        `https://api.themoviedb.org/3/${
+          anime.episode_run_time ? "tv" : "movie"
+        }/${anime.tmdbId}/videos?api_key=${apiKey}`
+      );
+      const videos = videoData.results.map((video) => ({
+        id: video.id,
+        key: video.key,
+        name: video.name,
+        type: video.type,
+        site: video.site,
+      }));
+
+      const { data: creditsData } = await axios.get(
+        `https://api.themoviedb.org/3/${
+          anime.episode_run_time ? "tv" : "movie"
+        }/${anime.tmdbId}/credits?api_key=${apiKey}`
+      );
+      const casts = creditsData.cast.map((cast) => ({
+        id: cast.id,
+        name: cast.name,
+        character: cast.character,
+        profile_path: cast.profile_path
+          ? `https://image.tmdb.org/t/p/original${cast.profile_path}`
+          : null,
+      }));
+
+      const { data: imagesData } = await axios.get(
+        `https://api.themoviedb.org/3/${
+          anime.episode_run_time ? "tv" : "movie"
+        }/${anime.tmdbId}/images?api_key=${apiKey}`
+      );
+      const posters = imagesData.posters.map((poster) => ({
+        file_path: `https://image.tmdb.org/t/p/original${poster.file_path}`,
+        width: poster.width,
+        height: poster.height,
+      }));
+      const backdrops = imagesData.backdrops.map((backdrop) => ({
+        file_path: `https://image.tmdb.org/t/p/original${backdrop.file_path}`,
+        width: backdrop.width,
+        height: backdrop.height,
+      }));
+
+      return {
+        animeDetails,
+        videos,
+        casts,
+        posters,
+        backdrops,
+      };
+    } catch (error) {
+      console.error("Error fetching anime details:", error);
+      throw error;
+    }
+  };
+
+  const fetchAndSetAnimeData = async (anime) => {
+    try {
+      const data = await fetchAnimeDetails(anime);
+
+      // Update the selectedAnime state with the new data
+      setSelectedAnime((prevAnime) => ({
+        ...prevAnime,
+        all_videos: data.videos,
+        casts: data.casts,
+        all_poster_path: data.posters,
+        all_backdrop_path: data.backdrops,
+      }));
+
+      // The state is updated asynchronously, so you can't access it right away here.
+      // Instead, use a `useEffect` to log it after the update.
+    } catch (error) {
+      console.error("Failed to set anime data", error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedAnime) {
+      console.log("Updated selectedAnime:", selectedAnime);
+    }
+  }, [selectedAnime]);
+
   const handleSelectanime = async (anime) => {
-    const apiKey = process.env.REACT_APP_TMDB_API_KEY;
     setSelectedAnime(null);
     setSelectedVideo({
       key: "",
@@ -295,6 +413,7 @@ const Form = () => {
   };
 
   const saveToVideo = (id) => {
+    console.log("dfsdgksdjgsdnj", selectedVideo.id);
     if (!selectedVideo) {
       alert("No video data to save.");
       return;
@@ -302,6 +421,7 @@ const Form = () => {
 
     const videoData = {
       animeId: id,
+      id: selectedVideo.id,
       key: selectedVideo.key || "",
       name: selectedVideo.name || "",
       site: selectedVideo.site || "Youtube",

@@ -60,14 +60,14 @@ const Lists = () => {
           </thead>
           <tbody>
             {lists.map((anime) => (
-              <tr key={anime.id}>
-                <td>{anime.id}</td>
-                <td>{anime.name}</td>
+              <tr key={anime.anime.id}>
+                <td>{anime.anime.id}</td>
+                <td>{anime.anime.name}</td>
                 <td>
                   <button
                     type="button"
                     onClick={() => {
-                      navigate("/main/movies/form/" + anime.id);
+                      navigate("/main/movies/form/" + anime.anime.id);
                     }}
                   >
                     Edit
