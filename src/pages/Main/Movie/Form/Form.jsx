@@ -242,6 +242,11 @@ const Form = () => {
       return;
     }
 
+    if (!selectedVideo.key || !selectedVideo.name) {
+      alert("Selected anime must have a Video and Name");
+      return;
+    }
+
     const data = {
       id: animeId,
       tmdbId: selectedAnime?.id,
@@ -278,13 +283,46 @@ const Form = () => {
       },
     })
       .then((response) => {
-        navigate("/main/movies");
-        console.log("Response:", response);
-        alert("Success");
+        console.log("Anime saved successfully:", response);
+        const savedAnimeId = response?.data?.id || animeId;
+        console.log("iddddd", response.data.id);
+        saveToVideo(savedAnimeId);
       })
       .catch((error) => {
         console.error(error);
-        alert("Error saving data");
+        alert("Error saving anime data");
+      });
+  };
+
+  const saveToVideo = (id) => {
+    if (!selectedVideo) {
+      alert("No video data to save.");
+      return;
+    }
+
+    const videoData = {
+      animeId: id,
+      key: selectedVideo.key || "",
+      name: selectedVideo.name || "",
+      site: selectedVideo.site || "Youtube",
+      type: selectedVideo.type || "Custom Video",
+    };
+
+    axios({
+      method: animeId ? "patch" : "post",
+      url: "/videosCrud.php",
+      data: videoData,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => {
+        console.log("Video saved successfully:", response);
+        alert("Anime and video saved successfully.");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error saving video data");
       });
   };
 

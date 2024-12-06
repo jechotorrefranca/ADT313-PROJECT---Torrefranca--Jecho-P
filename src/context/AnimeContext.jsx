@@ -41,6 +41,7 @@ function AnimeContextProvider({ children }) {
         const fetchedData = response.data.data;
         setAnimeList(fetchedData);
         setLists(fetchedData);
+        console.log(fetchedData);
       } else {
         console.error("No Animes found");
       }
