@@ -244,7 +244,7 @@
 
 .previewInputs {
   color: white;
-  width: 100%;
+  width: 80%;
   background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 1rem;
@@ -278,6 +278,7 @@
   justify-content: center;
   flex-direction: column;
   color: white;
+  margin-top: 2rem;
 }
 
 .overviewtext {
@@ -285,6 +286,7 @@
   max-width: 50rem;
   width: 100%;
   font-weight: bold;
+  overflow: auto;
 }
 
 .previewOverview {
@@ -429,4 +431,41 @@
   display: flex;
   gap: 1rem;
   white-space: nowrap;
+  justify-content: space-between;
+}
+
+.castMainContainer {
+  width: 100%;
+  height: fit-content;
+  overflow: auto;
+}
+
+.castContainer {
+  display: flex;
+  text-align: center;
+  font-weight: bold;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.castImage {
+  border-radius: 1rem;
+  width: 8rem;
+}
+
+.castBorder {
+  height: fit-content + 10rem;
+  background-color: rgb(36, 36, 36);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 2px solid rgb(111, 128, 138);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.castTextCont {
+  font-weight: bold;
+  max-width: 50rem;
+  width: 100%;
 }

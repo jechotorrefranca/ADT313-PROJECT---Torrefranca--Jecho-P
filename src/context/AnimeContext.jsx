@@ -17,15 +17,34 @@ function AnimeContextProvider({ children }) {
   const [ratedAnimeList, setRatedAnimeList] = useState([]);
   const [featuredAnimeList, setFeaturedAnimeList] = useState([]);
   const [lists, setLists] = useState([]);
+  const [onlyAnime, setOnlyAnime] = useState([]);
+  const [castCollection, setCastCollection] = useState([]);
 
   const accessToken = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userId");
+
+  const fetchOnlyAnime = useCallback(async () => {
+    try {
+      const response = await axios.post("/animeOnly.php");
+      if (response.data.success) {
+        setOnlyAnime(response.data.data);
+      } else {
+        console.error("No Animes found");
+      }
+    } catch (error) {
+      console.error("Error fetching only anime list:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOnlyAnime();
+  }, [fetchOnlyAnime]);
 
   const fetchAnimeById = useCallback(async (animeId, navigate) => {
     try {
       const response = await axios.post("/getAnime.php", { id: animeId });
       if (response.data.success) {
-        return response.data.data[0]; // If success, return the first anime
+        return response.data.data[0];
       } else {
         console.error("No data found for anime with ID:", animeId);
         navigate("/");
@@ -33,6 +52,24 @@ function AnimeContextProvider({ children }) {
     } catch (error) {
       console.error("Error fetching Anime:", error);
       navigate("/");
+    }
+  }, []);
+
+  const fetchAnimeByIdCasts = useCallback(async (animeId) => {
+    try {
+      const response = await axios.post("/getAnime.php", { id: animeId });
+      if (response.data.success) {
+        const allData = response.data.data;
+
+        // Extract and set casts
+        const allCasts = allData.map((item) => item.casts).flat();
+        setCastCollection(allCasts); // Update the state
+        console.log("All casts fetched:", allCasts);
+      } else {
+        console.error("No data found for anime with ID:", animeId);
+      }
+    } catch (error) {
+      console.error("Error fetching Anime casts:", error);
     }
   }, []);
 
@@ -58,7 +95,7 @@ function AnimeContextProvider({ children }) {
   useEffect(() => {
     const fetchSortedAnimes = async (sortBy, setter) => {
       try {
-        const response = await axios.post("/getAnime.php", { sortBy });
+        const response = await axios.post("/animeOnly.php", { sortBy });
         if (response.data.success) {
           setter(response.data.data.slice(0, 10));
           // console.log(
@@ -81,10 +118,10 @@ function AnimeContextProvider({ children }) {
   }, [fetchAnimeList]);
 
   useEffect(() => {
-    if (animeList.length > 0) {
+    if (onlyAnime.length > 0) {
       const getRandomAnimes = () => {
         const randomAnimes = [];
-        const tempList = [...animeList];
+        const tempList = [...onlyAnime];
 
         for (let i = 0; i < 10; i++) {
           const randomIndex = Math.floor(Math.random() * tempList.length);
@@ -110,12 +147,16 @@ function AnimeContextProvider({ children }) {
         ratedAnimeList,
         featuredAnimeList,
         setFeaturedAnimeList,
+        fetchAnimeByIdCasts,
         fetchAnimeById,
         fetchAnimeList,
+        fetchOnlyAnime,
+        onlyAnime,
         lists,
         setLists,
         accessToken,
         userId,
+        castCollection,
       }}
     >
       {children}

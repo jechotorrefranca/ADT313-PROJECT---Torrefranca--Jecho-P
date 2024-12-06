@@ -5,11 +5,12 @@ import axios from "axios";
 import { useAnimeContext } from "../../../../context/AnimeContext";
 const Lists = () => {
   const navigate = useNavigate();
-  const { accessToken, fetchAnimeList, lists, setLists } = useAnimeContext();
+  const { accessToken, onlyAnime, lists, setLists, fetchOnlyAnime } =
+    useAnimeContext();
 
   useEffect(() => {
-    fetchAnimeList();
-  }, [fetchAnimeList]);
+    fetchOnlyAnime();
+  }, [fetchOnlyAnime]);
 
   const handleDelete = (id) => {
     const isConfirm = window.confirm(
@@ -59,7 +60,7 @@ const Lists = () => {
             </tr>
           </thead>
           <tbody>
-            {lists.map((anime) => (
+            {onlyAnime.map((anime) => (
               <tr key={anime.anime.id}>
                 <td>{anime.anime.id}</td>
                 <td>{anime.anime.name}</td>

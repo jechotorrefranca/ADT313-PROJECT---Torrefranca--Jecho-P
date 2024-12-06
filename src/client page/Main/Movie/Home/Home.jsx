@@ -29,6 +29,7 @@ const Home = () => {
     ratedAnimeList,
     featuredAnimeList,
     popularAnimeList,
+    onlyAnime,
   } = useAnimeContext();
 
   useEffect(() => {

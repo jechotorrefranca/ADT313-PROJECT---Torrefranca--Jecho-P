@@ -18,10 +18,18 @@ const Form = () => {
   const [pageSize] = useState(20);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState([]);
+  const [selectedCasts, setSelectedCasts] = useState([]);
   const [currentAnimeData, setCurrentAnimeData] = useState([]);
   const [realId, setRealId] = useState();
-  const { accessToken, userId, fetchAnimeById, anime, setAnime } =
-    useAnimeContext();
+  const {
+    accessToken,
+    userId,
+    fetchAnimeById,
+    anime,
+    setAnime,
+    castCollection,
+    fetchAnimeByIdCasts,
+  } = useAnimeContext();
   let { animeId } = useParams();
   const navigate = useNavigate();
 
@@ -39,12 +47,18 @@ const Form = () => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
+    if (castCollection.length > 0) {
+      setSelectedCasts(castCollection);
+    }
+  }, [castCollection]);
+
+  useEffect(() => {
     if (!animeId) return;
 
     fetchAnimeById(animeId, navigate).then((anime) => {
       if (anime) {
         setSelectedAnime({
-          tmdbId: anime?.anime.id,
+          tmdbId: anime?.anime.tmdbId,
           adult: anime?.anime.adult,
           backdrop_path: anime?.anime.backdrop_path,
           episode_run_time: anime?.anime.episode_run_time,
@@ -65,8 +79,6 @@ const Form = () => {
           vote_count: anime?.anime.vote_count,
         });
 
-        console.log("di ko na alam", anime.anime);
-
         // console.log("AAAAAA", anime?.videos[0].id);
 
         if (anime?.videos && anime.videos.length > 0) {
@@ -78,16 +90,14 @@ const Form = () => {
             name: anime.videos[0].name,
           });
 
-          setRealId(anime.videos[0].id);
+          setSelectedCasts(castCollection);
 
-          console.log("Video data fetched:", anime.videos[0]);
+          setRealId(anime.videos[0].id);
         } else {
           console.log("No videos found for this anime.");
         }
-
-        console.log("fetching current details");
-        console.log(selectedVideo);
-        console.log(anime.anime);
+        fetchAnimeByIdCasts(animeId);
+        setSelectedCasts(castCollection);
         fetchAndSetAnimeData(anime.anime);
       }
     });
@@ -100,8 +110,6 @@ const Form = () => {
   };
 
   const handleSearch = useCallback(() => {
-    console.log("searching...");
-
     setPage(1);
 
     const apiKey = process.env.REACT_APP_TMDB_API_KEY;
@@ -151,7 +159,6 @@ const Form = () => {
             });
 
             setsearchedAnimeList(filteredResults);
-            console.log("Filtered Results:", filteredResults);
           })
           .catch((error) => {
             console.log("Error fetching all pages:", error);
@@ -171,8 +178,6 @@ const Form = () => {
           anime.episode_run_time ? "tv" : "movie"
         }/${anime.tmdbId}?api_key=${apiKey}`
       );
-
-      console.log("episode_run_time", anime.episode_run_time); // Ensure you're logging the correct property
 
       const { data: videoData } = await axios.get(
         `https://api.themoviedb.org/3/${
@@ -250,11 +255,30 @@ const Form = () => {
     }
   };
 
-  useEffect(() => {
-    if (selectedAnime) {
-      console.log("Updated selectedAnime:", selectedAnime);
+  const handleDeleteCast = async (castId) => {
+    try {
+      const response = await axios({
+        method: "delete", // or 'post' if your backend expects a POST request
+        url: "/castsCrud.php",
+        data: {
+          id: castId,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Proceed with removing the cast from the state regardless of the response
+      setSelectedCasts((prevCasts) =>
+        prevCasts.filter((cast) => cast.id !== castId)
+      );
+
+      fetchAnimeByIdCasts(animeId);
+      setSelectedCasts(castCollection);
+    } catch (error) {
+      console.error("Error while deleting cast:", error);
     }
-  }, [selectedAnime]);
+  };
 
   const handleSelectanime = async (anime) => {
     setSelectedAnime(null);
@@ -334,8 +358,6 @@ const Form = () => {
         all_videos: videos || [],
         casts: casts || [],
       });
-
-      console.log("Anime details fetched successfully:", selectedAnime);
     } catch (error) {
       console.error("Error fetching anime details:", error);
       alert("Failed to fetch detailed anime information. Please try again.");
@@ -343,7 +365,6 @@ const Form = () => {
   };
 
   const handleSave = () => {
-    console.log("why arent u working", selectedVideo);
     saveToAnime();
   };
 
@@ -359,20 +380,30 @@ const Form = () => {
     }
 
     if (!selectedAnime.poster_path || !selectedAnime.backdrop_path) {
-      alert("Selected anime must have a poster and backdrop.");
-      return;
+      const isConfirmed = window.confirm(
+        "Selected anime must have a poster and backdrop. Do you want to continue?"
+      );
+      if (!isConfirmed) {
+        return;
+      }
     }
 
     if (!selectedVideo.key || !selectedVideo.name) {
-      alert("Selected anime must have a Video and Name");
-      return;
+      const isConfirmed = window.confirm(
+        "Selected anime must have a Video and Name. Do you want to continue?"
+      );
+      if (!isConfirmed) {
+        return;
+      }
     }
 
     const data = {
       id: animeId,
       tmdbId: selectedAnime?.id,
       adult: selectedAnime?.adult,
-      backdrop_path: selectedAnime?.backdrop_path || null,
+      backdrop_path:
+        selectedAnime?.backdrop_path ||
+        "https://via.placeholder.com/800x450?text=No+Backdrop+Available",
       episode_run_time:
         Array.isArray(selectedAnime?.episode_run_time) &&
         selectedAnime?.episode_run_time.length > 0
@@ -387,7 +418,9 @@ const Form = () => {
       name: selectedAnime?.name || null,
       overview: selectedAnime?.overview || null,
       popularity: selectedAnime?.popularity || null,
-      poster_path: selectedAnime?.poster_path || null,
+      poster_path:
+        selectedAnime?.poster_path ||
+        "https://via.placeholder.com/200x300?text=No+Image+Available",
       production_companies:
         JSON.stringify(selectedAnime?.production_companies) || null,
       seasons: JSON.stringify(selectedAnime?.seasons) || null,
@@ -405,10 +438,9 @@ const Form = () => {
       },
     })
       .then((response) => {
-        console.log("Anime saved successfully:", response);
         const savedAnimeId = response?.data?.id || animeId;
-        console.log("iddddd", response.data.id);
         saveToVideo(savedAnimeId);
+        saveToCasts(savedAnimeId);
         navigate("/main/movies");
       })
       .catch((error) => {
@@ -418,7 +450,6 @@ const Form = () => {
   };
 
   const saveToVideo = (id) => {
-    console.log("dfsdgksdjgsdnj", selectedVideo.id);
     if (!selectedVideo) {
       alert("No video data to save.");
       return;
@@ -432,8 +463,6 @@ const Form = () => {
       site: selectedVideo.site || "Youtube",
       type: selectedVideo.type || "Custom Video",
     };
-
-    console.log("BEDYO", videoData);
 
     axios({
       method: animeId ? "patch" : "post",
@@ -453,10 +482,51 @@ const Form = () => {
       });
   };
 
+  const saveToCasts = (id) => {
+    if (!selectedVideo) {
+      alert("No video data to save.");
+      return;
+    }
+
+    if (
+      !selectedAnime ||
+      !selectedAnime.casts ||
+      selectedAnime.casts.length === 0
+    ) {
+      alert("No cast data to save.");
+      return;
+    }
+
+    selectedAnime.casts.forEach((cast) => {
+      const castData = {
+        id: animeId ? "" : "",
+        animeId: id,
+        characterName: cast.character || "Unknown",
+        name: cast.name || "Unknown",
+        profile_path: cast.profile_path || null,
+      };
+
+      axios({
+        method: "post",
+        url: "/castsCrud.php",
+        data: castData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => {
+          console.log("Cast saved successfully:", response);
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("Error saving cast data");
+        });
+    });
+  };
+
   const handleSelect = (item, type) => {
     setSelectedItem({ ...item, type });
     setSelectedAnime({ ...selectedAnime, [`${type}`]: item });
-    console.log(selectedAnime);
   };
 
   const totalPages = Math.ceil(searchedAnimeList.length / pageSize);
@@ -639,6 +709,40 @@ const Form = () => {
                   </div>
                 </div>
 
+                <div className="previewVideMain">
+                  <p className="prevVidTitle">Customize Video</p>
+                  <div className="previewVideoDes">
+                    <p>Backdrop Link</p>
+                    <input
+                      className="previewInputs"
+                      type="text"
+                      // disabled={!animeId}
+                      value={selectedAnime.backdrop_path}
+                      onChange={(e) =>
+                        setSelectedAnime({
+                          ...selectedAnime,
+                          backdrop_path: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="previewVideoDes">
+                    <p>Poster Link</p>
+                    <input
+                      className="previewInputs"
+                      type="text"
+                      // disabled={!animeId}
+                      value={selectedAnime.poster_path}
+                      onChange={(e) =>
+                        setSelectedAnime({
+                          ...selectedAnime,
+                          poster_path: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
                 <div className="overviewCont">
                   <div className="overviewtext">
                     <p>Overview</p>
@@ -769,22 +873,64 @@ const Form = () => {
                 </div>
 
                 <div className="overviewCont">
-                  <div className="overviewtext">
+                  <div className="castTextCont">
                     <p>Casts</p>
                   </div>
-
-                  <textarea
-                    className="previewOverview"
-                    disabled={!animeId}
-                    rows={10}
-                    value={selectedAnime ? selectedAnime.overview : ""}
-                    onChange={(e) =>
-                      setSelectedAnime({
-                        ...selectedAnime,
-                        overview: e.target.value,
-                      })
-                    }
-                  />
+                  <div className="overviewtext">
+                    <div>
+                      <div className="castMainContainer">
+                        <div className="castContainer">
+                          {animeId ? (
+                            <>
+                              {selectedCasts?.map((cast) => (
+                                <div key={cast.cast_id} className="castBorder">
+                                  <img
+                                    src={
+                                      cast.profile_path ||
+                                      "https://via.placeholder.com/500x750?text=No+Image+Available"
+                                    }
+                                    alt={cast.name}
+                                    className="castImage"
+                                  />
+                                  <div className="castInfo">
+                                    <div>{cast.name}</div>
+                                    <div>{cast.character}</div>
+                                  </div>
+                                  <button
+                                    className="videoButton"
+                                    onClick={(handleDele) =>
+                                      handleDeleteCast(cast.cast_id)
+                                    }
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              {selectedAnime.casts.map((cast) => (
+                                <div key={cast.id} className="castBorder">
+                                  <img
+                                    src={
+                                      cast.profile_path ||
+                                      "https://via.placeholder.com/500x750?text=No+Image+Available"
+                                    }
+                                    alt={cast.name}
+                                    className="castImage"
+                                  />
+                                  <div className="castInfo">
+                                    <div>{cast.name}</div>
+                                    <div>{cast.character}</div>
+                                  </div>
+                                </div>
+                              ))}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="overviewCont">
@@ -942,39 +1088,6 @@ const Form = () => {
           </div>
         )}
       </div>
-
-      {animeId !== undefined && selectedAnime && (
-        <div>
-          <hr />
-          <nav>
-            <ul className="tabs">
-              <li
-                onClick={() => {
-                  navigate(`/main/animes/form/${animeId}/cast-and-crews`);
-                }}
-              >
-                Cast & Crews
-              </li>
-              <li
-                onClick={() => {
-                  navigate(`/main/animes/form/${animeId}/videos`);
-                }}
-              >
-                Videos
-              </li>
-              <li
-                onClick={() => {
-                  navigate(`/main/animes/form/${animeId}/photos`);
-                }}
-              >
-                Photos
-              </li>
-            </ul>
-          </nav>
-
-          <Outlet />
-        </div>
-      )}
     </>
   );
 };
