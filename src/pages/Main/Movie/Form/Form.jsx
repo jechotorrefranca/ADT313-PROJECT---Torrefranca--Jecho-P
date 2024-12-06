@@ -23,6 +23,7 @@ const Form = () => {
   const [allImages, setAllImages] = useState([]);
   const [realId, setRealId] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
+  const [newselectedImages, setNewSelectedImages] = useState([]);
   const {
     accessToken,
     userId,
@@ -86,12 +87,13 @@ const Form = () => {
             name: anime.videos[0].name,
           });
 
-          setSelectedCasts(castCollection);
+          // setSelectedCasts(castCollection);
 
           setRealId(anime.videos[0].id);
         } else {
           console.log("No videos found for this anime.");
         }
+
         fetchAnimeByIdCasts(animeId);
         setSelectedCasts(castCollection);
         fetchAndSetAnimeData(anime.anime);
@@ -441,12 +443,44 @@ const Form = () => {
         const savedAnimeId = response?.data?.id || animeId;
         saveToVideo(savedAnimeId);
         saveToCasts(savedAnimeId);
+        saveToImages(savedAnimeId);
         navigate("/main/movies");
       })
       .catch((error) => {
         console.error(error);
         alert("Error saving anime data");
       });
+  };
+
+  const saveToImages = (id) => {
+    if (!selectedImages || selectedImages.length === 0) {
+      alert("No images to save.");
+      return;
+    }
+
+    selectedImages.forEach((image) => {
+      const imageData = {
+        file_path: image.file_path || "Unknown",
+        vote_average: image.vote_average || 0,
+        animeId: id,
+      };
+
+      axios({
+        method: "post",
+        url: "/imagesCrud.php",
+        data: imageData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => {
+          console.log("Image saved successfully:", response);
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("Error saving image data");
+        });
+    });
   };
 
   const saveToVideo = (id) => {
@@ -975,7 +1009,7 @@ const Form = () => {
                                 <div key={index} className="imageBorder">
                                   <img
                                     src={image.file_path || ""}
-                                    alt={image.name}
+                                    alt={index}
                                     className="imageImage"
                                   />
                                 </div>
