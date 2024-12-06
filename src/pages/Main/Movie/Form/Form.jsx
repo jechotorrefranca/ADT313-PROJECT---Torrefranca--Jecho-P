@@ -20,7 +20,9 @@ const Form = () => {
   const [selectedVideo, setSelectedVideo] = useState([]);
   const [selectedCasts, setSelectedCasts] = useState([]);
   const [currentAnimeData, setCurrentAnimeData] = useState([]);
+  const [allImages, setAllImages] = useState([]);
   const [realId, setRealId] = useState();
+  const [selectedImages, setSelectedImages] = useState([]);
   const {
     accessToken,
     userId,
@@ -35,16 +37,12 @@ const Form = () => {
 
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 
-  // let data = {
-  //   key: selectedVideo.key || "",
-  //   name: selectedVideo.name || "",
-  //   site: selectedVideo.site || "Youtube",
-  //   type: selectedVideo.type || "Custom Video",
-  // };
-
-  // console.log("selectedvid", data);
-
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const handleAddImage = (image) => {
+    setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]);
+    console.log("Image added to selected images:", selectedImages);
+  };
 
   useEffect(() => {
     if (castCollection.length > 0) {
@@ -78,8 +76,6 @@ const Form = () => {
           vote_average: anime?.anime.vote_average,
           vote_count: anime?.anime.vote_count,
         });
-
-        // console.log("AAAAAA", anime?.videos[0].id);
 
         if (anime?.videos && anime.videos.length > 0) {
           setSelectedVideo({
@@ -239,7 +235,8 @@ const Form = () => {
     try {
       const data = await fetchAnimeDetails(anime);
 
-      // Update the selectedAnime state with the new data
+      const combinedImages = [...data.posters, ...data.backdrops];
+
       setSelectedAnime((prevAnime) => ({
         ...prevAnime,
         all_videos: data.videos,
@@ -248,8 +245,7 @@ const Form = () => {
         all_backdrop_path: data.backdrops,
       }));
 
-      // The state is updated asynchronously, so you can't access it right away here.
-      // Instead, use a `useEffect` to log it after the update.
+      setAllImages(combinedImages);
     } catch (error) {
       console.error("Failed to set anime data", error);
     }
@@ -331,6 +327,10 @@ const Form = () => {
         width: backdrop.width,
         height: backdrop.height,
       }));
+
+      const combinedImages = [...posters, ...backdrops];
+
+      setAllImages(combinedImages);
 
       setSelectedAnime({
         id: animeDetails.id,
@@ -935,21 +935,57 @@ const Form = () => {
 
                 <div className="overviewCont">
                   <div className="overviewtext">
-                    <p>Media</p>
+                    <p>Images</p>
                   </div>
 
-                  <textarea
-                    className="previewOverview"
-                    disabled={!animeId}
-                    rows={10}
-                    value={selectedAnime ? selectedAnime.overview : ""}
-                    onChange={(e) =>
-                      setSelectedAnime({
-                        ...selectedAnime,
-                        overview: e.target.value,
-                      })
-                    }
-                  />
+                  <div className="overviewtext">
+                    <div>
+                      <div className="castMainContainer">
+                        <div className="castContainer">
+                          {animeId ? (
+                            <>
+                              {selectedCasts?.map((cast) => (
+                                <div key={cast.cast_id} className="castBorder">
+                                  <img
+                                    src={
+                                      cast.profile_path ||
+                                      "https://via.placeholder.com/500x750?text=No+Image+Available"
+                                    }
+                                    alt={cast.name}
+                                    className="castImage"
+                                  />
+                                  <div className="castInfo">
+                                    <div>{cast.name}</div>
+                                    <div>{cast.character}</div>
+                                  </div>
+                                  <button
+                                    className="videoButton"
+                                    onClick={(handleDele) =>
+                                      handleDeleteCast(cast.cast_id)
+                                    }
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              {selectedImages.map((image, index) => (
+                                <div key={index} className="imageBorder">
+                                  <img
+                                    src={image.file_path || ""}
+                                    alt={image.name}
+                                    className="imageImage"
+                                  />
+                                </div>
+                              ))}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="vertical-line"></div>
@@ -997,11 +1033,9 @@ const Form = () => {
                         <p>No videos found</p>
                       )}
                     </div>
-
                     <div className="sectionTitleCont">
                       <p className="sectionTitle">Poster</p>
                     </div>
-
                     <div className="videos-list2">
                       {selectedAnime &&
                       selectedAnime.all_poster_path &&
@@ -1032,11 +1066,9 @@ const Form = () => {
                         <p>No Posters found</p>
                       )}
                     </div>
-
                     <div className="sectionTitleCont">
                       <p className="sectionTitle">Backdrop</p>
                     </div>
-
                     <div className="videos-list2">
                       {selectedAnime &&
                       selectedAnime.all_backdrop_path &&
@@ -1068,6 +1100,33 @@ const Form = () => {
                         )
                       ) : (
                         <p>No Backdrop found</p>
+                      )}
+                    </div>
+                    <div className="sectionTitleCont">
+                      <p className="sectionTitle">Images</p>
+                    </div>
+                    <div className="videos-list2">
+                      {allImages && allImages.length > 0 ? (
+                        allImages.map((image, index) => (
+                          <div className="videosCont" key={index}>
+                            <p>{image.name}</p>
+                            <div className="video-preview">
+                              <img
+                                src={image.file_path}
+                                alt={`Image ${index}`}
+                                width="300"
+                              />
+                            </div>
+                            <button
+                              className="videoButton"
+                              onClick={() => handleAddImage(image)}
+                            >
+                              Add to Images
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No Images found</p>
                       )}
                     </div>
                   </div>
