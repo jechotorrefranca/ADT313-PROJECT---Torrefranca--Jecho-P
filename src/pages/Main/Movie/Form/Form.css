@@ -485,3 +485,7 @@
   max-width: 50rem;
   width: 100%;
 }
+
+.borderRadius {
+  border-radius: 1rem;
+}

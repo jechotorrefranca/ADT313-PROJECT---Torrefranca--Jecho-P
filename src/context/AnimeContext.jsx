@@ -19,6 +19,7 @@ function AnimeContextProvider({ children }) {
   const [lists, setLists] = useState([]);
   const [onlyAnime, setOnlyAnime] = useState([]);
   const [castCollection, setCastCollection] = useState([]);
+  const [imageCollection, setImageCollection] = useState([]);
 
   const accessToken = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userId");
@@ -44,6 +45,7 @@ function AnimeContextProvider({ children }) {
     try {
       const response = await axios.post("/getAnime.php", { id: animeId });
       if (response.data.success) {
+        console.log("sfdsfd", response.data.data[0]);
         return response.data.data[0];
       } else {
         console.error("No data found for anime with ID:", animeId);
@@ -61,15 +63,31 @@ function AnimeContextProvider({ children }) {
       if (response.data.success) {
         const allData = response.data.data;
 
-        // Extract and set casts
         const allCasts = allData.map((item) => item.casts).flat();
-        setCastCollection(allCasts); // Update the state
+        setCastCollection(allCasts);
         console.log("All casts fetched:", allCasts);
       } else {
         console.error("No data found for anime with ID:", animeId);
       }
     } catch (error) {
       console.error("Error fetching Anime casts:", error);
+    }
+  }, []);
+
+  const fetchAnimeByIdImages = useCallback(async (animeId) => {
+    try {
+      const response = await axios.post("/getAnime.php", { id: animeId });
+      if (response.data.success) {
+        const allData = response.data.data;
+
+        const allImages = allData.map((item) => item.images).flat();
+        setImageCollection(allImages);
+        console.log("All images fetched:", allImages);
+      } else {
+        console.error("No data found for anime with ID:", animeId);
+      }
+    } catch (error) {
+      console.error("Error fetching Anime images:", error);
     }
   }, []);
 
@@ -148,6 +166,8 @@ function AnimeContextProvider({ children }) {
         featuredAnimeList,
         setFeaturedAnimeList,
         fetchAnimeByIdCasts,
+        fetchAnimeByIdImages,
+        imageCollection,
         fetchAnimeById,
         fetchAnimeList,
         fetchOnlyAnime,

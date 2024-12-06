@@ -23,7 +23,7 @@ const Form = () => {
   const [allImages, setAllImages] = useState([]);
   const [realId, setRealId] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
-  const [newselectedImages, setNewSelectedImages] = useState([]);
+  const [newSelectedImages, setNewSelectedImages] = useState([]);
   const {
     accessToken,
     userId,
@@ -32,6 +32,8 @@ const Form = () => {
     setAnime,
     castCollection,
     fetchAnimeByIdCasts,
+    fetchAnimeByIdImages,
+    imageCollection,
   } = useAnimeContext();
   let { animeId } = useParams();
   const navigate = useNavigate();
@@ -41,8 +43,17 @@ const Form = () => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleAddImage = (image) => {
-    setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]);
-    console.log("Image added to selected images:", selectedImages);
+    if (animeId) {
+      setNewSelectedImages((prevSelectedImages) => [
+        ...prevSelectedImages,
+        image,
+      ]);
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]);
+      console.log("Image added to new selected images:", newSelectedImages);
+    } else {
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]);
+      console.log("Image added to selected images:", selectedImages);
+    }
   };
 
   useEffect(() => {
@@ -50,6 +61,12 @@ const Form = () => {
       setSelectedCasts(castCollection);
     }
   }, [castCollection]);
+
+  useEffect(() => {
+    if (imageCollection.length > 0) {
+      setSelectedImages(imageCollection);
+    }
+  }, [imageCollection]);
 
   useEffect(() => {
     if (!animeId) return;
@@ -87,6 +104,8 @@ const Form = () => {
             name: anime.videos[0].name,
           });
 
+          console.log("dsgndsjkgnds", anime.videos[0].name);
+
           // setSelectedCasts(castCollection);
 
           setRealId(anime.videos[0].id);
@@ -95,6 +114,8 @@ const Form = () => {
         }
 
         fetchAnimeByIdCasts(animeId);
+        fetchAnimeByIdImages(animeId);
+        setSelectedImages(imageCollection);
         setSelectedCasts(castCollection);
         fetchAndSetAnimeData(anime.anime);
       }
@@ -266,7 +287,6 @@ const Form = () => {
         },
       });
 
-      // Proceed with removing the cast from the state regardless of the response
       setSelectedCasts((prevCasts) =>
         prevCasts.filter((cast) => cast.id !== castId)
       );
@@ -278,7 +298,35 @@ const Form = () => {
     }
   };
 
+  const handleDeleteImage = async (imgId) => {
+    console.log(imgId);
+    try {
+      const response = await axios({
+        method: "delete", // or 'post' if your backend expects a POST request
+        url: "/imagesCrud.php",
+        data: {
+          id: imgId,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Proceed with removing the cast from the state regardless of the response
+      setSelectedImages((prevCasts) =>
+        prevCasts.filter((cast) => cast.id !== imgId)
+      );
+
+      fetchAnimeByIdImages(animeId);
+      setSelectedImages(imageCollection);
+    } catch (error) {
+      console.error("Error while deleting cast:", error);
+    }
+  };
+
   const handleSelectanime = async (anime) => {
+    setSelectedImages([]);
+    setSelectedCasts([]);
     setSelectedAnime(null);
     setSelectedVideo({
       key: "",
@@ -458,11 +506,13 @@ const Form = () => {
       return;
     }
 
-    selectedImages.forEach((image) => {
+    const imagesToProcess = animeId ? newSelectedImages : selectedImages;
+
+    imagesToProcess.forEach((image) => {
       const imageData = {
         file_path: image.file_path || "Unknown",
         vote_average: image.vote_average || 0,
-        animeId: id,
+        animeId: animeId ? animeId : id,
       };
 
       axios({
@@ -592,8 +642,8 @@ const Form = () => {
               </div>
               <div className="searchWholeCont">
                 <div className="searchedMovie">
-                  {getCurrentPageItems().map((anime) => (
-                    <div key={anime.id}>
+                  {getCurrentPageItems().map((anime, index) => (
+                    <div key={index}>
                       <div className="searchedMovieCont">
                         <img
                           className="searchedPosterImage"
@@ -916,8 +966,8 @@ const Form = () => {
                         <div className="castContainer">
                           {animeId ? (
                             <>
-                              {selectedCasts?.map((cast) => (
-                                <div key={cast.cast_id} className="castBorder">
+                              {selectedCasts?.map((cast, index) => (
+                                <div key={index} className="castBorder">
                                   <img
                                     src={
                                       cast.profile_path ||
@@ -932,7 +982,7 @@ const Form = () => {
                                   </div>
                                   <button
                                     className="videoButton"
-                                    onClick={(handleDele) =>
+                                    onClick={() =>
                                       handleDeleteCast(cast.cast_id)
                                     }
                                   >
@@ -943,8 +993,8 @@ const Form = () => {
                             </>
                           ) : (
                             <>
-                              {selectedAnime.casts.map((cast) => (
-                                <div key={cast.id} className="castBorder">
+                              {selectedAnime.casts.map((cast, index) => (
+                                <div key={index} className="castBorder">
                                   <img
                                     src={
                                       cast.profile_path ||
@@ -978,24 +1028,17 @@ const Form = () => {
                         <div className="castContainer">
                           {animeId ? (
                             <>
-                              {selectedCasts?.map((cast) => (
-                                <div key={cast.cast_id} className="castBorder">
+                              {selectedImages?.map((img, index) => (
+                                <div key={index} className="imageBorder">
                                   <img
-                                    src={
-                                      cast.profile_path ||
-                                      "https://via.placeholder.com/500x750?text=No+Image+Available"
-                                    }
-                                    alt={cast.name}
-                                    className="castImage"
+                                    src={img.file_path || ""}
+                                    alt={index}
+                                    className="imageImage"
                                   />
-                                  <div className="castInfo">
-                                    <div>{cast.name}</div>
-                                    <div>{cast.character}</div>
-                                  </div>
                                   <button
                                     className="videoButton"
-                                    onClick={(handleDele) =>
-                                      handleDeleteCast(cast.cast_id)
+                                    onClick={() =>
+                                      handleDeleteImage(img.image_id)
                                     }
                                   >
                                     Delete
@@ -1080,6 +1123,7 @@ const Form = () => {
                             <div className="videolist">
                               <div className="video-preview">
                                 <img
+                                  className="borderRadius"
                                   src={poster.file_path}
                                   alt={`Poster ${index}`}
                                   width="200"
@@ -1113,6 +1157,7 @@ const Form = () => {
                               <p>{backdrop.name}</p>
                               <div className="video-preview">
                                 <img
+                                  className="borderRadius"
                                   src={backdrop.file_path}
                                   alt={`Backdrop ${index}`}
                                   width="300"
