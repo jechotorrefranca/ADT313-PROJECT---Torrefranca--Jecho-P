@@ -155,36 +155,16 @@ function View() {
               </div>
             </div>
 
-            <div className="castSection">
-              <h2>Cast:</h2>
-              {anime.casts.length > 0 ? (
-                <div className="castGrid">
-                  {anime.casts.map((castMember, index) => (
-                    <div key={index} className="castCard">
-                      <img
-                        src={`https://image.tmdb.org/t/p/w200${castMember.profile_path}`}
-                        alt={castMember.name}
-                        className="castImage"
-                      />
-                      <div className="castInfo">
-                        <h3>{castMember.character}</h3>
-                        <p>
-                          <strong>Actor:</strong> {castMember.name}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No cast information available.</p>
-              )}
+            <div className="titlePlaceholder">
+              <div className="titletext">
+                <h2>Trailer:</h2>
+              </div>
             </div>
 
             {anime.videos && (
               <div className="videoSection">
                 <iframe
-                  width="560"
-                  height="315"
+                  className="iframe"
                   src={`https://www.youtube.com/embed/${anime.videos[0].key}`}
                   title="Anime Trailer"
                   frameBorder="0"
@@ -193,6 +173,37 @@ function View() {
                 ></iframe>
               </div>
             )}
+
+            <div className="titlePlaceholder">
+              <div className="titletext">
+                <h2>Cast:</h2>
+              </div>
+            </div>
+
+            <div className="wholeCastSect">
+              <div className="castSection">
+                {anime.casts.length > 0 ? (
+                  <div className="castGrid">
+                    {anime.casts.map((castMember, index) => (
+                      <div key={index} className="castCard">
+                        <img
+                          src={`https://image.tmdb.org/t/p/w200${castMember.profile_path}`}
+                          alt={castMember.name}
+                          className="castImage"
+                        />
+                        <div className="castInfo">
+                          <strong>{castMember.name}</strong>
+                          <div>as</div>
+                          <strong>{castMember.characterName}</strong>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No cast information available.</p>
+                )}
+              </div>
+            </div>
 
             <div className="mediaSection">
               <h2>Media:</h2>
