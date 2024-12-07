@@ -171,7 +171,7 @@ const Home = () => {
             <div key={all.anime.id}>
               <AnimeCards
                 anime={all.anime}
-                place={index + 1} // Pass the index here
+                place={index + 1}
                 onClick={() => {
                   navigate(`/view/${all.anime.id}`);
                 }}

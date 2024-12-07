@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import { useAnimeContext } from "../../../../context/AnimeContext";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import "./View.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCalendar,
+  faStar,
+  faCirclePlay,
+  faAngleRight,
+  faAngleLeft,
+  faClock,
+  faClosedCaptioning,
+} from "@fortawesome/free-solid-svg-icons";
+import GenreConverter from "../../../../components/GenreConvert/GenreConverter";
 
 function View() {
   const { anime, fetchAnimeById, setAnime } = useAnimeContext();
-  const [videoKey, setVideoKey] = useState(null);
   const { animeId } = useParams();
   const navigate = useNavigate();
 
@@ -16,10 +25,23 @@ function View() {
     setAnime(null);
 
     fetchAnimeById(animeId, navigate).then((anime) => {
-      setAnime(anime.anime);
+      setAnime(anime);
       console.log(anime);
     });
   }, [animeId, fetchAnimeById, navigate]);
+
+  const parsedSeasons =
+    anime?.anime?.seasons && typeof anime.anime.seasons === "string"
+      ? JSON.parse(anime.anime.seasons)
+      : anime?.anime?.seasons || [];
+
+  const parsedComp =
+    anime?.anime?.production_companies &&
+    typeof anime.anime.production_companies === "string"
+      ? JSON.parse(anime.anime.production_companies)
+      : anime?.anime?.production_companies || [];
+
+  console.log(parsedComp);
 
   const parsedCast =
     anime && anime.cast && anime.cast !== "null" ? JSON.parse(anime.cast) : [];
@@ -28,76 +50,198 @@ function View() {
     <div className="AnimeDetMain">
       {anime && (
         <>
-          <div>
-            <div className="backdropCont">
-              <div className="bd">
-                <img
-                  src={`https://image.tmdb.org/t/p/${anime.backdrop_path}`}
-                  alt={anime.title}
-                  className="bdImage"
-                />
-              </div>
-            </div>
-            <div>
-              <img
-                src={`https://image.tmdb.org/t/p/${anime.poster_path}`}
-                alt={anime.title}
-                className="movPoster"
-              />
-            </div>
-
-            <div className="banner">
-              <h1>{anime.name}</h1>
-            </div>
-            <h3>{anime.overview}</h3>
-            <div>
-              <span>Anime poster</span>
-            </div>
-
-            <h2>Cast:</h2>
-            {parsedCast.length > 0 && parsedCast.length !== "null" ? (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-                {parsedCast.map((castMember, index) => (
-                  <div
-                    key={index}
-                    style={{ width: "150px", textAlign: "center" }}
-                  >
-                    <h3>{castMember.character}</h3>
-                    <p>
-                      <strong>Actor:</strong> {castMember.name}
-                    </p>
-                    <img
-                      src={`https://image.tmdb.org/t/p/w200${castMember.profile_path}`}
-                      alt={castMember.name}
-                      style={{
-                        width: "100px",
-                        height: "150px",
-                        objectFit: "cover",
-                      }}
-                    />
+          <div className="viewWhole">
+            <div className="bdMainCont">
+              <div className="featured-list-containers">
+                <div className={`bdTextConts`}>
+                  <div className="featured-movie-titles">
+                    {anime.anime.name}
                   </div>
-                ))}
+
+                  <div className="featuredDetailss">
+                    <span>
+                      <span>
+                        <FontAwesomeIcon
+                          icon={faCirclePlay}
+                          className="featuredPlay"
+                        />{" "}
+                        {anime.anime.episode_run_time ? "TV" : "MOVIE"}
+                      </span>
+                    </span>
+
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faCalendar}
+                        className="featuredDate"
+                      />{" "}
+                      {anime.anime.first_air_date}
+                    </span>
+
+                    {anime.anime.episode_run_time && (
+                      <span>
+                        <FontAwesomeIcon
+                          icon={faClock}
+                          className="featuredClock"
+                        />{" "}
+                        {anime.anime.episode_run_time}m
+                      </span>
+                    )}
+
+                    <span>
+                      <FontAwesomeIcon icon={faStar} className="featuredStar" />{" "}
+                      {anime.anime.vote_average}
+                    </span>
+                  </div>
+
+                  <GenreConverter genres={anime.anime.genres} />
+                </div>
+
+                <div
+                  className="featured-backdrops"
+                  style={{
+                    background: `linear-gradient(to top, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 10%),
+                  linear-gradient(to right, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0.6) 10%),
+                  linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 10%),
+                  linear-gradient(to left, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 10%),
+                  url(https://image.tmdb.org/t/p/original${anime.anime.backdrop_path}) no-repeat center top`,
+                    backgroundSize: "contain",
+                  }}
+                ></div>
               </div>
-            ) : (
-              <p>No cast information available.</p>
+            </div>
+
+            <div className="heroSection">
+              <div className="heroContent">
+                <div className="posterContainer">
+                  <img
+                    src={`https://image.tmdb.org/t/p/original${anime.anime.poster_path}`}
+                    alt={anime.anime.name}
+                    className="animePoster"
+                  />
+                </div>
+                <div className="titleContainer">
+                  <div className="animeDetails">
+                    <div className="synopsis">Synopsis</div>
+                    <div className="animeOverview">{anime.anime.overview}</div>
+                  </div>
+                  <div className="linee" />
+                  <div>
+                    <div className="otherDet">
+                      <strong className="strongText">JA: </strong>{" "}
+                      <span>{anime.anime.original_name}</span>
+                    </div>
+                    <div className="otherDet">
+                      <strong className="strongText">Release Date: </strong>{" "}
+                      <span>{anime.anime.first_air_date}</span>
+                    </div>
+                    <div className="otherDet">
+                      <strong className="strongText">Seasons: </strong>{" "}
+                      <span>{parsedSeasons.length}</span>
+                    </div>
+                    {anime.anime.homepage && (
+                      <div className="otherDet">
+                        <strong className="strongText">Page: </strong>{" "}
+                        <a
+                          href={anime.anime.homepage}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {anime.anime.homepage}
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="castSection">
+              <h2>Cast:</h2>
+              {anime.casts.length > 0 ? (
+                <div className="castGrid">
+                  {anime.casts.map((castMember, index) => (
+                    <div key={index} className="castCard">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w200${castMember.profile_path}`}
+                        alt={castMember.name}
+                        className="castImage"
+                      />
+                      <div className="castInfo">
+                        <h3>{castMember.character}</h3>
+                        <p>
+                          <strong>Actor:</strong> {castMember.name}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No cast information available.</p>
+              )}
+            </div>
+
+            {anime.videos && (
+              <div className="videoSection">
+                <iframe
+                  width="560"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${anime.videos[0].key}`}
+                  title="Anime Trailer"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
             )}
-          </div>
 
-          <div>
-            <span>video</span>
-          </div>
+            <div className="mediaSection">
+              <h2>Media:</h2>
+              {anime.images.length > 0 ? (
+                <div className="imageGallery">
+                  {anime.images.map((image, index) => (
+                    <div key={index} className="galleryItem">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
+                        alt={image.name}
+                        className="mediaImage"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No media available.</p>
+              )}
+            </div>
 
-          {anime.videoKey && (
-            <iframe
-              width="560"
-              height="315"
-              src={`https://www.youtube.com/embed/${anime.videoKey}`}
-              title="Anime Trailer"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          )}
+            <div className="flexComp">
+              <div className="productionCompaniesSection">
+                <h2>Production Companies</h2>
+                <div className="productionCompaniesGrid">
+                  {parsedComp.length > 0 ? (
+                    parsedComp.map((company) => (
+                      <div key={company.id} className="productionCompanyCard">
+                        {company.logo_path && (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w200${company.logo_path}`}
+                            alt={company.name}
+                            className="companyLogo"
+                          />
+                        )}
+                        <div className="companyInfo">
+                          <h3 className="compName">{company.name}</h3>
+                          <p>
+                            <strong>Country:</strong> {company.origin_country}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No production companies available.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </div>
