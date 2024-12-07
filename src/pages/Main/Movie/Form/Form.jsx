@@ -106,8 +106,6 @@ const Form = () => {
 
           console.log("dsgndsjkgnds", anime.videos[0].name);
 
-          // setSelectedCasts(castCollection);
-
           setRealId(anime.videos[0].id);
         } else {
           console.log("No videos found for this anime.");

@@ -116,10 +116,10 @@ function AnimeContextProvider({ children }) {
         const response = await axios.post("/animeOnly.php", { sortBy });
         if (response.data.success) {
           setter(response.data.data.slice(0, 10));
-          // console.log(
-          //   `Fetched ${sortBy} Anime list:`,
-          //   response.data.data.slice(0, 10)
-          // );
+          console.log(
+            `Fetched ${sortBy} Anime list:`,
+            response.data.data.slice(0, 10)
+          );
         } else {
           console.error(`No ${sortBy} Animes found`);
         }
@@ -177,6 +177,7 @@ function AnimeContextProvider({ children }) {
         accessToken,
         userId,
         castCollection,
+        setOnlyAnime,
       }}
     >
       {children}
