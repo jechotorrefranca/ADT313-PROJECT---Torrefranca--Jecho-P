@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 1rem;
 }
 
 .wholeCont {
@@ -19,7 +20,6 @@
   position: relative;
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
-
 }
 
 .sliding {
@@ -48,7 +48,7 @@
   text-align: start;
   position: absolute;
   bottom: 10%;
-  left: 5% ;
+  left: 5%;
   width: 45%;
 }
 
@@ -146,7 +146,7 @@
 .featuredDetailButton {
   margin-top: 1.5rem;
   margin-left: 2rem;
-  color: rgba(255, 255, 255,80%);
+  color: rgba(255, 255, 255, 80%);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -169,7 +169,7 @@
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 2rem;
-  color: rgba(85, 163, 255,);
+  color: rgba(85, 163, 255);
 }
 
 .ratedAnimeList {

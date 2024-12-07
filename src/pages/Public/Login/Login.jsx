@@ -42,29 +42,36 @@ function Login() {
 
   const handleLogin = async () => {
     const data = { email, password };
-    setStatus('loading');
+    setStatus("loading");
     try {
       const response = await axios({
-        method: 'post',
-        url: '/loginUser.php',
+        method: "post",
+        url: "/loginUser.php",
         data,
-        headers: { 'Access-Control-Allow-Origin': '*' },
+        headers: { "Access-Control-Allow-Origin": "*" },
       });
-  
+
       console.log(response);
-  
+
       if (response.data.success) {
         const { user } = response.data;
-  
-        localStorage.setItem('accessToken', user.access_token);
-        localStorage.setItem('userId', user.user_id);
-  
-        if (user.user_role === 'admin') {
+
+        console.log(user);
+
+        localStorage.setItem("accessToken", user.access_token);
+        localStorage.setItem("userId", user.user_id);
+        localStorage.setItem("contactnumber", user.contact_number);
+        localStorage.setItem("fname", user.first_name);
+        localStorage.setItem("lname", user.last_name);
+        localStorage.setItem("mname", user.middle_name);
+        localStorage.setItem("userrole", user.user_role);
+
+        if (user.user_role === "admin") {
           console.log("Admin login successful");
-          navigate('/main/movies');
-        } else if (user.user_role === 'user') {
-          console.log("Access denied: User");
-          navigate('/');
+          navigate("/main/movies");
+        } else if (user.user_role === "user") {
+          console.log("user recognized");
+          navigate("/");
         } else {
           alert("User not recognized, Check your username and password");
         }
@@ -75,10 +82,9 @@ function Login() {
       console.error("Login failed", e);
       alert(e.response?.data?.error || "An error occurred during login");
     } finally {
-      setStatus('idle');
+      setStatus("idle");
     }
   };
-  
 
   useEffect(() => {
     setDebounceState(true);

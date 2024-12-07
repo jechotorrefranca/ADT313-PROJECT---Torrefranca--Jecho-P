@@ -30,6 +30,8 @@ const Home = () => {
     featuredAnimeList,
     popularAnimeList,
     onlyAnime,
+    userId,
+    urole,
   } = useAnimeContext();
 
   useEffect(() => {

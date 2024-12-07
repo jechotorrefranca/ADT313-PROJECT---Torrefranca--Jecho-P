@@ -104,7 +104,7 @@ const Form = () => {
             name: anime.videos[0].name,
           });
 
-          console.log("dsgndsjkgnds", anime.videos[0].name);
+          console.log("dsgndsjkgnds", anime.videos[0]);
 
           setRealId(anime.videos[0].id);
         } else {

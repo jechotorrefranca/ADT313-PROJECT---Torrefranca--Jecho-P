@@ -22,7 +22,7 @@
   backdrop-filter: blur(5px);
   width: 100%;
   padding: 1.25rem 3rem;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   z-index: 10;
 }
 
@@ -97,7 +97,7 @@ a {
   display: flex;
   gap: 1rem;
   align-items: center;
-  width: 100%;
+  width: 70%;
 }
 
 .searchCont {
@@ -148,4 +148,17 @@ a {
   padding: 0.5rem 1.5rem;
   border-radius: 100rem;
   font-size: 1rem;
+}
+
+.gearDash {
+  display: flex;
+  padding: 1rem;
+  border-radius: 100rem;
+  justify-content: center;
+  align-items: center;
+  background-color: #2c2c2c;
+  width: 1;
+  height: 1rem;
+  color: #55a3ff;
+  cursor: pointer;
 }

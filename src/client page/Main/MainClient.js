@@ -1,13 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../../pages/Main/Main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faGear } from "@fortawesome/free-solid-svg-icons";
 
 function MainClient() {
-  const accessToken = localStorage.getItem("accessToken");
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+  const [fname, setFname] = useState(localStorage.getItem("fname"));
+  const [urole, setUrole] = useState(localStorage.getItem("userrole"));
   const navigate = useNavigate();
-
   const inputRef = useRef(null);
 
   const handleDivClick = () => {
@@ -18,14 +21,29 @@ function MainClient() {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("fname");
+    localStorage.removeItem("userrole");
+
+    setAccessToken(null);
     navigate("/");
   };
 
   useEffect(() => {
-    if (!accessToken) {
-      handleLogout();
-    }
-  }, [accessToken]);
+    setAccessToken(localStorage.getItem("accessToken"));
+    setFname(localStorage.getItem("fname"));
+    setUrole(localStorage.getItem("userrole"));
+
+    const handleSavedChange = () => {
+      setAccessToken(localStorage.getItem("accessToken"));
+      setFname(localStorage.getItem("fname"));
+      setUrole(localStorage.getItem("userrole"));
+    };
+
+    window.addEventListener("storage", handleSavedChange);
+    return () => {
+      window.removeEventListener("storage", handleSavedChange);
+    };
+  }, []);
 
   return (
     <div className="Main">
@@ -53,14 +71,25 @@ function MainClient() {
             </div>
 
             {accessToken ? (
-              <li className="logout">
-                <a onClick={handleLogout}>Logout</a>
-              </li>
+              <>
+                <div className="welcome-msg">
+                  <p>Welcome! {fname}</p>
+                </div>
+
+                {urole === "admin" && (
+                  <NavLink to="/main/movies" className="gearDash">
+                    <FontAwesomeIcon icon={faGear} />
+                  </NavLink>
+                )}
+
+                <li className="logout">
+                  <a onClick={handleLogout}>Logout</a>
+                </li>
+              </>
             ) : (
               <div className="logReg">
-                
                 <NavLink to="/login" className="login">
-                  <span >Login</span>
+                  <span>Login</span>
                 </NavLink>
 
                 <div>Register</div>

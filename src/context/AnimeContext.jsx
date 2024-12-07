@@ -23,6 +23,11 @@ function AnimeContextProvider({ children }) {
 
   const accessToken = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userId");
+  const cNumber = localStorage.getItem("contactnumber");
+  const fname = localStorage.getItem("fname");
+  const lname = localStorage.getItem("lname");
+  const mname = localStorage.getItem("mname");
+  const urole = localStorage.getItem("userrole");
 
   const fetchOnlyAnime = useCallback(async () => {
     try {
@@ -176,6 +181,11 @@ function AnimeContextProvider({ children }) {
         setLists,
         accessToken,
         userId,
+        cNumber,
+        fname,
+        lname,
+        mname,
+        urole,
         castCollection,
         setOnlyAnime,
       }}
