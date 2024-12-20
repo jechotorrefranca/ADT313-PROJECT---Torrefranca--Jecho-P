@@ -27,6 +27,7 @@ function View() {
   const [fullImage, setFullImage] = useState();
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [commentAdded, setCommentAdded] = useState(false);
 
   useEffect(() => {
     if (!animeId) return;
@@ -53,7 +54,7 @@ function View() {
     };
 
     fetchComments();
-  }, [animeId]);
+  }, [animeId, commentAdded]);
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -132,6 +133,7 @@ function View() {
       .then((response) => {
         console.log("Comment submitted successfully:", response);
         setNewComment("");
+        setCommentAdded((prev) => !prev);
       })
       .catch((error) => {
         console.error(error);
