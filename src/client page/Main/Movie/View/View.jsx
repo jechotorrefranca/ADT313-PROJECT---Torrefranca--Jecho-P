@@ -12,6 +12,7 @@ import {
   faClock,
   faClosedCaptioning,
   faTimes,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import GenreConverter from "../../../../components/GenreConvert/GenreConverter";
 import ShowImage from "../../../../components/View/ShowImage";
@@ -23,8 +24,31 @@ function View() {
   const [showModal, setShowModal] = useState(false);
   const [showFullMedia, setShowFullMedia] = useState(false);
   const [fullImage, setFullImage] = useState();
+  const [newComment, setNewComment] = useState("");
 
-  console.log(userData);
+  const mockComments = [
+    {
+      id: 1,
+      name: "John Doe",
+      pfp: "https://via.placeholder.com/50",
+      text: "This anime is amazing! The story had me hooked.",
+      date: "2024-12-19",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      pfp: "https://via.placeholder.com/50",
+      text: "The character development was spot on. Highly recommend!",
+      date: "2024-12-18",
+    },
+    {
+      id: 3,
+      name: "AnimeFan123",
+      pfp: "https://via.placeholder.com/50",
+      text: "Can someone recommend similar anime to this?",
+      date: "2024-12-17",
+    },
+  ];
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -35,7 +59,7 @@ function View() {
   };
 
   const images = anime?.images || [];
-  const imagesToShow = images.slice(0, 6); // First 5 images
+  const imagesToShow = images.slice(0, 6);
   const remainingImagesCount = images.length > 5 ? images.length - 6 : 0;
 
   useEffect(() => {
@@ -51,7 +75,7 @@ function View() {
 
   const parsedSeasons =
     anime?.anime?.seasons && typeof anime.anime.seasons === "string"
-      ? JSON.parse(anime.anime.seasons || "[]") // Default to an empty array if null
+      ? JSON.parse(anime.anime.seasons || "[]")
       : Array.isArray(anime?.anime?.seasons)
       ? anime.anime.seasons
       : [];
@@ -74,6 +98,13 @@ function View() {
 
   const handleSetShowFullMedia = () => {
     setShowFullMedia(false);
+  };
+
+  const handleCommentSubmit = () => {
+    if (newComment.trim()) {
+      alert(`Comment Submitted: ${newComment}`);
+      setNewComment("");
+    }
   };
 
   return (
@@ -352,23 +383,66 @@ function View() {
         <hr className="lineBreak" />
       </div>
 
-      <div className="titlePlaceholder">
-        <div className="titletext">
-          <h2>Comments</h2>
-        </div>
-      </div>
-
-      {userData.accessToken ? (
-        <div>
-          <div>comment input</div>
-        </div>
-      ) : (
-        <div>
-          <div>
-            <p>You must be logged in to Comment</p>
+      <div className="commentsSection">
+        <div className="titlePlaceholder">
+          <div className="titletext">
+            <h2>Comments</h2>
           </div>
         </div>
-      )}
+
+        <div className="comWholeCont">
+          <div className="comCont">
+            {userData.accessToken ? (
+              <div className="commentInputSection">
+                <img
+                  src={userData.pfp || "https://via.placeholder.com/50"}
+                  alt="User"
+                  className="userPfp"
+                />
+                <textarea
+                  placeholder="Write your comment here..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  className="commentInput"
+                />
+                <button onClick={handleCommentSubmit} className="commentButton">
+                  {" "}
+                  <FontAwesomeIcon icon={faPaperPlane} className="planeIcon" />
+                </button>
+              </div>
+            ) : (
+              <div className="loginPrompt">
+                <p>You must be logged in to post a comment.</p>
+              </div>
+            )}
+
+            <div className="commentsList">
+              {mockComments.map((comment) => (
+                <div key={comment.id} className="commentCard">
+                  <div className="pfpNameDateCol">
+                    <div className="pandName">
+                      <img
+                        src={comment.pfp}
+                        alt={`${comment.name}`}
+                        className="commentPfp"
+                      />
+                      <p className="commentAuthor">{comment.name}</p>
+                    </div>
+                    <div>
+                      <div className="commentHeader">
+                        <span className="commentDate">{comment.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="commentContent">
+                    <p className="commentText">{comment.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
