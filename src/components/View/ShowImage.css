@@ -1,0 +1,60 @@
+.fullMediaImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.fullMediaImageCont {
+  max-width: 110rem;
+  max-height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fullImage {
+  max-height: 100%;
+  border-radius: 8px;
+}
+
+.closeButCont {
+  max-width: 110rem;
+  width: 60%;
+  display: flex;
+  justify-content: end;
+  margin-top: 3rem;
+}
+
+.closeButton {
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 1px;
+  height: 1px;
+  padding: 1.5rem;
+  border-radius: 100rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  transform: scale(1.2);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.closeButton svg {
+  pointer-events: none;
+}

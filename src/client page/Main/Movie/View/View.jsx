@@ -11,14 +11,18 @@ import {
   faAngleLeft,
   faClock,
   faClosedCaptioning,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import GenreConverter from "../../../../components/GenreConvert/GenreConverter";
+import ShowImage from "../../../../components/View/ShowImage";
 
 function View() {
   const { anime, fetchAnimeById, setAnime } = useAnimeContext();
   const { animeId } = useParams();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [showFullMedia, setShowFullMedia] = useState(false);
+  const [fullImage, setFullImage] = useState();
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -56,10 +60,19 @@ function View() {
       ? JSON.parse(anime.anime.production_companies)
       : anime?.anime?.production_companies || [];
 
-  console.log(parsedComp);
-
   const parsedCast =
     anime && anime.cast && anime.cast !== "null" ? JSON.parse(anime.cast) : [];
+
+  const handleClickImage = (image) => {
+    setFullImage(image);
+    setShowFullMedia(true);
+    console.log(showFullMedia);
+    console.log(image);
+  };
+
+  const handleSetShowFullMedia = () => {
+    setShowFullMedia(false);
+  };
 
   return (
     <div className="AnimeDetMain">
@@ -231,7 +244,11 @@ function View() {
                 {anime.images.length > 0 ? (
                   <div className="imageGallery">
                     {imagesToShow.map((image, index) => (
-                      <div key={index} className="galleryItem">
+                      <div
+                        key={index}
+                        className="galleryItem"
+                        onClick={() => handleClickImage(image)}
+                      >
                         <img
                           src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
                           alt={image.name}
@@ -260,12 +277,21 @@ function View() {
               {showModal && (
                 <div className="modal">
                   <div className="modalContent">
-                    <button className="closeButton" onClick={handleModalClose}>
-                      Close
-                    </button>
+                    <div className="closeButtonContainer">
+                      <button
+                        className="closeButton"
+                        onClick={handleModalClose}
+                      >
+                        <FontAwesomeIcon icon={faTimes} />
+                      </button>
+                    </div>
                     <div className="allImages">
                       {anime.images.map((image, index) => (
-                        <div key={index} className="modalImageItem">
+                        <div
+                          key={index}
+                          className="modalImageItem"
+                          onClick={() => handleClickImage(image)}
+                        >
                           <img
                             src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
                             alt={image.name}
@@ -311,6 +337,13 @@ function View() {
             </div>
           </div>
         </>
+      )}
+
+      {showFullMedia && (
+        <ShowImage
+          image={fullImage}
+          setShowFullMedia={handleSetShowFullMedia}
+        />
       )}
     </div>
   );

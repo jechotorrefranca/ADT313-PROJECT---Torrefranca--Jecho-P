@@ -273,16 +273,16 @@
   height: 200px;
   color: #fff;
   font-size: 3rem;
-  border-radius: 5px;
+  border-radius: 1rem;
   cursor: pointer;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative; /* Needed for layering */
-  overflow: hidden; /* Ensures the overlay stays inside the border-radius */
-  background-size: cover; /* Ensures the background image covers the entire div */
-  background-position: center; /* Centers the image */
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
 }
 
 .viewMore::before {
@@ -292,13 +292,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-  z-index: 1; /* Ensures the overlay is above the background image */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
 .viewMore span {
-  position: relative; /* To ensure the text is above the overlay */
-  z-index: 2; /* Places the text above the dark overlay */
+  position: relative;
+  z-index: 2;
 }
 
 .modal {
@@ -311,15 +311,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 50;
 }
 
 .modalContent {
-  background-color: #fff;
+  background-color: #000000ec;
   padding: 20px;
   border-radius: 10px;
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
+}
+
+.closeButtonContainer {
+  display: flex;
+  width: 100%;
+  justify-content: end;
 }
 
 .closeButton {
@@ -332,15 +339,52 @@
 }
 
 .allImages {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  width: 100%;
   gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.modalImageItem {
+  height: 200px;
+  width: 200px;
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .modalImage {
   width: 100%;
-  height: auto;
-  border-radius: 5px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.modalImageItem:hover .modalImage {
+  transform: scale(1.05);
+}
+
+.modalImageItem::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
+}
+
+.modalImageItem:hover::after {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalImage:hover {
+  background-color: #1313132d;
 }
 
 /* aaaaaaaaaaaaaaaaaa */
