@@ -62,12 +62,12 @@ function AnimeCards({ anime, onClick, place }) {
                   <span>{anime.episode_run_time ? "TV" : "MOVIE"}</span>
                 </div>
 
-                {anime.episode_run_time && (
+                {anime.episode_run_time && anime.episode_run_time !== 0 ? (
                   <div>
                     <FontAwesomeIcon icon={faClock} className="featuredClock" />
                     <span>{anime.episode_run_time}m</span>
                   </div>
-                )}
+                ) : null}
               </div>
 
               <div className="some">Japanese: {anime.original_name}</div>

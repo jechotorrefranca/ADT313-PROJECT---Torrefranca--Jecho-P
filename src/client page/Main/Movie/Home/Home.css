@@ -190,3 +190,16 @@
   font-weight: bold;
   font-size: 2rem;
 }
+
+.contCont {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.listRem {
+  width: 100%;
+  max-width: 105rem;
+  overflow-x: auto;
+}

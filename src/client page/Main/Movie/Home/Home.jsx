@@ -174,38 +174,67 @@ const Home = () => {
           )}
         </div>
 
-        <div className="animeTitle">
-          <p>Top Anime</p>
-        </div>
-        <div className="ratedAnimeList">
-          {ratedAnimeList.map((all, index) => (
-            <div key={all.anime.id}>
-              <AnimeCards
-                anime={all.anime}
-                place={index + 1}
-                onClick={() => {
-                  navigate(`/view/${all.anime.id}`);
-                }}
-              />
+        <div className="contCont">
+          <div className="listRem">
+            <div className="animeTitle">
+              <p>Top Anime</p>
             </div>
-          ))}
+            <div className="ratedAnimeList">
+              {ratedAnimeList.map((all, index) => (
+                <div key={all.anime.id}>
+                  <AnimeCards
+                    anime={all.anime}
+                    place={index + 1}
+                    onClick={() => {
+                      navigate(`/view/${all.anime.id}`);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="lovedAnimeList"></div>
-
-        <div className="popularAnimeList"></div>
-
-        <div className="list-container">
-          {/* {animeList.map((anime) => (
-            <div key={anime.id}>
-              <AnimeCards
-                anime={anime}
-                onClick={() => {
-                  navigate(`/view/${anime.id}`);
-                }}
-              />
+        <div className="contCont">
+          <div className="listRem">
+            <div className="animeTitle">
+              <p>Most Favorite Anime</p>
             </div>
-          ))} */}
+            <div className="ratedAnimeList">
+              {favoriteAnimeList.map((all, index) => (
+                <div key={all.anime.id}>
+                  <AnimeCards
+                    anime={all.anime}
+                    place={index + 1}
+                    onClick={() => {
+                      navigate(`/view/${all.anime.id}`);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="contCont">
+          <div className="listRem">
+            <div className="animeTitle">
+              <p>Popular Anime</p>
+            </div>
+            <div className="ratedAnimeList">
+              {popularAnimeList.map((all, index) => (
+                <div key={all.anime.id}>
+                  <AnimeCards
+                    anime={all.anime}
+                    place={index + 1}
+                    onClick={() => {
+                      navigate(`/view/${all.anime.id}`);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
