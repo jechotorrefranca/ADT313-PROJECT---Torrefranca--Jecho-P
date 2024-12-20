@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useReducer } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../../pages/Main/Main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,27 +7,64 @@ import Login from "../../pages/Public/Login/Login";
 import Register from "../../pages/Public/Register/Register";
 import { useAnimeContext } from "../../context/AnimeContext";
 
+// Define the initial state
+const initialState = {
+  accessToken: localStorage.getItem("accessToken"),
+  fname: localStorage.getItem("fname"),
+  urole: localStorage.getItem("userrole"),
+  showModal: false,
+  searchText: "",
+  showSearchBox: false,
+  showLogin: false,
+  showRegister: false,
+};
+
+// Define the reducer function
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "set_access_token":
+      return { ...state, accessToken: action.payload };
+    case "set_fname":
+      return { ...state, fname: action.payload };
+    case "set_user_role":
+      return { ...state, urole: action.payload };
+    case "toggle_modal":
+      return { ...state, showModal: !state.showModal };
+    case "set_search_text":
+      return { ...state, searchText: action.payload };
+    case "toggle_searchbox":
+      return { ...state, showSearchBox: action.payload };
+    case "toggle_login":
+      return { ...state, showLogin: !state.showLogin };
+    case "toggle_register":
+      return { ...state, showRegister: !state.showRegister };
+    default:
+      return state;
+  }
+};
+
 function MainClient() {
-  const [accessToken, setAccessToken] = useState(
-    localStorage.getItem("accessToken")
-  );
-  const [fname, setFname] = useState(localStorage.getItem("fname"));
-  const [urole, setUrole] = useState(localStorage.getItem("userrole"));
-  const [showModal, setShowModal] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [showSearchBox, setShowSearchBox] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    accessToken,
+    fname,
+    urole,
+    showModal,
+    searchText,
+    showSearchBox,
+    showLogin,
+    showRegister,
+  } = state;
+
+  const { onlyAnime, userData } = useAnimeContext();
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const searchBoxRef = useRef(null); // Add a ref for the search box
-  const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
-
-  const { onlyAnime } = useAnimeContext();
+  const searchBoxRef = useRef(null);
 
   const handleDivClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
-      setShowSearchBox(true);
+      dispatch({ type: "toggle_searchbox", payload: true });
     }
   };
 
@@ -36,12 +73,12 @@ function MainClient() {
     localStorage.removeItem("fname");
     localStorage.removeItem("userrole");
 
-    setAccessToken(null);
+    dispatch({ type: "set_access_token", payload: null });
     navigate("/");
   };
 
   const toggleModal = () => {
-    setShowModal((prev) => !prev);
+    dispatch({ type: "toggle_modal" });
   };
 
   const filteredAnime =
@@ -52,14 +89,16 @@ function MainClient() {
       : [];
 
   useEffect(() => {
-    setAccessToken(localStorage.getItem("accessToken"));
-    setFname(localStorage.getItem("fname"));
-    setUrole(localStorage.getItem("userrole"));
-
     const handleSavedChange = () => {
-      setAccessToken(localStorage.getItem("accessToken"));
-      setFname(localStorage.getItem("fname"));
-      setUrole(localStorage.getItem("userrole"));
+      dispatch({
+        type: "set_access_token",
+        payload: localStorage.getItem("accessToken"),
+      });
+      dispatch({ type: "set_fname", payload: localStorage.getItem("fname") });
+      dispatch({
+        type: "set_user_role",
+        payload: localStorage.getItem("userrole"),
+      });
     };
 
     window.addEventListener("storage", handleSavedChange);
@@ -75,7 +114,7 @@ function MainClient() {
         !searchBoxRef.current.contains(event.target) &&
         inputRef.current !== event.target
       ) {
-        setShowSearchBox(false);
+        dispatch({ type: "toggle_searchbox", payload: false });
       }
     };
 
@@ -86,16 +125,16 @@ function MainClient() {
   }, []);
 
   const handleShowLogin = () => {
-    setShowLogin((prev) => !prev);
+    dispatch({ type: "toggle_login" });
   };
 
   const handleCLoseRegister = () => {
-    setShowRegister((prev) => !prev);
+    dispatch({ type: "toggle_register" });
   };
 
   const handleShowRegister = () => {
-    setShowLogin((prev) => !prev);
-    setShowRegister((prev) => !prev);
+    dispatch({ type: "toggle_login" });
+    dispatch({ type: "toggle_register" });
   };
 
   return (
@@ -116,8 +155,15 @@ function MainClient() {
                   className="searchBox"
                   ref={inputRef}
                   value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  onFocus={() => setShowSearchBox(true)}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "set_search_text",
+                      payload: e.target.value,
+                    })
+                  }
+                  onFocus={() =>
+                    dispatch({ type: "toggle_searchbox", payload: true })
+                  }
                 />
               </div>
             </div>
@@ -126,11 +172,11 @@ function MainClient() {
               <div className="rightNav">
                 <div className="welcome-msg">
                   <div className="welName">
-                    <p>Welcome! {fname}</p>
+                    <p>Welcome! {userData.firstName}</p>
                   </div>
 
                   <div>
-                    {urole === "admin" && (
+                    {userData.userRole === "admin" && (
                       <NavLink to="/main/movies" className="gearDash">
                         <FontAwesomeIcon icon={faGear} />
                       </NavLink>
@@ -175,7 +221,7 @@ function MainClient() {
                     <div
                       className="filteredAnime"
                       key={item.anime.id}
-                      onMouseDown={() => navigate(`/view/${item.anime.id}`)} // Prevent blur before navigation
+                      onMouseDown={() => navigate(`/view/${item.anime.id}`)}
                     >
                       <img
                         src={item.anime.poster_path}
