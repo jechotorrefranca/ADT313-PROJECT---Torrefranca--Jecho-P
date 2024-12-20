@@ -204,3 +204,26 @@ a {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.abso {
+  position: relative;
+}
+
+.modall {
+  width: 3rem;
+  position: absolute;
+  top: 120%;
+  left: -50%;
+  transform: translate(-50%, 0);
+  background-color: #398ae0;
+  padding: 1rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.modall:hover {
+  background-color: #0056b3;
+}

@@ -13,8 +13,10 @@ function MainClient() {
   );
   const [fname, setFname] = useState(localStorage.getItem("fname"));
   const [urole, setUrole] = useState(localStorage.getItem("userrole"));
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const pfpRef = useRef(null); // Ref for profile picture
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -33,6 +35,10 @@ function MainClient() {
 
     setAccessToken(null);
     navigate("/");
+  };
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
   };
 
   useEffect(() => {
@@ -101,12 +107,19 @@ function MainClient() {
                     )}
                   </div>
 
-                  <div>
+                  <div className="abso">
                     <img
                       src={"https://via.placeholder.com/50"}
                       alt="User"
                       className="pfpContainer"
+                      ref={pfpRef}
+                      onClick={toggleModal} // Show modal on click
                     />
+                    {showModal && (
+                      <div className="modall" onClick={handleLogout}>
+                        Logout
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
