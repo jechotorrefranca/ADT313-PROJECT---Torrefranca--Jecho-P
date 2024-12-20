@@ -581,3 +581,12 @@
   display: flex;
   align-items: center;
 }
+
+.noComments {
+  display: flex;
+  justify-content: center;
+}
+
+.noCommentsMessage {
+  font-size: 2rem;
+}

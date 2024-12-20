@@ -26,30 +26,34 @@ function View() {
   const [showFullMedia, setShowFullMedia] = useState(false);
   const [fullImage, setFullImage] = useState();
   const [newComment, setNewComment] = useState("");
+  const [comments, setComments] = useState([]);
 
-  const mockComments = [
-    {
-      id: 1,
-      name: "John Doe",
-      pfp: "https://via.placeholder.com/50",
-      text: "This anime is amazing! The story had me hooked.",
-      date: "2024-12-19",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      pfp: "https://via.placeholder.com/50",
-      text: "The character development was spot on. Highly recommend!",
-      date: "2024-12-18",
-    },
-    {
-      id: 3,
-      name: "AnimeFan123",
-      pfp: "https://via.placeholder.com/50",
-      text: "Can someone recommend similar anime to this?",
-      date: "2024-12-17",
-    },
-  ];
+  useEffect(() => {
+    if (!animeId) return;
+
+    const fetchComments = () => {
+      axios({
+        method: "post",
+        url: "/getComments.php",
+        data: { animeId: animeId },
+      })
+        .then((response) => {
+          if (response.data.success) {
+            const sortedComments = response.data.data.sort((a, b) => {
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+            setComments(sortedComments);
+          } else {
+            setComments([]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching comments:", err);
+        });
+    };
+
+    fetchComments();
+  }, [animeId]);
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -445,28 +449,45 @@ function View() {
             )}
 
             <div className="commentsList">
-              {mockComments.map((comment) => (
-                <div key={comment.id} className="commentCard">
-                  <div className="pfpNameDateCol">
-                    <div className="pandName">
-                      <img
-                        src={comment.pfp}
-                        alt={`${comment.name}`}
-                        className="commentPfp"
-                      />
-                      <p className="commentAuthor">{comment.name}</p>
-                    </div>
-                    <div>
-                      <div className="commentHeader">
-                        <span className="commentDate">{comment.date}</span>
+              {comments.length > 0 ? (
+                comments.map((comment) => (
+                  <div key={comment.id} className="commentCard">
+                    <div className="pfpNameDateCol">
+                      <div className="pandName">
+                        <img
+                          src={comment.pfp}
+                          alt={`${comment.name}`}
+                          className="commentPfp"
+                        />
+                        <p className="commentAuthor">{comment.name}</p>
+                      </div>
+                      <div>
+                        <div className="commentHeader">
+                          <span className="commentDate">
+                            {new Date(comment.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              }
+                            )}
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    <div className="commentContent">
+                      <p className="commentText">{comment.comment}</p>
+                    </div>
                   </div>
-                  <div className="commentContent">
-                    <p className="commentText">{comment.text}</p>
-                  </div>
+                ))
+              ) : (
+                <div className="noComments">
+                  <p className="noCommentsMessage">
+                    No comments yet. Be the first to comment!
+                  </p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
