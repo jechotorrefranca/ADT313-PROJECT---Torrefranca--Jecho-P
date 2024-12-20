@@ -3,6 +3,8 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../../pages/Main/Main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faGear } from "@fortawesome/free-solid-svg-icons";
+import Login from "../../pages/Public/Login/Login";
+import Register from "../../pages/Public/Register/Register";
 
 function MainClient() {
   const [accessToken, setAccessToken] = useState(
@@ -12,6 +14,8 @@ function MainClient() {
   const [urole, setUrole] = useState(localStorage.getItem("userrole"));
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   const handleDivClick = () => {
     if (inputRef.current) {
@@ -45,6 +49,19 @@ function MainClient() {
     };
   }, []);
 
+  const handleShowLogin = () => {
+    setShowLogin((prev) => !prev);
+  };
+
+  const handleCLoseRegister = () => {
+    setShowRegister((prev) => !prev);
+  };
+
+  const handleShowRegister = () => {
+    setShowLogin((prev) => !prev);
+    setShowRegister((prev) => !prev);
+  };
+
   return (
     <div className="Main">
       <div className="container">
@@ -63,10 +80,6 @@ function MainClient() {
                   className="searchBox"
                   ref={inputRef}
                 />
-              </div>
-
-              <div className="filterBut">
-                <span>Filter</span>
               </div>
             </div>
 
@@ -96,15 +109,26 @@ function MainClient() {
               </div>
             ) : (
               <div className="logReg">
-                <NavLink to="/login" className="login">
+                <div to="/login" className="login" onClick={handleShowLogin}>
                   <span>Login</span>
-                </NavLink>
-
-                <div>Register</div>
+                </div>
               </div>
             )}
           </ul>
         </div>
+
+        {showLogin && (
+          <Login
+            handleClose={handleShowLogin}
+            handleShowRegister={handleShowRegister}
+          />
+        )}
+        {showRegister && (
+          <Register
+            handleClose={handleCLoseRegister}
+            handleGoLogin={handleShowRegister}
+          />
+        )}
 
         <div className="outlet">
           <Outlet />

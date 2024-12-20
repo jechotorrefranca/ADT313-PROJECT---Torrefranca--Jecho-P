@@ -4,9 +4,9 @@ import axios from "axios";
 import { useDebounce } from "../../../utils/hooks/useDebounce";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-function Register() {
+function Register({ handleClose, handleGoLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -123,7 +123,7 @@ function Register() {
       .then((res) => {
         console.log(res);
         alert("Registration successful!");
-        navigate("/login");
+        navigate("/");
         resetInputs();
         setStatus("idle");
       })
@@ -165,6 +165,9 @@ function Register() {
   return (
     <div className="formCont">
       <div className="wholee">
+        <div className="exitIcon">
+          <FontAwesomeIcon icon={faTimes} onClick={handleClose} />
+        </div>
         <div className="formDiv">
           <p className="registerText">Register</p>
           <form>
@@ -296,9 +299,9 @@ function Register() {
           </form>
 
           <div className="alrAcc">
-            <a href="/login">
-              <small>I already have an account</small>
-            </a>
+            <p onClick={handleGoLogin}>
+              <small className="alrAccPoint">I already have an account</small>
+            </p>
           </div>
         </div>
       </div>

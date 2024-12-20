@@ -4,9 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useDebounce } from "../../../utils/hooks/useDebounce";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faT,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
-function Login() {
+function Login({ handleClose, handleShowRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFieldsDirty, setIsFieldsDirty] = useState(false);
@@ -95,6 +100,9 @@ function Login() {
   return (
     <div className="Login">
       <div className="main-container">
+        <div className="exitIcon">
+          <FontAwesomeIcon icon={faTimes} onClick={handleClose} />
+        </div>
         <form>
           <div className="form-container">
             <p className="loginText">Login</p>
@@ -173,9 +181,14 @@ function Login() {
               </button>
             </div>
             <div className="register-container">
-              <a href="/register">
-                <small className="regText">Register</small>
-              </a>
+              <p>
+                <small className="regText">
+                  <span className="dontAcc">Don't have an account? </span>
+                  <span onClick={handleShowRegister} className="registerPoint">
+                    Register
+                  </span>
+                </small>
+              </p>
             </div>
           </div>
         </form>

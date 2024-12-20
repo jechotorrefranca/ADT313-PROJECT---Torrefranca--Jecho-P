@@ -1,11 +1,13 @@
 .formCont {
+  position: absolute;
+  z-index: 200;
   height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #469dff;
-  background-color: rgba(0, 0, 0, 0.753);
+  background-color: rgba(0, 0, 0, 0.849);
   font-size: 1.2rem;
   font-weight: bolder;
 }
@@ -47,6 +49,10 @@
 
 .alrAcc {
   margin-top: 12px;
+}
+
+.alrAccPoint {
+  cursor: pointer;
 }
 
 .showPass {
