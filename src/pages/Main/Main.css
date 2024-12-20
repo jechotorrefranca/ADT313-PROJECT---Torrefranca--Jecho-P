@@ -12,7 +12,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* height: 100%; */
 }
 
 .navigation {
@@ -39,28 +38,6 @@
   width: 100%;
   max-width: 110rem;
 }
-
-/* .Main .container .navigation ul li {
-  padding: 10px 20px;
-} */
-
-/* .Main .container .navigation ul li a {
-  text-decoration: none;
-  display: block;
-  padding: 10px 20px;
-  border-radius: 7%;
-  font-family: "Century Gothic", sans-serif;
-} */
-
-/* .Main .container .navigation ul li a.active {
-  background: #31374e;
-  color: #c5c6c7;
-}
-
-.Main .container .navigation ul li a:hover {
-  background: #31374e;
-  color: #c5c6c7;
-} */
 
 .Main .container .navigation ul li.logout {
   cursor: pointer;
@@ -215,7 +192,7 @@ a {
   top: 120%;
   left: -50%;
   transform: translate(-50%, 0);
-  background-color: #398ae0;
+  background-color: #494949;
   padding: 1rem 3rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -225,5 +202,75 @@ a {
 }
 
 .modall:hover {
-  background-color: #0056b3;
+  background-color: #252525;
+}
+
+.searchRem {
+  background-color: #55a3ff;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.absolute-search-box {
+  position: absolute;
+  top: 5rem;
+  width: 50%;
+  min-height: 20rem;
+  max-width: 90rem;
+  background: rgba(0, 0, 0, 0.822);
+  border-radius: 1rem;
+  z-index: 1000;
+  padding: 10rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 40rem;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.filteredCont {
+}
+
+.filteredAnime {
+  background-color: #00000094;
+  border: 1px solid #549eff;
+  padding: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filteredAnime:hover {
+  background-color: rgb(0, 11, 22);
+}
+
+.typetextCont {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  color: white;
+}
+
+.animePosterCardImgg {
+  max-width: 100px;
+  object-fit: cover;
+  transition: filter 0.3s ease;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.imageTextSearch {
+  font-size: 1.5rem;
+}
+
+.searchedName {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.searchedOverview {
+  font-size: large;
 }

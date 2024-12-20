@@ -14,9 +14,11 @@ function MainClient() {
   const [fname, setFname] = useState(localStorage.getItem("fname"));
   const [urole, setUrole] = useState(localStorage.getItem("userrole"));
   const [showModal, setShowModal] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [showSearchBox, setShowSearchBox] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const pfpRef = useRef(null); // Ref for profile picture
+  const searchBoxRef = useRef(null); // Add a ref for the search box
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -25,6 +27,7 @@ function MainClient() {
   const handleDivClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
+      setShowSearchBox(true);
     }
   };
 
@@ -41,6 +44,13 @@ function MainClient() {
     setShowModal((prev) => !prev);
   };
 
+  const filteredAnime =
+    Array.isArray(onlyAnime) && searchText.trim() !== ""
+      ? onlyAnime.filter((item) =>
+          item.anime?.name?.toLowerCase().includes(searchText.toLowerCase())
+        )
+      : [];
+
   useEffect(() => {
     setAccessToken(localStorage.getItem("accessToken"));
     setFname(localStorage.getItem("fname"));
@@ -55,6 +65,23 @@ function MainClient() {
     window.addEventListener("storage", handleSavedChange);
     return () => {
       window.removeEventListener("storage", handleSavedChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchBoxRef.current &&
+        !searchBoxRef.current.contains(event.target) &&
+        inputRef.current !== event.target
+      ) {
+        setShowSearchBox(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -88,6 +115,9 @@ function MainClient() {
                   type="text"
                   className="searchBox"
                   ref={inputRef}
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onFocus={() => setShowSearchBox(true)}
                 />
               </div>
             </div>
@@ -112,8 +142,7 @@ function MainClient() {
                       src={"https://via.placeholder.com/50"}
                       alt="User"
                       className="pfpContainer"
-                      ref={pfpRef}
-                      onClick={toggleModal} // Show modal on click
+                      onClick={toggleModal}
                     />
                     {showModal && (
                       <div className="modall" onClick={handleLogout}>
@@ -132,6 +161,48 @@ function MainClient() {
             )}
           </ul>
         </div>
+
+        {showSearchBox && (
+          <div className="searchRem" ref={searchBoxRef}>
+            <div className="absolute-search-box">
+              {searchText.trim() === "" ? (
+                <div className="typetextCont">
+                  <p>Type to search for your favorite anime</p>
+                </div>
+              ) : filteredAnime.length > 0 ? (
+                <div className="filteredCont">
+                  {filteredAnime.map((item) => (
+                    <div
+                      className="filteredAnime"
+                      key={item.anime.id}
+                      onMouseDown={() => navigate(`/view/${item.anime.id}`)} // Prevent blur before navigation
+                    >
+                      <img
+                        src={item.anime.poster_path}
+                        alt={item.anime.name}
+                        className="animePosterCardImgg"
+                      />
+                      <div className="imageTextSearch">
+                        <div className="searchedName">{item.anime.name}</div>
+                        <div className="searchedOverview">
+                          {item.anime.overview
+                            .split(" ")
+                            .slice(0, 40)
+                            .join(" ")
+                            .concat("...")}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="typetextCont">
+                  <p>No results found</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {showLogin && (
           <Login
