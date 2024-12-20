@@ -25,7 +25,7 @@ const Form = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [newSelectedImages, setNewSelectedImages] = useState([]);
   const {
-    accessToken,
+    userData,
     userId,
     fetchAnimeById,
     anime,
@@ -281,7 +281,7 @@ const Form = () => {
           id: castId,
         },
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${userData.accessToken}`,
         },
       });
 
@@ -306,7 +306,7 @@ const Form = () => {
           id: imgId,
         },
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${userData.accessToken}`,
         },
       });
 
@@ -418,7 +418,7 @@ const Form = () => {
   };
 
   const saveToAnime = () => {
-    if (!accessToken) {
+    if (!userData.accessToken) {
       alert("No access token found. Please log in.");
       return;
     }
@@ -486,7 +486,7 @@ const Form = () => {
       url: "/animeCrud.php",
       data: data,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${userData.accessToken}`,
       },
     })
       .then((response) => {
@@ -524,7 +524,7 @@ const Form = () => {
         url: "/imagesCrud.php",
         data: imageData,
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${userData.accessToken}`,
         },
       })
         .then((response) => {
@@ -559,7 +559,7 @@ const Form = () => {
       url: "/videosCrud.php",
       data: videoData,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${userData.accessToken}`,
       },
     })
       .then((response) => {
@@ -601,7 +601,7 @@ const Form = () => {
         url: "/castsCrud.php",
         data: castData,
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${userData.accessToken}`,
         },
       })
         .then((response) => {
@@ -1079,144 +1079,149 @@ const Form = () => {
                     <p>Customization</p>
                   </div>
                   <div>
-                    <div className="sectionTitleCont">
-                      <p className="sectionTitle">Video</p>
-                    </div>
-                    <div className="videos-list">
-                      {selectedAnime &&
-                      selectedAnime.all_videos &&
-                      selectedAnime.all_videos.length > 0 ? (
-                        selectedAnime.all_videos.map((video) => (
-                          <div className="videosCont" key={video.id}>
-                            <p>{video.name}</p>
-                            <div className="videolist">
-                              <div className="video-preview">
-                                <iframe
-                                  width="280"
-                                  height="158"
-                                  src={`https://www.youtube.com/embed/${video.key}`}
-                                  title={video.name}
-                                  frameBorder="0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                ></iframe>
+                    <div className="customizationCont">
+                      <div className="sectionTitleCont">
+                        <p className="sectionTitle">Video</p>
+                      </div>
+                      <div className="videos-list">
+                        {selectedAnime &&
+                        selectedAnime.all_videos &&
+                        selectedAnime.all_videos.length > 0 ? (
+                          selectedAnime.all_videos.map((video) => (
+                            <div className="videosCont" key={video.id}>
+                              <p>{video.name}</p>
+                              <div className="videolist">
+                                <div className="video-preview">
+                                  <iframe
+                                    width="280"
+                                    height="158"
+                                    src={`https://www.youtube.com/embed/${video.key}`}
+                                    title={video.name}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  ></iframe>
+                                </div>
+                                <button
+                                  className="videoButton"
+                                  onClick={() => {
+                                    setSelectedVideo(video);
+                                  }}
+                                >
+                                  Select Video
+                                </button>
                               </div>
-                              <button
-                                className="videoButton"
-                                onClick={() => {
-                                  setSelectedVideo(video);
-                                }}
-                              >
-                                Select Video
-                              </button>
                             </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p>No videos found</p>
-                      )}
-                    </div>
-                    <div className="sectionTitleCont">
-                      <p className="sectionTitle">Poster</p>
-                    </div>
-                    <div className="videos-list2">
-                      {selectedAnime &&
-                      selectedAnime.all_poster_path &&
-                      selectedAnime.all_poster_path.length > 0 ? (
-                        selectedAnime.all_poster_path.map((poster, index) => (
-                          <div className="videosCont" key={index}>
-                            <p>{poster.name}</p>
-                            <div className="videolist">
-                              <div className="video-preview">
-                                <img
-                                  className="borderRadius"
-                                  src={poster.file_path}
-                                  alt={`Poster ${index}`}
-                                  width="200"
-                                />
-                              </div>
-                              <button
-                                className="videoButton"
-                                onClick={() => {
-                                  handleSelect(poster.file_path, "poster_path");
-                                }}
-                              >
-                                Select Poster
-                              </button>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p>No Posters found</p>
-                      )}
-                    </div>
-                    <div className="sectionTitleCont">
-                      <p className="sectionTitle">Backdrop</p>
-                    </div>
-                    <div className="videos-list2">
-                      {selectedAnime &&
-                      selectedAnime.all_backdrop_path &&
-                      selectedAnime.all_backdrop_path.length > 0 ? (
-                        selectedAnime.all_backdrop_path.map(
-                          (backdrop, index) => (
+                          ))
+                        ) : (
+                          <p>No videos found</p>
+                        )}
+                      </div>
+                      <div className="sectionTitleCont">
+                        <p className="sectionTitle">Poster</p>
+                      </div>
+                      <div className="videos-list2">
+                        {selectedAnime &&
+                        selectedAnime.all_poster_path &&
+                        selectedAnime.all_poster_path.length > 0 ? (
+                          selectedAnime.all_poster_path.map((poster, index) => (
                             <div className="videosCont" key={index}>
-                              <p>{backdrop.name}</p>
+                              <p>{poster.name}</p>
+                              <div className="videolist">
+                                <div className="video-preview">
+                                  <img
+                                    className="borderRadius"
+                                    src={poster.file_path}
+                                    alt={`Poster ${index}`}
+                                    width="200"
+                                  />
+                                </div>
+                                <button
+                                  className="videoButton"
+                                  onClick={() => {
+                                    handleSelect(
+                                      poster.file_path,
+                                      "poster_path"
+                                    );
+                                  }}
+                                >
+                                  Select Poster
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p>No Posters found</p>
+                        )}
+                      </div>
+                      <div className="sectionTitleCont">
+                        <p className="sectionTitle">Backdrop</p>
+                      </div>
+                      <div className="videos-list2">
+                        {selectedAnime &&
+                        selectedAnime.all_backdrop_path &&
+                        selectedAnime.all_backdrop_path.length > 0 ? (
+                          selectedAnime.all_backdrop_path.map(
+                            (backdrop, index) => (
+                              <div className="videosCont" key={index}>
+                                <p>{backdrop.name}</p>
+                                <div className="video-preview">
+                                  <img
+                                    className="borderRadius"
+                                    src={backdrop.file_path}
+                                    alt={`Backdrop ${index}`}
+                                    width="300"
+                                  />
+                                </div>
+                                <button
+                                  className="videoButton"
+                                  onClick={() => {
+                                    handleSelect(
+                                      backdrop.file_path,
+                                      "backdrop_path"
+                                    );
+                                  }}
+                                >
+                                  Select Backdrop
+                                </button>
+                              </div>
+                            )
+                          )
+                        ) : (
+                          <p>No Backdrop found</p>
+                        )}
+                      </div>
+                      <div className="sectionTitleCont">
+                        <p className="sectionTitle">Images</p>
+                      </div>
+                      <div className="videos-list2">
+                        {allImages && allImages.length > 0 ? (
+                          allImages.map((image, index) => (
+                            <div className="videosCont" key={index}>
+                              <p>{image.name}</p>
                               <div className="video-preview">
                                 <img
-                                  className="borderRadius"
-                                  src={backdrop.file_path}
-                                  alt={`Backdrop ${index}`}
+                                  src={image.file_path}
+                                  alt={`Image ${index}`}
                                   width="300"
                                 />
                               </div>
                               <button
                                 className="videoButton"
-                                onClick={() => {
-                                  handleSelect(
-                                    backdrop.file_path,
-                                    "backdrop_path"
-                                  );
-                                }}
+                                onClick={() => handleAddImage(image)}
                               >
-                                Select Backdrop
+                                Add to Images
                               </button>
                             </div>
-                          )
-                        )
-                      ) : (
-                        <p>No Backdrop found</p>
-                      )}
-                    </div>
-                    <div className="sectionTitleCont">
-                      <p className="sectionTitle">Images</p>
-                    </div>
-                    <div className="videos-list2">
-                      {allImages && allImages.length > 0 ? (
-                        allImages.map((image, index) => (
-                          <div className="videosCont" key={index}>
-                            <p>{image.name}</p>
-                            <div className="video-preview">
-                              <img
-                                src={image.file_path}
-                                alt={`Image ${index}`}
-                                width="300"
-                              />
-                            </div>
-                            <button
-                              className="videoButton"
-                              onClick={() => handleAddImage(image)}
-                            >
-                              Add to Images
-                            </button>
-                          </div>
-                        ))
-                      ) : (
-                        <p>No Images found</p>
-                      )}
+                          ))
+                        ) : (
+                          <p>No Images found</p>
+                        )}
+                      </div>
                     </div>
                   </div>
+                  <div></div>
                 </div>
-                <div></div>
 
                 <div className="saveButtonCont">
                   <button
