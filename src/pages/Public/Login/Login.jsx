@@ -3,6 +3,8 @@ import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { useDebounce } from "../../../utils/hooks/useDebounce";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -93,13 +95,14 @@ function Login() {
   return (
     <div className="Login">
       <div className="main-container">
-        <h3>Login</h3>
         <form>
           <div className="form-container">
+            <p className="loginText">Login</p>
             <div>
               <div className="form-group">
                 <label>E-mail:</label>
                 <input
+                  className="form-containerInput"
                   type="text"
                   name="email"
                   ref={emailRef}
@@ -113,19 +116,32 @@ function Login() {
             <div>
               <div className="form-group">
                 <label>Password:</label>
-                <input
-                  type={isShowPassword ? "text" : "password"}
-                  name="password"
-                  ref={passwordRef}
-                  onChange={(e) => handleOnChange(e, "password")}
-                />
+                <div className="passwordContt">
+                  <input
+                    className="passwordInputt"
+                    type={isShowPassword ? "text" : "password"}
+                    value={password}
+                    ref={passwordRef}
+                    onChange={(e) => handleOnChange(e, "password")}
+                  />
+                  {isShowPassword ? (
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className="passEye"
+                      onClick={handleShowPassword}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="passEye"
+                      onClick={handleShowPassword}
+                    />
+                  )}
+                </div>
               </div>
               {debounceState && isFieldsDirty && password == "" && (
                 <span className="errors">This field is required</span>
               )}
-            </div>
-            <div className="show-password" onClick={handleShowPassword}>
-              {isShowPassword ? "Hide" : "Show"} Password
             </div>
 
             <div className="submit-container">
@@ -158,7 +174,7 @@ function Login() {
             </div>
             <div className="register-container">
               <a href="/register">
-                <small>Register</small>
+                <small className="regText">Register</small>
               </a>
             </div>
           </div>

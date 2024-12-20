@@ -1,45 +1,130 @@
-.main-container {
+.Login {
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  color: #469dff;
+  background-color: rgba(0, 0, 0, 0.753);
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+
+.main-container {
+  text-align: center;
 }
 
 .form-container {
-  padding: 4rem 2rem;
-  border: 1px solid #ccc;
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid #469dff;
   border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.form-container > div {
-  margin-bottom: 12px;
+  padding: 1rem 5rem;
+  padding-bottom: 3.5rem;
+  background-color: rgb(22, 22, 22);
 }
 
 .form-group {
   display: flex;
+  gap: 3rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .form-group label {
   width: 70px;
-  margin-right: 8px;
   text-align: left;
 }
+
+.form-containerInput {
+  border-radius: 100rem;
+  padding: 0.7rem 0.5rem;
+  width: 10rem;
+}
+
+.password-input {
+  box-sizing: border-box;
+  all: unset;
+  width: 8rem;
+}
+
+.password-container {
+  display: flex;
+  background-color: white;
+  border-radius: 100rem;
+  color: black;
+  padding: 0.4rem 0.6rem;
+  width: 10rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pass-eye {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
 .errors {
   color: red;
   font-size: 12px;
 }
+
 .submit-container {
   margin-top: 12px;
   text-align: center;
 }
-.register-container {
-  text-align: center;
+
+.submit-container button {
+  padding: 0.7rem 2rem;
+  border-radius: 100rem;
+  background-color: #469dff;
+  color: rgb(6, 30, 44);
+  font-weight: bold;
+  cursor: pointer;
 }
+
+.register-container {
+  margin-top: 12px;
+}
+
+.register-container a {
+  color: #469dff;
+  font-size: 1rem;
+}
+
 .show-password {
   margin-bottom: 1rem;
   cursor: pointer;
+}
+
+.loginText {
+  font-size: 2rem;
+}
+
+.passwordContt {
+  border-radius: 100rem;
+  width: 11rem;
+  display: flex;
+  align-items: center;
+  color: black;
+  justify-content: space-around;
+  padding: 0.5rem 0.05rem;
+  background-color: white;
+}
+
+.passwordInputt {
+  box-sizing: border-box;
+  border-radius: 100rem;
+  all: unset;
+  width: 7rem;
+  text-align: start;
+  padding: 0rem 0.2rem;
+  font-size: 14px;
+  font-weight: normal;
+  color: black;
+}
+
+.regText {
+  font-size: 1rem;
 }

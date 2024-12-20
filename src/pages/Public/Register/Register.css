@@ -1,45 +1,90 @@
-.formCont{
-    height: 100vh;
-    width: 100vw;
-    /* background-color: aqua; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.formCont {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #469dff;
+  background-color: rgba(0, 0, 0, 0.753);
+  font-size: 1.2rem;
+  font-weight: bolder;
 }
 
-.whole{
-    text-align: center;
+.registerText {
+  font-size: 2rem;
 }
 
-.formDiv{
-    width: fit-content;
-    height: fit-content;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    padding: 4rem 2rem;
-    
+.wholee {
+  text-align: center;
 }
 
-.inputCont{
-    margin-bottom: 12px;
-    text-align: left;
+.formDiv {
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid #469dff;
+  border-radius: 0.5rem;
+  padding: 1rem 5rem;
+  padding-bottom: 3.5rem;
+  background-color: rgb(22, 22, 22);
 }
 
-.showPassCont{
-    display: flex;
-    justify-content: end;
+.inputCont {
+  margin-bottom: 12px;
+  text-align: left;
 }
 
-.inputs{
-    display: flex;
-    gap: 1rem;
-    justify-content:space-between;
+.showPassCont {
+  display: flex;
+  justify-content: end;
 }
 
-.alrAcc{
-    margin-top: 12px;
+.inputs {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alrAcc {
+  margin-top: 12px;
 }
 
 .showPass {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+.formDivInp {
+  border-radius: 100rem;
+  padding: 0.7rem 0.5rem;
+  width: 10rem;
+}
+
+.regButton {
+  padding: 0.7rem 2rem;
+  border-radius: 100rem;
+  background-color: #469dff;
+  color: rgb(6, 30, 44);
+  font-weight: bold;
+}
+
+.passwordInput {
+  box-sizing: border-box;
+  all: unset;
+  width: 8rem;
+}
+
+.passwordCont {
+  display: flex;
+  background-color: white;
+  border-radius: 100rem;
+  color: black;
+  padding: 0.4rem 0.6rem;
+  width: 10rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.passEye {
+  font-size: 1rem;
+  cursor: pointer;
 }
