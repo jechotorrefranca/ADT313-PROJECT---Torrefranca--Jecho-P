@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faGear } from "@fortawesome/free-solid-svg-icons";
 import Login from "../../pages/Public/Login/Login";
 import Register from "../../pages/Public/Register/Register";
+import { useAnimeContext } from "../../context/AnimeContext";
 
 function MainClient() {
   const [accessToken, setAccessToken] = useState(
@@ -16,6 +17,8 @@ function MainClient() {
   const inputRef = useRef(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  const { onlyAnime } = useAnimeContext();
 
   const handleDivClick = () => {
     if (inputRef.current) {
@@ -99,13 +102,13 @@ function MainClient() {
                   </div>
 
                   <div>
-                    <div className="pfpContainer"></div>
+                    <img
+                      src={"https://via.placeholder.com/50"}
+                      alt="User"
+                      className="pfpContainer"
+                    />
                   </div>
                 </div>
-
-                <li className="logout">
-                  <a onClick={handleLogout}>Logout</a>
-                </li>
               </div>
             ) : (
               <div className="logReg">

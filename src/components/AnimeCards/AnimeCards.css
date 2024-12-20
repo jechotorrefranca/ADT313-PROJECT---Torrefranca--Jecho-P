@@ -7,7 +7,7 @@
 
 .card {
   display: flex;
-  align-items:end;
+  align-items: end;
   gap: 1rem;
   max-width: 180px;
   cursor: pointer;
@@ -80,8 +80,6 @@
 .flexDet {
   display: flex;
 }
-
-
 
 .starType {
   display: flex;

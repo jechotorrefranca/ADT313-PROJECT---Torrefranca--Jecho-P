@@ -77,6 +77,8 @@
   box-sizing: border-box;
   all: unset;
   width: 8rem;
+  font-size: 14px;
+  font-weight: normal;
 }
 
 .passwordCont {

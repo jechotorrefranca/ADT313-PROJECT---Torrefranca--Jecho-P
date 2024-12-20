@@ -123,7 +123,7 @@ function Register({ handleClose, handleGoLogin }) {
       .then((res) => {
         console.log(res);
         alert("Registration successful!");
-        navigate("/");
+        handleGoLogin();
         resetInputs();
         setStatus("idle");
       })

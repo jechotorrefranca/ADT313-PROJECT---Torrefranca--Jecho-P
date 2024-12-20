@@ -78,7 +78,7 @@ function Login({ handleClose, handleShowRegister }) {
           navigate("/main/movies");
         } else if (user.user_role === "user") {
           console.log("user recognized");
-          navigate("/");
+          window.location.reload();
         } else {
           alert("User not recognized, Check your username and password");
         }
