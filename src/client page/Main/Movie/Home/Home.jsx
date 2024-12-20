@@ -99,7 +99,7 @@ const Home = () => {
                       icon={faCirclePlay}
                       className="featuredPlay"
                     />{" "}
-                    {featuredAnime.episode_run_time ? "TV" : "MOVIE"}
+                    {featuredAnime.seasons !== "null" ? "TV" : "MOVIE"}
                   </span>
 
                   <span>

@@ -22,8 +22,15 @@
   padding: 1rem;
 }
 
+.lineBreakCont {
+  display: flex;
+  justify-content: center;
+}
+
 .lineBreak {
+  width: 100%;
   margin: 3rem 0rem;
+  max-width: 110rem;
 }
 
 .searchedPosterImage {

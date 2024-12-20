@@ -17,12 +17,14 @@ import GenreConverter from "../../../../components/GenreConvert/GenreConverter";
 import ShowImage from "../../../../components/View/ShowImage";
 
 function View() {
-  const { anime, fetchAnimeById, setAnime } = useAnimeContext();
+  const { anime, fetchAnimeById, setAnime, userData } = useAnimeContext();
   const { animeId } = useParams();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showFullMedia, setShowFullMedia] = useState(false);
   const [fullImage, setFullImage] = useState();
+
+  console.log(userData);
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -344,6 +346,28 @@ function View() {
           image={fullImage}
           setShowFullMedia={handleSetShowFullMedia}
         />
+      )}
+
+      <div className="lineBreakCont">
+        <hr className="lineBreak" />
+      </div>
+
+      <div className="titlePlaceholder">
+        <div className="titletext">
+          <h2>Comments</h2>
+        </div>
+      </div>
+
+      {userData.accessToken ? (
+        <div>
+          <div>comment input</div>
+        </div>
+      ) : (
+        <div>
+          <div>
+            <p>You must be logged in to Comment</p>
+          </div>
+        </div>
       )}
     </div>
   );
