@@ -5,5 +5,3 @@ AniKou is your go-to platform for exploring the vibrant world of anime movies an
 Stay updated on the latest releases, discover hidden gems, and connect with a community of anime enthusiasts. Whether you're a seasoned otaku or new to the anime universe, AniKou is designed to enhance your viewing experience and keep your love for anime alive.
 
 # ADT313 Project
-
-Will upload the api once all api is completed
