@@ -78,90 +78,101 @@ const Home = () => {
   return (
     <div className="whole">
       <div className="wholeCont">
-        {featuredAnime && featuredAnimeArray.length ? (
-          <div className="featured-list-container">
-            <div className="featuredArrow left" onClick={() => handleSlide(1)}>
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </div>
-
-            <div className={`bdTextCont ${isSliding ? "sliding" : ""}`}>
-              <div className="featuredNumber">{`#${featuredNumber} Featured`}</div>
-
-              <div className="featured-movie-title">{featuredAnime.name}</div>
-
-              <div className="featuredDetails">
-                <span>
-                  <FontAwesomeIcon
-                    icon={faCirclePlay}
-                    className="featuredPlay"
-                  />{" "}
-                  {featuredAnime.episode_run_time ? "TV" : "MOVIE"}
-                </span>
-
-                <span>
-                  <FontAwesomeIcon icon={faCalendar} className="featuredDate" />{" "}
-                  {featuredAnime.first_air_date}
-                </span>
-
-                {featuredAnime.episode_run_time && (
-                  <span>
-                    <FontAwesomeIcon icon={faClock} className="featuredClock" />{" "}
-                    {featuredAnime.episode_run_time}m
-                  </span>
-                )}
-
-                <span>
-                  <FontAwesomeIcon icon={faStar} className="featuredStar" />{" "}
-                  {featuredAnime.vote_average}
-                </span>
-              </div>
-
-              <GenreConverter genres={featuredAnime.genres} />
-
-              <div className="featuredOverview">
-                {featuredAnime.overview
-                  .split(" ")
-                  .slice(0, 40)
-                  .join(" ")
-                  .concat("...")}
-              </div>
-
+        <div className="flexFeat">
+          {featuredAnime && featuredAnimeArray.length ? (
+            <div className="featured-list-container">
               <div
-                className="featuredDetailButton"
-                onClick={() => {
-                  navigate(`/view/${featuredAnime.id}`);
-                }}
+                className="featuredArrow left"
+                onClick={() => handleSlide(1)}
               >
-                <p>Detail</p>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  className="featuredRight"
-                />
+                <FontAwesomeIcon icon={faAngleLeft} />
               </div>
-            </div>
 
-            <div className="backdropExtra" />
-            <div
-              className="featured-backdrop"
-              style={{
-                background: `linear-gradient(to top, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 20%),
+              <div className={`bdTextCont ${isSliding ? "sliding" : ""}`}>
+                <div className="featuredNumber">{`#${featuredNumber} Featured`}</div>
+
+                <div className="featured-movie-title">{featuredAnime.name}</div>
+
+                <div className="featuredDetails">
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faCirclePlay}
+                      className="featuredPlay"
+                    />{" "}
+                    {featuredAnime.episode_run_time ? "TV" : "MOVIE"}
+                  </span>
+
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faCalendar}
+                      className="featuredDate"
+                    />{" "}
+                    {featuredAnime.first_air_date}
+                  </span>
+
+                  {featuredAnime.episode_run_time > 0 && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className="featuredClock"
+                      />{" "}
+                      {featuredAnime.episode_run_time}m
+                    </span>
+                  )}
+
+                  <span>
+                    <FontAwesomeIcon icon={faStar} className="featuredStar" />{" "}
+                    {featuredAnime.vote_average}
+                  </span>
+                </div>
+
+                <GenreConverter genres={featuredAnime.genres} />
+
+                <div className="featuredOverview">
+                  {featuredAnime.overview
+                    .split(" ")
+                    .slice(0, 40)
+                    .join(" ")
+                    .concat("...")}
+                </div>
+
+                <div
+                  className="featuredDetailButton"
+                  onClick={() => {
+                    navigate(`/view/${featuredAnime.id}`);
+                  }}
+                >
+                  <p>Detail</p>
+                  <FontAwesomeIcon
+                    icon={faAngleRight}
+                    className="featuredRight"
+                  />
+                </div>
+              </div>
+
+              <div className="backdropExtra" />
+              <div
+                className="featured-backdrop"
+                style={{
+                  background: `linear-gradient(to top, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 20%),
                   linear-gradient(to right, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 65%),
                   linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 20%),
                   linear-gradient(to left, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 0) 20%),
                   url(${featuredAnime.backdrop_path}) no-repeat center top`,
-              }}
-            ></div>
+                }}
+              ></div>
 
-            <div
-              className="featuredArrow right"
-              onClick={() => handleSlide(-1)}
-            >
-              <FontAwesomeIcon icon={faAngleRight} />
+              <div
+                className="featuredArrow right"
+                onClick={() => handleSlide(-1)}
+              >
+                <FontAwesomeIcon icon={faAngleRight} />
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="featured-list-container-loader"></div>
-        )}
+          ) : (
+            <div className="featured-list-container-loader"></div>
+          )}
+        </div>
 
         <div className="animeTitle">
           <p>Top Anime</p>

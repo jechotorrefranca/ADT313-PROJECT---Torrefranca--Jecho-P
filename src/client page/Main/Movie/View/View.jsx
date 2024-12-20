@@ -240,9 +240,6 @@ function View() {
                         )}
                         <div className="companyInfo">
                           <h3 className="compName">{company.name}</h3>
-                          <p>
-                            <strong>Country:</strong> {company.origin_country}
-                          </p>
                         </div>
                       </div>
                     ))

@@ -71,21 +71,29 @@ function MainClient() {
             </div>
 
             {accessToken ? (
-              <>
+              <div className="rightNav">
                 <div className="welcome-msg">
-                  <p>Welcome! {fname}</p>
-                </div>
+                  <div className="welName">
+                    <p>Welcome! {fname}</p>
+                  </div>
 
-                {urole === "admin" && (
-                  <NavLink to="/main/movies" className="gearDash">
-                    <FontAwesomeIcon icon={faGear} />
-                  </NavLink>
-                )}
+                  <div>
+                    {urole === "admin" && (
+                      <NavLink to="/main/movies" className="gearDash">
+                        <FontAwesomeIcon icon={faGear} />
+                      </NavLink>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="pfpContainer"></div>
+                  </div>
+                </div>
 
                 <li className="logout">
                   <a onClick={handleLogout}>Logout</a>
                 </li>
-              </>
+              </div>
             ) : (
               <div className="logReg">
                 <NavLink to="/login" className="login">

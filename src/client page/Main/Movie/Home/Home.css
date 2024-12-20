@@ -6,6 +6,11 @@
   margin-top: 1rem;
 }
 
+.flexFeat {
+  display: flex;
+  justify-content: center;
+}
+
 .wholeCont {
   width: 90%;
 }
@@ -20,6 +25,7 @@
   position: relative;
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
+  max-width: 110rem;
 }
 
 .sliding {
