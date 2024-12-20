@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import GenreConverter from "../../../../components/GenreConvert/GenreConverter";
 import ShowImage from "../../../../components/View/ShowImage";
+import axios from "axios";
 
 function View() {
   const { anime, fetchAnimeById, setAnime, userData } = useAnimeContext();
@@ -101,10 +102,37 @@ function View() {
   };
 
   const handleCommentSubmit = () => {
-    if (newComment.trim()) {
-      alert(`Comment Submitted: ${newComment}`);
-      setNewComment("");
+    console.log("Submitting comment for anime ID:", animeId);
+
+    if (!newComment.trim()) {
+      alert("Comment cannot be empty.");
+      return;
     }
+
+    const commentData = {
+      anime_id: animeId,
+      user_id: userData.userId,
+      user_name: userData.firstName + " " + userData.lastName || "User Unknown",
+      pfp: userData.pfp || "https://via.placeholder.com/50",
+      comment_text: newComment.trim(),
+    };
+
+    axios({
+      method: "post",
+      url: "/commentsCrud.php",
+      data: commentData,
+      headers: {
+        Authorization: `Bearer ${userData.accessToken}`,
+      },
+    })
+      .then((response) => {
+        console.log("Comment submitted successfully:", response);
+        setNewComment("");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error submitting comment.");
+      });
   };
 
   return (
