@@ -7,7 +7,6 @@ import Login from "../../pages/Public/Login/Login";
 import Register from "../../pages/Public/Register/Register";
 import { useAnimeContext } from "../../context/AnimeContext";
 
-// Define the initial state
 const initialState = {
   accessToken: localStorage.getItem("accessToken"),
   fname: localStorage.getItem("fname"),
@@ -19,7 +18,6 @@ const initialState = {
   showRegister: false,
 };
 
-// Define the reducer function
 const reducer = (state, action) => {
   switch (action.type) {
     case "set_access_token":
