@@ -18,6 +18,19 @@ function View() {
   const { anime, fetchAnimeById, setAnime } = useAnimeContext();
   const { animeId } = useParams();
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalOpen = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  const images = anime?.images || [];
+  const imagesToShow = images.slice(0, 6); // First 5 images
+  const remainingImagesCount = images.length > 5 ? images.length - 6 : 0;
 
   useEffect(() => {
     if (!animeId) return;
@@ -32,8 +45,10 @@ function View() {
 
   const parsedSeasons =
     anime?.anime?.seasons && typeof anime.anime.seasons === "string"
-      ? JSON.parse(anime.anime.seasons)
-      : anime?.anime?.seasons || [];
+      ? JSON.parse(anime.anime.seasons || "[]") // Default to an empty array if null
+      : Array.isArray(anime?.anime?.seasons)
+      ? anime.anime.seasons
+      : [];
 
   const parsedComp =
     anime?.anime?.production_companies &&
@@ -65,7 +80,7 @@ function View() {
                           icon={faCirclePlay}
                           className="featuredPlay"
                         />{" "}
-                        {anime.anime.episode_run_time ? "TV" : "MOVIE"}
+                        {anime.anime.seasons !== "null" ? "TV" : "MOVIE"}
                       </span>
                     </span>
 
@@ -136,7 +151,7 @@ function View() {
                     </div>
                     <div className="otherDet">
                       <strong className="strongText">Seasons: </strong>{" "}
-                      <span>{parsedSeasons.length}</span>
+                      <span>{parsedSeasons?.length || 0}</span>
                     </div>
                     {anime.anime.homepage && (
                       <div className="otherDet">
@@ -165,7 +180,7 @@ function View() {
               <div className="videoSection">
                 <iframe
                   className="iframe"
-                  src={`https://www.youtube.com/embed/${anime.videos[0].key}`}
+                  src={`https://www.youtube.com/embed/${anime?.videos[0].key}`}
                   title="Anime Trailer"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -205,28 +220,73 @@ function View() {
               </div>
             </div>
 
+            <div className="titlePlaceholder">
+              <div className="titletext">
+                <h2>Media:</h2>
+              </div>
+            </div>
+
             <div className="mediaSection">
-              <h2>Media:</h2>
-              {anime.images.length > 0 ? (
-                <div className="imageGallery">
-                  {anime.images.map((image, index) => (
-                    <div key={index} className="galleryItem">
-                      <img
-                        src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
-                        alt={image.name}
-                        className="mediaImage"
-                      />
+              <div className="mediaSec">
+                {anime.images.length > 0 ? (
+                  <div className="imageGallery">
+                    {imagesToShow.map((image, index) => (
+                      <div key={index} className="galleryItem">
+                        <img
+                          src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
+                          alt={image.name}
+                          className="mediaImage"
+                        />
+                      </div>
+                    ))}
+
+                    {remainingImagesCount > 0 && (
+                      <div
+                        className="viewMore"
+                        onClick={handleModalOpen}
+                        style={{
+                          backgroundImage: `url(https://image.tmdb.org/t/p/w200${anime.images[6]?.file_path})`,
+                        }}
+                      >
+                        <span>+{remainingImagesCount}</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p>No media available.</p>
+                )}
+              </div>
+
+              {showModal && (
+                <div className="modal">
+                  <div className="modalContent">
+                    <button className="closeButton" onClick={handleModalClose}>
+                      Close
+                    </button>
+                    <div className="allImages">
+                      {anime.images.map((image, index) => (
+                        <div key={index} className="modalImageItem">
+                          <img
+                            src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
+                            alt={image.name}
+                            className="modalImage"
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              ) : (
-                <p>No media available.</p>
               )}
+            </div>
+
+            <div className="titlePlaceholder">
+              <div className="titletext">
+                <h2>Production Companies:</h2>
+              </div>
             </div>
 
             <div className="flexComp">
               <div className="productionCompaniesSection">
-                <h2>Production Companies</h2>
                 <div className="productionCompaniesGrid">
                   {parsedComp.length > 0 ? (
                     parsedComp.map((company) => (

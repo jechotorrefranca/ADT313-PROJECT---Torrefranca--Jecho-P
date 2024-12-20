@@ -71,7 +71,7 @@
   display: flex;
   gap: 2rem;
   width: 100%;
-  max-width: 1200px;
+  max-width: 110rem;
 }
 
 .titleContainer {
@@ -143,7 +143,7 @@
 
 .titletext {
   width: 100%;
-  max-width: 70rem;
+  max-width: 110rem;
 }
 
 .wholeCastSect {
@@ -154,7 +154,7 @@
 .castSection {
   padding: 20px;
   width: 100%;
-  max-width: 70rem;
+  max-width: 110rem;
   max-height: 40rem;
   overflow-y: scroll;
 }
@@ -183,24 +183,35 @@
   padding-top: 10px;
 }
 
-/* Video Section */
 .videoSection {
   text-align: center;
   padding: 20px;
 }
 
 .iframe {
-  width: 50%;
-  max-width: 70rem; /* Ensures it doesn't exceed container's width */
-  height: auto; /* Maintains the aspect ratio */
-  aspect-ratio: 16 / 9; /* Aspect ratio for YouTube videos */
+  width: 70%;
+  max-width: 110rem;
+  height: auto;
+  aspect-ratio: 16 / 9;
 }
 
 /* Media Section */
+
 .mediaSection {
   padding: 20px;
-  background-color: #fff;
   margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.mediaSec {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 110rem;
+  border-radius: 2rem;
+  background-color: #222222;
+  padding: 5rem 0rem;
 }
 
 .imageGallery {
@@ -210,14 +221,126 @@
 }
 
 .galleryItem {
-  width: 150px;
+  width: 200px;
+  cursor: pointer;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
 }
 
 .mediaImage {
   width: 100%;
-  height: 150px;
+  height: 200px;
   object-fit: cover;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.galleryItem:hover .mediaImage {
+  transform: scale(1.05);
+}
+
+.galleryItem::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.galleryItem:hover::after {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mediaImage:hover {
+  background-color: #1313132d;
+}
+
+.imageGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.viewMore {
+  width: 200px;
+  height: 200px;
+  color: #fff;
+  font-size: 3rem;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Needed for layering */
+  overflow: hidden; /* Ensures the overlay stays inside the border-radius */
+  background-size: cover; /* Ensures the background image covers the entire div */
+  background-position: center; /* Centers the image */
+}
+
+.viewMore::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  z-index: 1; /* Ensures the overlay is above the background image */
+}
+
+.viewMore span {
+  position: relative; /* To ensure the text is above the overlay */
+  z-index: 2; /* Places the text above the dark overlay */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+.closeButton {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.allImages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.modalImage {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
 
 /* aaaaaaaaaaaaaaaaaa */
@@ -226,7 +349,7 @@
   margin-top: 30px;
   padding: 20px;
   width: 100%;
-  max-width: 70rem;
+  max-width: 110rem;
 }
 
 .productionCompaniesGrid {

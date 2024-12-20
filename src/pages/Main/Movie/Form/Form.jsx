@@ -192,13 +192,13 @@ const Form = () => {
     try {
       const { data: animeDetails } = await axios.get(
         `https://api.themoviedb.org/3/${
-          anime.episode_run_time ? "tv" : "movie"
+          anime.seasons !== "null" ? "tv" : "movie"
         }/${anime.tmdbId}?api_key=${apiKey}`
       );
 
       const { data: videoData } = await axios.get(
         `https://api.themoviedb.org/3/${
-          anime.episode_run_time ? "tv" : "movie"
+          anime.seasons !== "null" ? "tv" : "movie"
         }/${anime.tmdbId}/videos?api_key=${apiKey}`
       );
       const videos = videoData.results.map((video) => ({
@@ -211,7 +211,7 @@ const Form = () => {
 
       const { data: creditsData } = await axios.get(
         `https://api.themoviedb.org/3/${
-          anime.episode_run_time ? "tv" : "movie"
+          anime.seasons !== "null" ? "tv" : "movie"
         }/${anime.tmdbId}/credits?api_key=${apiKey}`
       );
       const casts = creditsData.cast.map((cast) => ({
@@ -225,7 +225,7 @@ const Form = () => {
 
       const { data: imagesData } = await axios.get(
         `https://api.themoviedb.org/3/${
-          anime.episode_run_time ? "tv" : "movie"
+          anime.seasons !== "null" ? "tv" : "movie"
         }/${anime.tmdbId}/images?api_key=${apiKey}`
       );
       const posters = imagesData.posters.map((poster) => ({
@@ -323,6 +323,7 @@ const Form = () => {
   };
 
   const handleSelectanime = async (anime) => {
+    console.log(anime);
     setSelectedImages([]);
     setSelectedCasts([]);
     setSelectedAnime(null);
@@ -454,9 +455,12 @@ const Form = () => {
         "https://via.placeholder.com/800x450?text=No+Backdrop+Available",
       episode_run_time:
         Array.isArray(selectedAnime?.episode_run_time) &&
-        selectedAnime?.episode_run_time.length > 0
-          ? selectedAnime.episode_run_time[0]
-          : selectedAnime?.episode_run_time || null,
+        selectedAnime.episode_run_time.length > 0
+          ? String(selectedAnime.episode_run_time[0])
+          : selectedAnime?.episode_run_time
+          ? String(selectedAnime.episode_run_time)
+          : null,
+
       first_air_date: selectedAnime?.first_air_date || null,
       genres: JSON.stringify(selectedAnime?.genres) || null,
       homepage: selectedAnime?.homepage || null,
@@ -486,7 +490,9 @@ const Form = () => {
       },
     })
       .then((response) => {
+        console.log("RESPONSEEEE", response);
         const savedAnimeId = response?.data?.id || animeId;
+        console.log("AAAAAAAAAAAAAAAA", savedAnimeId);
         saveToVideo(savedAnimeId);
         saveToCasts(savedAnimeId);
         saveToImages(savedAnimeId);
@@ -532,6 +538,8 @@ const Form = () => {
   };
 
   const saveToVideo = (id) => {
+    console.log("why is this error huhu", id);
+
     if (!selectedVideo) {
       alert("No video data to save.");
       return;
