@@ -172,7 +172,8 @@ function View() {
                       {anime.anime.first_air_date}
                     </span>
 
-                    {anime.anime.episode_run_time && (
+                    {anime.anime.episode_run_time &&
+                    anime.anime.episode_run_time !== 0 ? (
                       <span>
                         <FontAwesomeIcon
                           icon={faClock}
@@ -180,7 +181,7 @@ function View() {
                         />{" "}
                         {anime.anime.episode_run_time}m
                       </span>
-                    )}
+                    ) : null}
 
                     <span>
                       <FontAwesomeIcon icon={faStar} className="featuredStar" />{" "}
