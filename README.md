@@ -9,7 +9,7 @@ Stay updated on the latest releases, discover hidden gems, and connect with a co
 # AniKou API Endpoints
 
 ## Login and Register
-| Method  | URL                                   | Payload                                                                               | Header  Description       |
+| Method  | URL                                   | Payload                                                                               | Header | Description       |
 |---------|---------------------------------------|---------------------------------------------------------------------------------------|--------|-------------------|
 | POST    | localhost/anikou-api/registerUser.php         | {"email": "test@mail.com", "password": "password", "firstName": "string", "middleName": "string", "lastName": "string"} | N/A    | Register user     |
 | POST    | localhost/anikou-api/loginUser.php            | {"email": "test@mail.com", "password": "password"}                                    | N/A    | Login user        |
